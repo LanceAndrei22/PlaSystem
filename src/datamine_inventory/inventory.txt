@@ -1,0 +1,12 @@
+K121S | 2 | 759.0 | Red Dead Redemption 2 | Action-Adventure | Playstation 5, XBOX One, PC | 2019 | Rockstar Games
+J1T5S | 2 | 555.5 | Tetris: 2023 | Puzzle | PC | 2011 | Mirrorsoft, PLAYSTUDIOS, Nintendo, Spectrum HoloByte, EA Mobile, Tandy Corporation, Vanguard Works
+U52K1 | 2 | 1350.0 | Skyrim: 2023 | Action RPG | Xbox 360, PC, PlayStation 3 | 2015 | Bethesda
+7NBHH | 2 | 2699.0 | NBA:2K24 | Sports, Casual | Playstation 5, XBOX One, PC | 2023 | 2K INC.
+WPVL10 | 5 | 2599.0 | Baldur's Gate 3 | Turn Based RPG | PC | 2023 | Larian Studios
+76H1X | 9 | 50.0 | Counter Strike 2 | FPS | PC | 2010 | Valve
+MU04N | 3 | 2599.0 | Cyberpunk 2077 | Open World | Playstation 5, XBOX One, PC | 2020 | CD PROJEKT RED
+TD9FV | 4 | 1239.95 | Divinity: Original Sin 2  | Tactical RPG | PC | 2017 | Larian Studios
+5SFEU | 2 | 500.0 | Defense Of The Ancients | MOBA | PC | 2010 | Valve
+WI946 | 5 | 835.0 | No Mans Sky | Survival | Playstation 4, PC | 2016 | Hello Games
+CQASI | 3 | 2500.0 | Final Fantasy 15 | RPG | Playstation 5 | 2022 | Square Enix
+32Q64 | 4 | 2500.0 | Kingdom Hearts 10 | Tactical RPG | Playstation 5, Switch | 2011 | Square Enix
