@@ -1,14 +1,14 @@
-package datamine_main;
+package plasystem_main;
 
+import plasystem_gui.LaunchPanelGUI;
 import com.formdev.flatlaf.FlatDarkLaf;
-import datamine_gui.*;
 
 import javax.swing.*;
 
 /**
- * The main class to start the DataMine application.
+ * The main class to start the PlaSystem application.
  */
-public class DataMine {
+public class PlaSystem {
     /**
      * The main method to initialize and launch the application.
      *

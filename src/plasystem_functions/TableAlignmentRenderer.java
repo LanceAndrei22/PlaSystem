@@ -1,4 +1,4 @@
-package datamine_functions;
+package plasystem_functions;
 
 import javax.swing.*;
 import javax.swing.table.*;

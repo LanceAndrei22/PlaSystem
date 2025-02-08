@@ -1,6 +1,12 @@
-package datamine_gui;
+package plasystem_gui;
 
-import datamine_functions.*;
+import plasystem_functions.ErrorValueHandling;
+import plasystem_functions.DataHandling;
+import plasystem_functions.RandomIDGenerator;
+import plasystem_functions.TransactionHandling;
+import plasystem_functions.TableAlignmentRenderer;
+import plasystem_functions.FrameExporter;
+import plasystem_functions.GameData;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -75,74 +81,74 @@ public class TransactionGUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        transactPanel = new JPanel();
-        prodIDLabel = new JLabel();
-        itemPriceLabel = new JLabel();
-        paymentAmountLabel = new JLabel();
-        itemPriceTxtField = new JTextField();
-        prodIDTxtField = new JTextField();
-        dateTxtField = new JTextField();
-        dateLabel = new JLabel();
-        verifyBtn = new JButton();
-        totalAmountLabel = new JLabel();
-        totalAmountTxtField = new JTextField();
-        paymentAmountTxtField = new JTextField();
-        quantityLabel = new JLabel();
-        quantityPicker = new JSpinner();
-        addBtn = new JButton();
-        prodNameLabel = new JLabel();
-        prodNameTxtField = new JTextField();
-        clearBtn = new JButton();
-        jScrollPane2 = new JScrollPane();
-        transactionTable = new JTable();
-        titleLabel = new JLabel();
-        cancelBtn = new JButton();
-        printReceiptBtn = new JButton();
-        submitBtn = new JButton();
+        transactPanel = new javax.swing.JPanel();
+        prodIDLabel = new javax.swing.JLabel();
+        itemPriceLabel = new javax.swing.JLabel();
+        paymentAmountLabel = new javax.swing.JLabel();
+        itemPriceTxtField = new javax.swing.JTextField();
+        prodIDTxtField = new javax.swing.JTextField();
+        dateTxtField = new javax.swing.JTextField();
+        dateLabel = new javax.swing.JLabel();
+        verifyBtn = new javax.swing.JButton();
+        totalAmountLabel = new javax.swing.JLabel();
+        totalAmountTxtField = new javax.swing.JTextField();
+        paymentAmountTxtField = new javax.swing.JTextField();
+        quantityLabel = new javax.swing.JLabel();
+        quantityPicker = new javax.swing.JSpinner();
+        addBtn = new javax.swing.JButton();
+        prodNameLabel = new javax.swing.JLabel();
+        prodNameTxtField = new javax.swing.JTextField();
+        clearBtn = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        transactionTable = new javax.swing.JTable();
+        titleLabel = new javax.swing.JLabel();
+        cancelBtn = new javax.swing.JButton();
+        printReceiptBtn = new javax.swing.JButton();
+        submitBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        transactPanel.setBorder(BorderFactory.createTitledBorder(""));
+        transactPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        prodIDLabel.setFont(new Font("Segoe UI", 0, 13)); // NOI18N
+        prodIDLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         prodIDLabel.setText("Product ID:");
 
-        itemPriceLabel.setFont(new Font("Segoe UI", 0, 13)); // NOI18N
+        itemPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         itemPriceLabel.setText("Item Price:");
 
-        paymentAmountLabel.setFont(new Font("Segoe UI", 0, 13)); // NOI18N
+        paymentAmountLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         paymentAmountLabel.setText("Payment Amount:");
 
         itemPriceTxtField.setEditable(false);
 
         dateTxtField.setEditable(false);
 
-        dateLabel.setFont(new Font("Segoe UI", 0, 13)); // NOI18N
+        dateLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         dateLabel.setText("Date of Transaction:");
 
-        verifyBtn.setBackground(new Color(102, 102, 102));
-        verifyBtn.setFont(new Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        verifyBtn.setBackground(new java.awt.Color(102, 102, 102));
+        verifyBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         verifyBtn.setText("VERIFY PRODUCT");
-        verifyBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        verifyBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 verifyBtnActionPerformed(evt);
             }
         });
 
-        totalAmountLabel.setFont(new Font("Segoe UI", 0, 13)); // NOI18N
+        totalAmountLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         totalAmountLabel.setText("Total:");
 
         totalAmountTxtField.setEditable(false);
 
-        quantityLabel.setFont(new Font("Segoe UI", 0, 13)); // NOI18N
+        quantityLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         quantityLabel.setText("Quantity:");
 
-        addBtn.setBackground(new Color(102, 102, 102));
-        addBtn.setFont(new Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        addBtn.setBackground(new java.awt.Color(102, 102, 102));
+        addBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         addBtn.setText("ADD");
-        addBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
             }
         });
@@ -151,18 +157,18 @@ public class TransactionGUI extends JFrame {
 
         prodNameTxtField.setEditable(false);
 
-        clearBtn.setBackground(new Color(102, 102, 102));
-        clearBtn.setFont(new Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        clearBtn.setBackground(new java.awt.Color(102, 102, 102));
+        clearBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         clearBtn.setText("CLEAR");
-        clearBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        clearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearBtnActionPerformed(evt);
             }
         });
 
-        transactionTable.setFont(new Font("Lucida Sans Typewriter", 0, 10)); // NOI18N
-        transactionTable.setForeground(new Color(255, 102, 51));
-        transactionTable.setModel(new DefaultTableModel(
+        transactionTable.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 10)); // NOI18N
+        transactionTable.setForeground(new java.awt.Color(255, 102, 51));
+        transactionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -185,149 +191,149 @@ public class TransactionGUI extends JFrame {
             transactionTable.getColumnModel().getColumn(2).setPreferredWidth(25);
         }
 
-        GroupLayout transactPanelLayout = new GroupLayout(transactPanel);
+        javax.swing.GroupLayout transactPanelLayout = new javax.swing.GroupLayout(transactPanel);
         transactPanel.setLayout(transactPanelLayout);
         transactPanelLayout.setHorizontalGroup(
-            transactPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transactPanelLayout.createSequentialGroup()
                 .addGap(0, 16, Short.MAX_VALUE)
-                .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(transactPanelLayout.createSequentialGroup()
                         .addComponent(paymentAmountLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(paymentAmountTxtField, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(GroupLayout.Alignment.LEADING, transactPanelLayout.createSequentialGroup()
-                        .addComponent(verifyBtn, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addBtn, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(paymentAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, transactPanelLayout.createSequentialGroup()
+                        .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(clearBtn, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(prodNameLabel)
                             .addComponent(itemPriceLabel)
                             .addComponent(quantityLabel)
                             .addComponent(prodIDLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(itemPriceTxtField)
-                            .addComponent(prodNameTxtField, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                            .addComponent(prodNameTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                             .addComponent(prodIDTxtField)
-                            .addComponent(quantityPicker, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(transactPanelLayout.createSequentialGroup()
                         .addGap(73, 73, 73)
                         .addComponent(totalAmountLabel)
                         .addGap(18, 18, 18)
-                        .addComponent(totalAmountTxtField, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(transactPanelLayout.createSequentialGroup()
                         .addComponent(dateLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dateTxtField, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         transactPanelLayout.setVerticalGroup(
-            transactPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transactPanelLayout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(prodIDLabel)
-                    .addComponent(prodIDTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(prodIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dateLabel)
-                    .addComponent(dateTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(prodNameTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(prodNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(prodNameLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(itemPriceLabel)
-                            .addComponent(itemPriceTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(itemPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(quantityLabel)
-                            .addComponent(quantityPicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(26, 26, 26)
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paymentAmountLabel)
-                            .addComponent(paymentAmountTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(paymentAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(13, 13, 13)
-                        .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(verifyBtn, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addBtn, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(clearBtn, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(transactPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(totalAmountLabel)
-                    .addComponent(totalAmountTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        titleLabel.setFont(new Font("Segoe UI Semibold", 0, 15)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("Segoe UI Semibold", 0, 15)); // NOI18N
         titleLabel.setText(" DataMine Transaction");
 
-        cancelBtn.setBackground(new Color(102, 102, 102));
-        cancelBtn.setFont(new Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        cancelBtn.setBackground(new java.awt.Color(102, 102, 102));
+        cancelBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         cancelBtn.setText("CANCEL");
-        cancelBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelBtnActionPerformed(evt);
             }
         });
 
-        printReceiptBtn.setBackground(new Color(102, 102, 102));
-        printReceiptBtn.setFont(new Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        printReceiptBtn.setBackground(new java.awt.Color(102, 102, 102));
+        printReceiptBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         printReceiptBtn.setText("PRINT RECEIPT");
-        printReceiptBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        printReceiptBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printReceiptBtnActionPerformed(evt);
             }
         });
 
-        submitBtn.setBackground(new Color(102, 102, 102));
-        submitBtn.setFont(new Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        submitBtn.setBackground(new java.awt.Color(102, 102, 102));
+        submitBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         submitBtn.setText("SUBMIT");
-        submitBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitBtnActionPerformed(evt);
             }
         });
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 29, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel)
-                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(cancelBtn, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(submitBtn, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(printReceiptBtn))
-                        .addComponent(transactPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addComponent(titleLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(transactPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelBtn, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(printReceiptBtn, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(submitBtn, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(printReceiptBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -574,29 +580,29 @@ public class TransactionGUI extends JFrame {
     }//GEN-LAST:event_verifyBtnActionPerformed
       
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton addBtn;
-    private JButton cancelBtn;
-    private JButton clearBtn;
-    private JLabel dateLabel;
-    private JTextField dateTxtField;
-    private JLabel itemPriceLabel;
-    private JTextField itemPriceTxtField;
-    private JScrollPane jScrollPane2;
-    private JLabel paymentAmountLabel;
-    private JTextField paymentAmountTxtField;
-    private JButton printReceiptBtn;
-    private JLabel prodIDLabel;
-    private JTextField prodIDTxtField;
-    private JLabel prodNameLabel;
-    private JTextField prodNameTxtField;
-    private JLabel quantityLabel;
-    private JSpinner quantityPicker;
-    private JButton submitBtn;
-    private JLabel titleLabel;
-    private JLabel totalAmountLabel;
-    private JTextField totalAmountTxtField;
-    private JPanel transactPanel;
-    private JTable transactionTable;
-    private JButton verifyBtn;
+    private javax.swing.JButton addBtn;
+    private javax.swing.JButton cancelBtn;
+    private javax.swing.JButton clearBtn;
+    private javax.swing.JLabel dateLabel;
+    private javax.swing.JTextField dateTxtField;
+    private javax.swing.JLabel itemPriceLabel;
+    private javax.swing.JTextField itemPriceTxtField;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel paymentAmountLabel;
+    private javax.swing.JTextField paymentAmountTxtField;
+    private javax.swing.JButton printReceiptBtn;
+    private javax.swing.JLabel prodIDLabel;
+    private javax.swing.JTextField prodIDTxtField;
+    private javax.swing.JLabel prodNameLabel;
+    private javax.swing.JTextField prodNameTxtField;
+    private javax.swing.JLabel quantityLabel;
+    private javax.swing.JSpinner quantityPicker;
+    private javax.swing.JButton submitBtn;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel totalAmountLabel;
+    private javax.swing.JTextField totalAmountTxtField;
+    private javax.swing.JPanel transactPanel;
+    private javax.swing.JTable transactionTable;
+    private javax.swing.JButton verifyBtn;
     // End of variables declaration//GEN-END:variables
 }

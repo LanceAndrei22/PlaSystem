@@ -1,4 +1,4 @@
-package datamine_functions;
+package plasystem_functions;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +20,7 @@ public class FrameExporter {
      */
     public static void exportFrameAsImage(JFrame frameToExport, String imageName) {
         // Define the directory path to save the image
-        String directory = "src/datamine_receipt";
+        String directory = "src/plasystem_receipt";
         File directoryFile = new File(directory);
 
         // Check if directory doesn't exist, create it

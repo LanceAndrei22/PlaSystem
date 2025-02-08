@@ -1,4 +1,4 @@
-package datamine_functions;
+package plasystem_functions;
 
 import java.io.*;
 import javax.swing.*;
@@ -10,10 +10,10 @@ import java.util.Properties;
  */
 public class DatabaseFileChooser {
     // Default file path for the inventory file
-    private static String filepath = "src/datamine_inventory/inventory.txt";
+    private static String filepath = "src/plasystem_inventory/inventory.txt";
     
     // Configuration file constants
-    private static final String CONFIG_FILE = "src/datamine_inventory/config.properties";
+    private static final String CONFIG_FILE = "src/plasystem_inventory/config.properties";
     private static final String LAST_CHOSEN_FILE = "last_chosen_file";
 
     /**

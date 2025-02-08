@@ -1,6 +1,9 @@
-package datamine_gui;
+package plasystem_gui;
 
-import datamine_functions.*;
+import plasystem_functions.ErrorValueHandling;
+import plasystem_functions.DataHandling;
+import plasystem_functions.RandomIDGenerator;
+import plasystem_functions.GameData;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -66,31 +69,31 @@ public class AddDataGUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        textFieldsPanel = new JPanel();
-        productIDTxtField = new JTextField();
-        genreTxtField = new JTextField();
-        platformTxtField = new JTextField();
-        nameLabel = new JLabel();
-        genreLabel = new JLabel();
-        platformLabel = new JLabel();
-        publisherTxtField = new JTextField();
-        yearTxtField = new JTextField();
-        priceTxtField = new JTextField();
-        publisherLabel = new JLabel();
-        priceLabel = new JLabel();
-        yearLabel = new JLabel();
-        quantityLabel = new JLabel();
-        nameTxtField = new JTextField();
-        productIDLabel = new JLabel();
-        quantityPicker = new JSpinner();
-        cancelBtn = new JButton();
-        addBtn = new JButton();
-        titleLabel = new JLabel();
+        textFieldsPanel = new javax.swing.JPanel();
+        productIDTxtField = new javax.swing.JTextField();
+        genreTxtField = new javax.swing.JTextField();
+        platformTxtField = new javax.swing.JTextField();
+        nameLabel = new javax.swing.JLabel();
+        genreLabel = new javax.swing.JLabel();
+        platformLabel = new javax.swing.JLabel();
+        publisherTxtField = new javax.swing.JTextField();
+        yearTxtField = new javax.swing.JTextField();
+        priceTxtField = new javax.swing.JTextField();
+        publisherLabel = new javax.swing.JLabel();
+        priceLabel = new javax.swing.JLabel();
+        yearLabel = new javax.swing.JLabel();
+        quantityLabel = new javax.swing.JLabel();
+        nameTxtField = new javax.swing.JTextField();
+        productIDLabel = new javax.swing.JLabel();
+        quantityPicker = new javax.swing.JSpinner();
+        cancelBtn = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        titleLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        textFieldsPanel.setBorder(BorderFactory.createTitledBorder(""));
+        textFieldsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         productIDTxtField.setEditable(false);
 
@@ -110,118 +113,118 @@ public class AddDataGUI extends JFrame {
 
         productIDLabel.setText("PRODUCT ID");
 
-        GroupLayout textFieldsPanelLayout = new GroupLayout(textFieldsPanel);
+        javax.swing.GroupLayout textFieldsPanelLayout = new javax.swing.GroupLayout(textFieldsPanel);
         textFieldsPanel.setLayout(textFieldsPanelLayout);
         textFieldsPanelLayout.setHorizontalGroup(
-            textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(textFieldsPanelLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(publisherLabel)
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nameLabel)
                             .addComponent(genreLabel)
                             .addComponent(platformLabel))
                         .addGap(20, 20, 20)
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(publisherTxtField, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(publisherTxtField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                             .addComponent(nameTxtField)
                             .addComponent(genreTxtField)
                             .addComponent(platformTxtField))))
                 .addGap(31, 31, 31)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(priceLabel)
                     .addComponent(productIDLabel)
                     .addComponent(yearLabel)
                     .addComponent(quantityLabel))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(productIDTxtField)
                     .addComponent(priceTxtField)
-                    .addComponent(yearTxtField, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(quantityPicker, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(yearTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
         textFieldsPanelLayout.setVerticalGroup(
-            textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(textFieldsPanelLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(productIDTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(productIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(productIDLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(priceTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(priceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(nameTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nameLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(genreTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(genreTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(genreLabel)
                             .addComponent(priceLabel))
                         .addGap(18, 18, 18)
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(platformLabel)
-                            .addComponent(platformTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(platformTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(yearLabel)
-                            .addComponent(yearTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(yearTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(quantityPicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(publisherLabel)
-                    .addComponent(publisherTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(publisherTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(quantityLabel))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
         cancelBtn.setText("CANCEL");
-        cancelBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelBtnActionPerformed(evt);
             }
         });
 
         addBtn.setText("ADD");
-        addBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
             }
         });
 
-        titleLabel.setFont(new Font("Segoe UI Semibold", 0, 15)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("Segoe UI Semibold", 0, 15)); // NOI18N
         titleLabel.setText("Add Data");
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel)
-                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(cancelBtn, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(27, 27, 27)
-                            .addComponent(addBtn, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
-                        .addComponent(textFieldsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(textFieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(titleLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textFieldsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cancelBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addBtn, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
+                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textFieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cancelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -321,25 +324,25 @@ public class AddDataGUI extends JFrame {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton addBtn;
-    private JButton cancelBtn;
-    private JLabel genreLabel;
-    private JTextField genreTxtField;
-    private JLabel nameLabel;
-    private JTextField nameTxtField;
-    private JLabel platformLabel;
-    private JTextField platformTxtField;
-    private JLabel priceLabel;
-    private JTextField priceTxtField;
-    private JLabel productIDLabel;
-    private JTextField productIDTxtField;
-    private JLabel publisherLabel;
-    private JTextField publisherTxtField;
-    private JLabel quantityLabel;
-    private JSpinner quantityPicker;
-    private JPanel textFieldsPanel;
-    private JLabel titleLabel;
-    private JLabel yearLabel;
-    private JTextField yearTxtField;
+    private javax.swing.JButton addBtn;
+    private javax.swing.JButton cancelBtn;
+    private javax.swing.JLabel genreLabel;
+    private javax.swing.JTextField genreTxtField;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextField nameTxtField;
+    private javax.swing.JLabel platformLabel;
+    private javax.swing.JTextField platformTxtField;
+    private javax.swing.JLabel priceLabel;
+    private javax.swing.JTextField priceTxtField;
+    private javax.swing.JLabel productIDLabel;
+    private javax.swing.JTextField productIDTxtField;
+    private javax.swing.JLabel publisherLabel;
+    private javax.swing.JTextField publisherTxtField;
+    private javax.swing.JLabel quantityLabel;
+    private javax.swing.JSpinner quantityPicker;
+    private javax.swing.JPanel textFieldsPanel;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel yearLabel;
+    private javax.swing.JTextField yearTxtField;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,6 +1,7 @@
-package datamine_gui;
+package plasystem_gui;
 
-import datamine_functions.*;
+import plasystem_functions.KeycodeVerification;
+import plasystem_functions.DatabaseFileChooser;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -199,7 +200,7 @@ public class LaunchPanelGUI extends JFrame {
      * Handles the action performed when the launch button is clicked.
      * It verifies the key code and launches the main program if validated.
      */
-    private void launchButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_launchButtonActionPerformed 
+    private void launchButtonActionPerformed(ActionEvent evt) {                                              
         // Check if the keycode file is visible; if so, return
         if(keyValidator.isKeycodeFileVisible()){
             return;
@@ -223,24 +224,24 @@ public class LaunchPanelGUI extends JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_launchButtonActionPerformed
+    }                                            
     
     /**
      * Handles the action performed when the exit button is clicked.
      * Exits the program.
      */
-    private void exitButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed                                           
+    private void exitButtonActionPerformed(ActionEvent evt) {                                                                                      
         System.exit(0); // Close the application
-    }//GEN-LAST:event_exitButtonActionPerformed
+    }                                          
     
     /**
      * Handles the action performed when the file chooser button is clicked.
      * Invokes the file chooser to select a file and updates the file path label.
      */
-    private void fileChooserBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_fileChooserBtnActionPerformed                                               
+    private void fileChooserBtnActionPerformed(ActionEvent evt) {                                                                                              
         DatabaseFileChooser.chooseFile(); // Open file chooser
         filePathLabel.setText(DatabaseFileChooser.getFileName()); // Update file path label
-    }//GEN-LAST:event_fileChooserBtnActionPerformed
+    }                                              
     
     /**
      * Launches the main program GUI, sets it visible, and disposes of the current frame.
@@ -251,7 +252,7 @@ public class LaunchPanelGUI extends JFrame {
         this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private JButton exitButton;
     private JToggleButton fileChooserBtn;
     private JLabel filePathLabel;
@@ -263,5 +264,5 @@ public class LaunchPanelGUI extends JFrame {
     private JLabel titleLabel1;
     private JLabel titleLabel2;
     private JLabel titleLabel3;
-    // End of variables declaration//GEN-END:variables                   
+    // End of variables declaration                                      
 }

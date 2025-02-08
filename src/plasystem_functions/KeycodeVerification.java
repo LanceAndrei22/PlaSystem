@@ -1,4 +1,4 @@
-package datamine_functions;
+package plasystem_functions;
 
 import javax.swing.JOptionPane;
 import java.io.*;
@@ -7,7 +7,7 @@ import java.io.*;
  * Handles verification and checks related to key codes stored in a file.
  */
 public class KeycodeVerification {
-    private String keyFilePath = "src/datamine_main/key.txt"; // Path to the keycode file
+    private String keyFilePath = "src/plasystem_main/key.txt"; // Path to the keycode file
     
     /**
      * Verifies if the provided key code matches any key code in the file.
