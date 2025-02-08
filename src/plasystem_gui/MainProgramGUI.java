@@ -1,6 +1,10 @@
-package datamine_gui;
+package plasystem_gui;
 
-import datamine_functions.*;
+import plasystem_functions.DataHandling;
+import plasystem_functions.DatabaseFileChooser;
+import plasystem_functions.TableRowSelector;
+import plasystem_functions.TableAlignmentRenderer;
+import plasystem_functions.GameData;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -69,23 +73,24 @@ public class MainProgramGUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        datamineTblScrollPane = new JScrollPane();
-        datamineTbl = new JTable();
-        searchPanel = new JPanel();
-        searchTxtField = new JTextField();
-        searchPrmtrBox = new JComboBox<>();
-        dataPanel = new JPanel();
-        editBtn = new JButton();
-        deleteBtn = new JButton();
-        addBtn = new JButton();
-        transactBtn = new JButton();
-        datamineLogoLabel = new JLabel();
+        menuBar1 = new java.awt.MenuBar();
+        datamineTblScrollPane = new javax.swing.JScrollPane();
+        datamineTbl = new javax.swing.JTable();
+        searchPanel = new javax.swing.JPanel();
+        searchTxtField = new javax.swing.JTextField();
+        searchPrmtrBox = new javax.swing.JComboBox<>();
+        dataPanel = new javax.swing.JPanel();
+        editBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        transactBtn = new javax.swing.JButton();
+        datamineLogoLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         datamineTbl.setAutoCreateRowSorter(true);
-        datamineTbl.setModel(new DefaultTableModel(
+        datamineTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -94,7 +99,7 @@ public class MainProgramGUI extends JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                String.class, Integer.class, Double.class, String.class, String.class, String.class, Integer.class, String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 true, false, false, false, false, false, false, false
@@ -117,126 +122,126 @@ public class MainProgramGUI extends JFrame {
             datamineTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
         }
 
-        searchTxtField.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent evt) {
+        searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchTxtFieldKeyReleased(evt);
             }
         });
 
-        searchPrmtrBox.setModel(new DefaultComboBoxModel<>(new String[] { "Name", "Genre", "Platform", "Publisher", "Year", "Price", "Quantity" }));
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name", "Genre", "Platform", "Publisher", "Year", "Price", "Quantity" }));
 
-        GroupLayout searchPanelLayout = new GroupLayout(searchPanel);
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
         searchPanel.setLayout(searchPanelLayout);
         searchPanelLayout.setHorizontalGroup(
-            searchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchTxtField, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchPrmtrBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         searchPanelLayout.setVerticalGroup(
-            searchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(searchPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchTxtField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchPrmtrBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
         editBtn.setText("Edit");
-        editBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editBtnActionPerformed(evt);
             }
         });
 
         deleteBtn.setText("Delete");
-        deleteBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteBtnActionPerformed(evt);
             }
         });
 
-        GroupLayout dataPanelLayout = new GroupLayout(dataPanel);
+        javax.swing.GroupLayout dataPanelLayout = new javax.swing.GroupLayout(dataPanel);
         dataPanel.setLayout(dataPanelLayout);
         dataPanelLayout.setHorizontalGroup(
-            dataPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dataPanelLayout.createSequentialGroup()
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(editBtn)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteBtn)
                 .addContainerGap())
         );
         dataPanelLayout.setVerticalGroup(
-            dataPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, dataPanelLayout.createSequentialGroup()
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(dataPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dataPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editBtn)
                     .addComponent(deleteBtn))
                 .addContainerGap())
         );
 
-        addBtn.setFont(new Font("Segoe UI", 0, 18)); // NOI18N
-        addBtn.setIcon(new ImageIcon(getClass().getResource("/datamine_main/datamineAdd.png"))); // NOI18N
-        addBtn.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-        addBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        addBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/datamine_main/datamineAdd.png"))); // NOI18N
+        addBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
             }
         });
 
-        transactBtn.setFont(new Font("Segoe UI", 0, 24)); // NOI18N
-        transactBtn.setIcon(new ImageIcon(getClass().getResource("/datamine_main/datamineTransact.png"))); // NOI18N
-        transactBtn.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-        transactBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        transactBtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/datamine_main/datamineTransact.png"))); // NOI18N
+        transactBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        transactBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 transactBtnActionPerformed(evt);
             }
         });
 
-        datamineLogoLabel.setIcon(new ImageIcon(getClass().getResource("/datamine_main/datamineTitle.png"))); // NOI18N
+        datamineLogoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/datamine_main/datamineTitle.png"))); // NOI18N
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(datamineTblScrollPane)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(searchPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 683, Short.MAX_VALUE)
-                        .addComponent(dataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 683, Short.MAX_VALUE)
+                        .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addBtn, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(datamineLogoLabel, GroupLayout.PREFERRED_SIZE, 329, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(datamineLogoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(245, 245, 245)
-                        .addComponent(transactBtn, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(transactBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(datamineLogoLabel, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+                .addComponent(datamineLogoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(searchPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(datamineTblScrollPane, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(addBtn, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(transactBtn, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(datamineTblScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(transactBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -352,16 +357,17 @@ public class MainProgramGUI extends JFrame {
     }//GEN-LAST:event_searchTxtFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton addBtn;
-    private JPanel dataPanel;
-    private JLabel datamineLogoLabel;
-    private JTable datamineTbl;
-    private JScrollPane datamineTblScrollPane;
-    private JButton deleteBtn;
-    private JButton editBtn;
-    private JPanel searchPanel;
-    private JComboBox<String> searchPrmtrBox;
-    private JTextField searchTxtField;
-    private JButton transactBtn;
+    private javax.swing.JButton addBtn;
+    private javax.swing.JPanel dataPanel;
+    private javax.swing.JLabel datamineLogoLabel;
+    private javax.swing.JTable datamineTbl;
+    private javax.swing.JScrollPane datamineTblScrollPane;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JButton editBtn;
+    private java.awt.MenuBar menuBar1;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JComboBox<String> searchPrmtrBox;
+    private javax.swing.JTextField searchTxtField;
+    private javax.swing.JButton transactBtn;
     // End of variables declaration//GEN-END:variables
 }

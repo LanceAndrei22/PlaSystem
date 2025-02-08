@@ -1,4 +1,4 @@
-package datamine_functions;
+package plasystem_functions;
 
 /**
  * Handles error checking for numeric inputs.
