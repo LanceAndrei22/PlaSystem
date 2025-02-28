@@ -313,7 +313,6 @@ public class AddDataGUI extends JFrame {
                                            tempName, 
                                            tempGenre, 
                                            tempConsole, 
-                                           validYear, 
                                            tempPublisher);
                     
                     // Reset text fields and generate a new product ID
