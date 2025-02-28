@@ -22,14 +22,6 @@ public class EditDataGUI extends JFrame {
     ErrorValueHandling isDataValid = new ErrorValueHandling();
     
     /**
-     * Default constructor for the EditDataGUI.
-     */
-    public EditDataGUI (){
-       initComponents(); // Initialize components defined in the GUI
-       setLocationRelativeTo(null); // Set the location of the window to the center of the screen
-    }
-    
-    /**
      * Constructor with parameters to initialize EditDataGUI with existing data.
      *
      * @param selectedRow The index of the selected row.
@@ -42,11 +34,11 @@ public class EditDataGUI extends JFrame {
      * @param name        The name of the product.
      * @param genre       The genre of the product.
      * @param platform    The platform(s) the product is available on.
-     * @param year        The release year of the product.
      * @param publisher   The publisher of the product.
      */
-    public EditDataGUI(int selectedRow, String path,LinkedList<GameData> list, JTable TableData,String productID, String quantity, String price, String name, String genre, String platform, String year, String publisher) {
+    public EditDataGUI(int selectedRow, String path, LinkedList<GameData> list, JTable TableData,String productID, String quantity, String price, String name, String genre, String platform, String publisher) {
         initComponents(); // Initialize components defined in the GUI
+        
         setLocationRelativeTo(null); // Set the location of the window to the center of the screen
         
         // Assign provided parameters to class attributes
@@ -66,7 +58,7 @@ public class EditDataGUI extends JFrame {
         nameTxtField.setText(name);
         genreTxtField.setText(genre);
         platformTxtField.setText(platform);
-        yearTxtField.setText(year);
+       
         publisherTxtField.setText(publisher);
         
         // Ensure quantity value is non-negative
@@ -89,8 +81,6 @@ public class EditDataGUI extends JFrame {
         productIDTxtField = new javax.swing.JTextField();
         genreLabel = new javax.swing.JLabel();
         genreTxtField = new javax.swing.JTextField();
-        yearLabel = new javax.swing.JLabel();
-        yearTxtField = new javax.swing.JTextField();
         priceLabel = new javax.swing.JLabel();
         priceTxtField = new javax.swing.JTextField();
         quantityLabel = new javax.swing.JLabel();
@@ -102,30 +92,44 @@ public class EditDataGUI extends JFrame {
         cancelBtn = new javax.swing.JButton();
         saveBtn = new javax.swing.JButton();
         titleTabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         textFieldsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        textFieldsPanel.setForeground(new java.awt.Color(0, 0, 0));
         textFieldsPanel.setPreferredSize(new java.awt.Dimension(528, 306));
 
+        nameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        nameLabel.setForeground(new java.awt.Color(0, 0, 0));
         nameLabel.setText("NAME");
 
+        prodIDLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        prodIDLabel.setForeground(new java.awt.Color(0, 0, 0));
         prodIDLabel.setText("PROD ID");
 
         productIDTxtField.setEditable(false);
 
-        genreLabel.setText("GENRE");
+        genreLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        genreLabel.setForeground(new java.awt.Color(0, 0, 0));
+        genreLabel.setText("SIZE");
 
-        yearLabel.setText("YEAR");
-
+        priceLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        priceLabel.setForeground(new java.awt.Color(0, 0, 0));
         priceLabel.setText("PRICE");
 
+        quantityLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        quantityLabel.setForeground(new java.awt.Color(0, 0, 0));
         quantityLabel.setText("QUANTITY");
 
-        platformLabel.setText("PLATFORM");
+        platformLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        platformLabel.setForeground(new java.awt.Color(0, 0, 0));
+        platformLabel.setText("BRAND");
 
-        publisherLabel.setText("PUBLISHER");
+        publisherLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        publisherLabel.setForeground(new java.awt.Color(0, 0, 0));
+        publisherLabel.setText("TYPE");
 
         javax.swing.GroupLayout textFieldsPanelLayout = new javax.swing.GroupLayout(textFieldsPanel);
         textFieldsPanel.setLayout(textFieldsPanelLayout);
@@ -134,20 +138,6 @@ public class EditDataGUI extends JFrame {
             .addGroup(textFieldsPanelLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                                .addComponent(platformLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(platformTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                                .addComponent(publisherLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(publisherTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(24, 24, 24)
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(textFieldsPanelLayout.createSequentialGroup()
@@ -160,25 +150,38 @@ public class EditDataGUI extends JFrame {
                                         .addGap(39, 39, 39)
                                         .addComponent(nameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(nameLabel))
-                        .addGap(27, 27, 27)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(prodIDLabel))))
-                .addGap(18, 18, 18)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(productIDTxtField)
-                        .addComponent(yearTxtField)
-                        .addComponent(priceTxtField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                            .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(prodIDLabel))
+                            .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(publisherLabel))))
+                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                        .addComponent(platformLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(platformTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(quantityLabel))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(productIDTxtField)
+                    .addComponent(priceTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(publisherTxtField))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         textFieldsPanelLayout.setVerticalGroup(
             textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(textFieldsPanelLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(productIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                        .addComponent(productIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(publisherTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nameLabel)
@@ -188,8 +191,7 @@ public class EditDataGUI extends JFrame {
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(genreLabel)
                             .addComponent(genreTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(yearTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(yearLabel))
+                            .addComponent(publisherLabel))
                         .addGap(22, 22, 22)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(platformLabel)
@@ -197,52 +199,52 @@ public class EditDataGUI extends JFrame {
                             .addComponent(priceLabel)
                             .addComponent(priceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(publisherTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(publisherLabel))
-                            .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(quantityLabel)
-                                .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(46, Short.MAX_VALUE))
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(quantityLabel)
+                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
-        cancelBtn.setText("Cancel");
+        cancelBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        cancelBtn.setText("CANCEL");
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelBtnActionPerformed(evt);
             }
         });
 
-        saveBtn.setText("Save");
+        saveBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        saveBtn.setText("SAVE");
         saveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveBtnActionPerformed(evt);
             }
         });
 
-        titleTabel.setFont(new java.awt.Font("Segoe UI Semibold", 0, 15)); // NOI18N
-        titleTabel.setText("Edit Data");
+        titleTabel.setFont(new java.awt.Font("Microsoft YaHei UI", 3, 15)); // NOI18N
+        titleTabel.setText("Edit/Re-Stock Items");
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (9).png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(titleTabel)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(330, 330, 330)
-                                .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(textFieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                    .addComponent(titleTabel, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(27, 27, 27))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(textFieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap()))))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,7 +258,11 @@ public class EditDataGUI extends JFrame {
                     .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        textFieldsPanel.setBackground(new Color(0, 153, 255, 100));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -292,16 +298,7 @@ public class EditDataGUI extends JFrame {
                     }
                 }
 
-                // Validate and parse the Year text field
-                int editedYear = 0;
-                String yearText = yearTxtField.getText();
-                if (!isDataValid.isInteger(yearText) || yearText.length() != 4) {
-                    isValid = false;
-                    JOptionPane.showMessageDialog(null, "Invalid Year Input. Please enter a valid year with exactly 4 digits.", "Error", JOptionPane.ERROR_MESSAGE);
-                } 
-                else {
-                    editedYear = Integer.parseInt(yearText);
-                }
+                
 
                 if (isValid) {
                     // Get edited quantity, name, genre, console, and publisher from respective fields
@@ -321,7 +318,6 @@ public class EditDataGUI extends JFrame {
                         editedName,
                         editedGenre, 
                         editedConsole, 
-                        editedYear, 
                         editedPublisher);
 
                     // Close the current edit frame
@@ -343,6 +339,7 @@ public class EditDataGUI extends JFrame {
     private javax.swing.JButton cancelBtn;
     private javax.swing.JLabel genreLabel;
     private javax.swing.JTextField genreTxtField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTxtField;
     private javax.swing.JLabel platformLabel;
@@ -358,7 +355,5 @@ public class EditDataGUI extends JFrame {
     private javax.swing.JButton saveBtn;
     private javax.swing.JPanel textFieldsPanel;
     private javax.swing.JLabel titleTabel;
-    private javax.swing.JLabel yearLabel;
-    private javax.swing.JTextField yearTxtField;
     // End of variables declaration//GEN-END:variables
 }

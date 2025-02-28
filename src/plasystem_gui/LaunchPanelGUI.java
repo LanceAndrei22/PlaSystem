@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package plasystem_gui;
 
 import plasystem_functions.KeycodeVerification;
@@ -7,24 +11,22 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * Represents the launch panel of the application.
+ *
+ * @author mjbal
  */
-public class LaunchPanelGUI extends JFrame {
-    // Attributes for handling data
-    KeycodeVerification keyValidator = new KeycodeVerification();
+public class LaunchPanelGUI extends javax.swing.JFrame {
+
     
-    /**
-     * Constructor for LaunchPanelGUI.
-     * Initializes components, sets the location, and updates the file path label.
-     */
+      KeycodeVerification keyValidator = new KeycodeVerification();
+     
     public LaunchPanelGUI() {
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
         
         // Update the label with the file name obtained from DatabaseFileChooser
-        filePathLabel.setText(DatabaseFileChooser.getFileName());
+       
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,173 +36,83 @@ public class LaunchPanelGUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        launchPanel = new JPanel();
-        titleLabel = new JLabel();
-        launchButton = new JButton();
-        exitButton = new JButton();
-        fileChooserBtn = new JToggleButton();
-        filePathLabel = new JLabel();
-        titleLabel1 = new JLabel();
-        titleLabel2 = new JLabel();
-        titleLabel3 = new JLabel();
-        logoPanel = new JPanel();
-        logoLabel = new JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        exitButton = new javax.swing.JButton();
+        launchButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new Color(51, 51, 51));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        launchPanel.setBackground(new Color(255, 153, 102));
-
-        titleLabel.setFont(new Font("Segoe UI Symbol", 1, 60)); // NOI18N
-        titleLabel.setForeground(new Color(51, 51, 51));
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setText("Buy,");
-
-        launchButton.setBackground(new Color(51, 51, 51));
-        launchButton.setForeground(new Color(255, 255, 255));
-        launchButton.setText("Launch");
-        launchButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        launchButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                launchButtonActionPerformed(evt);
-            }
-        });
-
-        exitButton.setBackground(new Color(51, 51, 51));
-        exitButton.setForeground(new Color(255, 255, 255));
+        exitButton.setBackground(new java.awt.Color(0, 153, 255));
+        exitButton.setForeground(new java.awt.Color(255, 255, 255));
         exitButton.setText("Exit");
-        exitButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        exitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        exitButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        exitButton.setInheritsPopupMenu(true);
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitButtonActionPerformed(evt);
             }
         });
 
-        fileChooserBtn.setBackground(new Color(51, 51, 51));
-        fileChooserBtn.setForeground(new Color(255, 255, 255));
-        fileChooserBtn.setText("Choose Database");
-        fileChooserBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                fileChooserBtnActionPerformed(evt);
+        launchButton.setBackground(new java.awt.Color(0, 153, 255));
+        launchButton.setForeground(new java.awt.Color(255, 255, 255));
+        launchButton.setText("Launch");
+        launchButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        launchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                launchButtonActionPerformed(evt);
             }
         });
 
-        filePathLabel.setFont(new Font("Segoe UI", 0, 10)); // NOI18N
-        filePathLabel.setForeground(new Color(51, 51, 51));
-        filePathLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        filePathLabel.setText("filepath");
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px)11.gif"))); // NOI18N
 
-        titleLabel1.setFont(new Font("Segoe UI Symbol", 1, 75)); // NOI18N
-        titleLabel1.setForeground(new Color(51, 51, 51));
-        titleLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel1.setText("Discover,");
-
-        titleLabel2.setFont(new Font("Segoe UI Symbol", 1, 60)); // NOI18N
-        titleLabel2.setForeground(new Color(51, 51, 51));
-        titleLabel2.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel2.setText("Play");
-
-        titleLabel3.setFont(new Font("Segoe UI Symbol", 1, 12)); // NOI18N
-        titleLabel3.setForeground(new Color(51, 51, 51));
-        titleLabel3.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel3.setText("VERSION 1.0");
-        titleLabel3.setToolTipText("");
-
-        GroupLayout launchPanelLayout = new GroupLayout(launchPanel);
-        launchPanel.setLayout(launchPanelLayout);
-        launchPanelLayout.setHorizontalGroup(
-            launchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(launchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                        .addGroup(launchPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(exitButton, GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                            .addComponent(launchButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(97, 97, 97))
-                    .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                        .addComponent(titleLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(titleLabel2)
-                        .addGap(72, 72, 72))))
-            .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
-                .addGroup(launchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(filePathLabel, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 399, GroupLayout.PREFERRED_SIZE)
-                    .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                        .addComponent(fileChooserBtn)
-                        .addGap(137, 137, 137))
-                    .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                        .addComponent(titleLabel1)
-                        .addGap(31, 31, 31))
-                    .addGroup(GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
-                        .addComponent(titleLabel3, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-                        .addGap(158, 158, 158))))
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(452, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                    .addComponent(launchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(449, 449, 449))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
-        launchPanelLayout.setVerticalGroup(
-            launchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(launchPanelLayout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(titleLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(titleLabel1)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(launchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(titleLabel2)
-                    .addComponent(titleLabel, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addComponent(launchButton, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(exitButton, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(fileChooserBtn)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filePathLabel)
-                .addContainerGap())
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(347, Short.MAX_VALUE)
+                .addComponent(launchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        logoPanel.setBackground(new Color(51, 51, 51));
-
-        logoLabel.setBackground(new Color(51, 51, 51));
-        logoLabel.setIcon(new ImageIcon(getClass().getResource("/datamine_main/datamineLogo.png"))); // NOI18N
-
-        GroupLayout logoPanelLayout = new GroupLayout(logoPanel);
-        logoPanel.setLayout(logoPanelLayout);
-        logoPanelLayout.setHorizontalGroup(
-            logoPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(logoPanelLayout.createSequentialGroup()
-                .addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 509, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        logoPanelLayout.setVerticalGroup(
-            logoPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(logoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(launchPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(logoPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(launchPanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    /**
-     * Handles the action performed when the launch button is clicked.
-     * It verifies the key code and launches the main program if validated.
-     */
-    private void launchButtonActionPerformed(ActionEvent evt) {                                              
+
+    private void launchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchButtonActionPerformed
         // Check if the keycode file is visible; if so, return
         if(keyValidator.isKeycodeFileVisible()){
             return;
@@ -224,45 +136,59 @@ public class LaunchPanelGUI extends JFrame {
                 }
             }
         }
-    }                                            
-    
+    }//GEN-LAST:event_launchButtonActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+       System.exit(0); // Close the application
+    }//GEN-LAST:event_exitButtonActionPerformed
+
     /**
-     * Handles the action performed when the exit button is clicked.
-     * Exits the program.
-     */
-    private void exitButtonActionPerformed(ActionEvent evt) {                                                                                      
-        System.exit(0); // Close the application
-    }                                          
-    
-    /**
-     * Handles the action performed when the file chooser button is clicked.
-     * Invokes the file chooser to select a file and updates the file path label.
-     */
-    private void fileChooserBtnActionPerformed(ActionEvent evt) {                                                                                              
-        DatabaseFileChooser.chooseFile(); // Open file chooser
-        filePathLabel.setText(DatabaseFileChooser.getFileName()); // Update file path label
-    }                                              
-    
-    /**
-     * Launches the main program GUI, sets it visible, and disposes of the current frame.
+     * @param args the command line arguments
      */
     private void launchMainProgram() {
         JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
         mainProgram.setVisible(true); // Set the main program frame visible
         this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
     }
+    
+    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
 
-    // Variables declaration - do not modify                     
-    private JButton exitButton;
-    private JToggleButton fileChooserBtn;
-    private JLabel filePathLabel;
-    private JButton launchButton;
-    private JPanel launchPanel;
-    private JLabel logoLabel;
-    private JPanel logoPanel;
-    private JLabel titleLabel;
-    private JLabel titleLabel1;
-    private JLabel titleLabel2;
-    private JLabel titleLabel3;
-    // End of variables declaration                                      
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new LaunchPanelGUI().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton exitButton;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton launchButton;
+    // End of variables declaration//GEN-END:variables
 }

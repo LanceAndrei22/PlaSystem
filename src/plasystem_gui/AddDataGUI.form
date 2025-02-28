@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="resizable" type="boolean" value="false"/>
@@ -24,11 +24,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace pref="26" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="37" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="titleLabel" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                  <Component id="titleLabel" min="-2" pref="121" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="cancelBtn" min="-2" pref="99" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
@@ -38,6 +38,12 @@
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+          </Group>
+          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabel1" min="-2" pref="567" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              </Group>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,7 +59,13 @@
                   <Component id="cancelBtn" max="32767" attributes="0"/>
                   <Component id="addBtn" min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
+                  <Component id="jLabel1" min="-2" pref="346" max="-2" attributes="0"/>
+              </Group>
           </Group>
       </Group>
     </DimensionLayout>
@@ -67,6 +79,9 @@
           </Border>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="textFieldsPanel.setBackground(new Color(255, 255, 153, 150));"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -74,8 +89,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="publisherLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="genreLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -83,28 +97,37 @@
                           </Group>
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="publisherTxtField" alignment="1" pref="144" max="32767" attributes="0"/>
-                              <Component id="nameTxtField" max="32767" attributes="0"/>
+                              <Component id="nameTxtField" pref="144" max="32767" attributes="0"/>
                               <Component id="genreTxtField" max="32767" attributes="0"/>
                               <Component id="platformTxtField" alignment="0" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="priceLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="productIDLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="publisherLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="quantityLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="quantityPicker" min="-2" pref="75" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="priceLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="productIDLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="yearLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="quantityLabel" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="productIDTxtField" pref="136" max="32767" attributes="0"/>
+                              <Component id="priceTxtField" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="publisherTxtField" pref="151" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="productIDTxtField" max="32767" attributes="0"/>
-                      <Component id="priceTxtField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="yearTxtField" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
-                      <Component id="quantityPicker" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -120,6 +143,8 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="priceTxtField" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="publisherTxtField" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -136,19 +161,16 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="platformLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="platformTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="yearLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="yearTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="publisherLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="quantityPicker" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="publisherLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="publisherTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="quantityPicker" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="28" max="32767" attributes="0"/>
+                  <EmptySpace pref="44" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -165,42 +187,53 @@
         </Component>
         <Component class="javax.swing.JLabel" name="nameLabel">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="NAME"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="genreLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="GENRE"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="SIZE"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="platformLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="PLATFORM"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="BRAND"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="publisherTxtField">
-        </Component>
-        <Component class="javax.swing.JTextField" name="yearTxtField">
         </Component>
         <Component class="javax.swing.JTextField" name="priceTxtField">
         </Component>
         <Component class="javax.swing.JLabel" name="publisherLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="PUBLISHER"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="TYPE"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="priceLabel">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="PRICE"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="yearLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="YEAR"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="quantityLabel">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="QUANTITY"/>
           </Properties>
         </Component>
@@ -208,6 +241,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="productIDLabel">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="PRODUCT ID"/>
           </Properties>
         </Component>
@@ -217,6 +253,9 @@
     </Container>
     <Component class="javax.swing.JButton" name="cancelBtn">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="CANCEL"/>
       </Properties>
       <Events>
@@ -225,6 +264,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="addBtn">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="ADD"/>
       </Properties>
       <Events>
@@ -234,9 +276,16 @@
     <Component class="javax.swing.JLabel" name="titleLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI Semibold" size="15" style="0"/>
+          <Font name="Microsoft YaHei UI" size="15" style="3"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Add Data"/>
+        <Property name="text" type="java.lang.String" value="Add Inventory"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/plasystem_main/SOFTWARE (1000 x 500 px) (8).png"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

@@ -13,7 +13,7 @@ public class TableRowSelector {
     private String tblName = "";
     private String tblGenre = "";
     private String tblPlatform = "";
-    private String tblYear = "";
+   
     private String tblPublisher = "";
     private int viewRow = 0;
 
@@ -37,8 +37,7 @@ public class TableRowSelector {
             tblName = tblModel.getValueAt(modelRow, 3).toString();
             tblGenre = tblModel.getValueAt(modelRow, 4).toString();
             tblPlatform = tblModel.getValueAt(modelRow, 5).toString();
-            tblYear = tblModel.getValueAt(modelRow, 6).toString();
-            tblPublisher = tblModel.getValueAt(modelRow, 7).toString();
+           tblPublisher = tblModel.getValueAt(modelRow, 6).toString();
             viewRow = modelRow;
         }
     }
@@ -60,9 +59,7 @@ public class TableRowSelector {
         return tblPlatform;
     }
 
-    public String getTblYear() {
-        return tblYear;
-    }
+    
 
     public String getTblPublsher() {
         return tblPublisher;
