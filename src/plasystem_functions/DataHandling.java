@@ -75,7 +75,7 @@ public class DataHandling extends GameData {
                 
                 // Check if the data has all required fields
                 // If complete data, create a GameData object and add it to the linked list
-                if (fileData.length == 8) {
+                if (fileData.length == 7) {
                     // Extract individual data elements from the fileData array
                     String productID = fileData[0];
                     int quantity = Integer.parseInt(fileData[1]);
@@ -83,7 +83,7 @@ public class DataHandling extends GameData {
                     String name = fileData[3];
                     String genre = fileData[4];
                     String platform = fileData[5];
-                    String publisher = fileData[7];
+                    String publisher = fileData[6];
                     
                     // Create a GameData object with extracted data
                     GameData data = new GameData(productID, quantity, price, name, genre, platform, publisher);
@@ -126,8 +126,7 @@ public class DataHandling extends GameData {
             for (GameData element : gameList) {
                 // Constructing the line to write in the file
                 String line = element.getProductID() + " | " + element.getQuantity() + " | " + element.getPrice() + " | "
-                        + element.getName() + " | " + element.getGenre() + " | " + element.getPlatform() + " | "
-                         + " | " + element.getPublisher() + "\n";
+                        + element.getName() + " | " + element.getGenre() + " | " + element.getPlatform() + " | " + element.getPublisher() + "\n";
                 fileWriter.write(line); // Writing the constructed line to the file
             }
         } catch (IOException e) {
@@ -163,8 +162,7 @@ public class DataHandling extends GameData {
             model.setValueAt(newName, selectedRow, 3);       // Update name
             model.setValueAt(newGenre, selectedRow, 4);      // Update genre
             model.setValueAt(newPlatform, selectedRow, 5);   // Update platform
-                 
-            model.setValueAt(newPublisher, selectedRow, 7);  // Update publisher
+            model.setValueAt(newPublisher, selectedRow, 6);  // Update publisher
 
             // Update the data in the linked list
             GameData editedGameData = list.get(selectedRow);    // Get the selected GameData object
@@ -173,7 +171,6 @@ public class DataHandling extends GameData {
             editedGameData.setName(newName);                     // Update name
             editedGameData.setGenre(newGenre);                  // Update genre
             editedGameData.setPlatform(newPlatform);          // Update platform
-            
             editedGameData.setPublisher(newPublisher);        // Update publisher
 
             // Save the changes to the file and display appropriate messages
@@ -198,10 +195,9 @@ public class DataHandling extends GameData {
      * @param name       The name for the new data.
      * @param genre      The genre for the new data.
      * @param platform   The platform for the new data.
-     * @param year       The release year for the new data.
      * @param publisher  The publisher for the new data.
      */
-    public void addNewData(LinkedList<GameData> list, JTable table, String productID, int quantity, double price, String name, String genre, String platform, int year, String publisher ) {
+    public void addNewData(LinkedList<GameData> list, JTable table, String productID, int quantity, double price, String name, String genre, String platform, String publisher ) {
         // Create a new GameData object
         GameData data = new GameData(
                 productID,

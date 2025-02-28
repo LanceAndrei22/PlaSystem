@@ -22,14 +22,6 @@ public class EditDataGUI extends JFrame {
     ErrorValueHandling isDataValid = new ErrorValueHandling();
     
     /**
-     * Default constructor for the EditDataGUI.
-     */
-    public EditDataGUI (int selectedRow1, String filePath, LinkedList<GameData> gameList, JTable datamineTbl, String tblProductID, String tblQuantity, String tblPrice, String tblName, String tblGenre, String tblPlatform, String tblPublisher){
-       initComponents(); // Initialize components defined in the GUI
-       setLocationRelativeTo(null); // Set the location of the window to the center of the screen
-    }
-    
-    /**
      * Constructor with parameters to initialize EditDataGUI with existing data.
      *
      * @param selectedRow The index of the selected row.
@@ -42,10 +34,9 @@ public class EditDataGUI extends JFrame {
      * @param name        The name of the product.
      * @param genre       The genre of the product.
      * @param platform    The platform(s) the product is available on.
-     * @param year        The release year of the product.
      * @param publisher   The publisher of the product.
      */
-    public EditDataGUI(int selectedRow, String path,LinkedList<GameData> list, JTable TableData,String productID, String quantity, String price, String name, String genre, String platform, String year, String publisher) {
+    public EditDataGUI(int selectedRow, String path, LinkedList<GameData> list, JTable TableData,String productID, String quantity, String price, String name, String genre, String platform, String publisher) {
         initComponents(); // Initialize components defined in the GUI
         
         setLocationRelativeTo(null); // Set the location of the window to the center of the screen
