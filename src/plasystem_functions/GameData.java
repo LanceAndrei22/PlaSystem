@@ -8,7 +8,7 @@ public class GameData {
     protected int quantity;
     protected double price;
     protected String productID;
-    protected int year;
+   
     protected String name;
     protected String genre;
     protected String publisher;
@@ -23,17 +23,17 @@ public class GameData {
      * @param gameName    The name of the game.
      * @param genre       The genre of the game.
      * @param platform    The platform(s) the game is available on.
-     * @param releaseYear The release year of the game.
+    
      * @param publisher   The publisher of the game.
      */
-    public GameData(String productID, int quantity, double price, String gameName, String genre, String platform, int releaseYear, String publisher){
+    public GameData(String productID, int quantity, double price, String gameName, String genre, String platform, String publisher){
         this.productID = productID;
         this.quantity = quantity;
         this.price = price;
         this.name = gameName;
         this.genre = genre;
         this.platform = platform;
-        this.year = releaseYear;
+        
         this.publisher = publisher;  
     }
     
@@ -93,13 +93,7 @@ public class GameData {
         return platform;
     }
     
-    // Setters and getters for Release Year
-    public void setReleaseYear(int year){
-        this.year = year;
-    }
-    public int getReleaseYear(){
-        return year;
-    }
+   
     
     // Setters and getters for Publisher
     public void setPublisher(String publisher){

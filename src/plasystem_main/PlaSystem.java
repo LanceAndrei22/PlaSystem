@@ -1,7 +1,7 @@
 package plasystem_main;
 
 import plasystem_gui.LaunchPanelGUI;
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
 
@@ -15,10 +15,11 @@ public class PlaSystem {
      * @param args Command-line arguments (not used in this application).
      */
     public static void main(String[] args) {
-        FlatDarkLaf.setup(); // Set up FlatDarkLaf look and feel for the UI
-        
+        FlatIntelliJLaf.setup(); // Set up FlatDarkLaf look and feel for the UI
         // Create a JFrame instance of LaunchPanelGUI to start the application
         JFrame launchPanel = new LaunchPanelGUI();
         launchPanel.setVisible(true); // Make the launch panel visible
+        
+        JFrame.setDefaultLookAndFeelDecorated(true);
     }
 }

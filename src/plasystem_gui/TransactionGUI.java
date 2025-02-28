@@ -105,13 +105,14 @@ public class TransactionGUI extends JFrame {
         cancelBtn = new javax.swing.JButton();
         printReceiptBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         transactPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        prodIDLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        prodIDLabel.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         prodIDLabel.setText("Product ID:");
 
         itemPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -124,10 +125,9 @@ public class TransactionGUI extends JFrame {
 
         dateTxtField.setEditable(false);
 
-        dateLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        dateLabel.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         dateLabel.setText("Date of Transaction:");
 
-        verifyBtn.setBackground(new java.awt.Color(102, 102, 102));
         verifyBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         verifyBtn.setText("VERIFY PRODUCT");
         verifyBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -144,7 +144,6 @@ public class TransactionGUI extends JFrame {
         quantityLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         quantityLabel.setText("Quantity:");
 
-        addBtn.setBackground(new java.awt.Color(102, 102, 102));
         addBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         addBtn.setText("ADD");
         addBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -157,7 +156,6 @@ public class TransactionGUI extends JFrame {
 
         prodNameTxtField.setEditable(false);
 
-        clearBtn.setBackground(new java.awt.Color(102, 102, 102));
         clearBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         clearBtn.setText("CLEAR");
         clearBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -274,10 +272,9 @@ public class TransactionGUI extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        titleLabel.setFont(new java.awt.Font("Segoe UI Semibold", 0, 15)); // NOI18N
-        titleLabel.setText(" DataMine Transaction");
+        titleLabel.setFont(new java.awt.Font("Microsoft YaHei UI", 3, 15)); // NOI18N
+        titleLabel.setText("PlaSystem Transaction");
 
-        cancelBtn.setBackground(new java.awt.Color(102, 102, 102));
         cancelBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         cancelBtn.setText("CANCEL");
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -286,7 +283,6 @@ public class TransactionGUI extends JFrame {
             }
         });
 
-        printReceiptBtn.setBackground(new java.awt.Color(102, 102, 102));
         printReceiptBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         printReceiptBtn.setText("PRINT RECEIPT");
         printReceiptBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -295,7 +291,6 @@ public class TransactionGUI extends JFrame {
             }
         });
 
-        submitBtn.setBackground(new java.awt.Color(102, 102, 102));
         submitBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         submitBtn.setText("SUBMIT");
         submitBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -304,14 +299,15 @@ public class TransactionGUI extends JFrame {
             }
         });
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (10).png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 29, Short.MAX_VALUE)
+                .addGap(0, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(titleLabel)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -319,8 +315,11 @@ public class TransactionGUI extends JFrame {
                             .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(printReceiptBtn))
-                        .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 782, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,8 +333,14 @@ public class TransactionGUI extends JFrame {
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(printReceiptBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
+
+        transactPanel.setBackground(new Color(255, 102, 102, 100));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -587,6 +592,7 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JTextField dateTxtField;
     private javax.swing.JLabel itemPriceLabel;
     private javax.swing.JTextField itemPriceTxtField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel paymentAmountLabel;
     private javax.swing.JTextField paymentAmountTxtField;
