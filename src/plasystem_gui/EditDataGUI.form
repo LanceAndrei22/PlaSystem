@@ -99,7 +99,7 @@
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="genreTxtField" min="-2" pref="173" max="-2" attributes="0"/>
+                                          <Component id="sizeTxtField" min="-2" pref="173" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
@@ -123,7 +123,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="platformLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="platformTxtField" min="-2" pref="173" max="-2" attributes="0"/>
+                          <Component id="brandTxtField" min="-2" pref="173" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="priceLabel" min="-2" pref="48" max="-2" attributes="0"/>
@@ -136,7 +136,7 @@
                       <Component id="productIDTxtField" max="32767" attributes="0"/>
                       <Component id="priceTxtField" alignment="0" pref="150" max="32767" attributes="0"/>
                       <Component id="quantityPicker" min="-2" pref="79" max="-2" attributes="0"/>
-                      <Component id="publisherTxtField" alignment="0" max="32767" attributes="0"/>
+                      <Component id="typeTxtField" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="53" max="32767" attributes="0"/>
               </Group>
@@ -150,7 +150,7 @@
                       <Group type="102" attributes="0">
                           <Component id="productIDTxtField" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="publisherTxtField" min="-2" max="-2" attributes="0"/>
+                          <Component id="typeTxtField" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -161,13 +161,13 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="genreLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="genreTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="sizeTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="publisherLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="platformLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="platformTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="brandTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="priceTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -224,7 +224,7 @@
             <Property name="text" type="java.lang.String" value="SIZE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="genreTxtField">
+        <Component class="javax.swing.JTextField" name="sizeTxtField">
         </Component>
         <Component class="javax.swing.JLabel" name="priceLabel">
           <Properties>
@@ -252,9 +252,9 @@
         </Component>
         <Component class="javax.swing.JSpinner" name="quantityPicker">
         </Component>
-        <Component class="javax.swing.JTextField" name="publisherTxtField">
+        <Component class="javax.swing.JTextField" name="typeTxtField">
         </Component>
-        <Component class="javax.swing.JTextField" name="platformTxtField">
+        <Component class="javax.swing.JTextField" name="brandTxtField">
         </Component>
         <Component class="javax.swing.JLabel" name="platformLabel">
           <Properties>

@@ -3,7 +3,7 @@ package plasystem_gui;
 import plasystem_functions.ErrorValueHandling;
 import plasystem_functions.DataHandling;
 import plasystem_functions.RandomIDGenerator;
-import plasystem_functions.GameData;
+import plasystem_functions.ProductData;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -15,7 +15,7 @@ import java.awt.event.*;
  */
 public class AddDataGUI extends JFrame {
     // Attributes for handling data
-    LinkedList<GameData> gameList;
+    LinkedList<ProductData> gameList;
     private String filePath;
     private JTable tableData;
     private String newProductID;
@@ -33,11 +33,11 @@ public class AddDataGUI extends JFrame {
     /**
      * Constructor initializing the AddDataGUI with necessary data.
      *
-     * @param gameList   The list of GameData to be updated.
+     * @param gameList   The list of ProductData to be updated.
      * @param tableData  The JTable to display and modify data.
      * @param filePath   The path to the file storing the game data.
      */
-    public AddDataGUI(LinkedList<GameData> gameList, JTable tableData, String filePath) {
+    public AddDataGUI(LinkedList<ProductData> gameList, JTable tableData, String filePath) {
         initComponents(); // Initialize components defined in the form
         
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
@@ -72,12 +72,12 @@ public class AddDataGUI extends JFrame {
 
         textFieldsPanel = new javax.swing.JPanel();
         productIDTxtField = new javax.swing.JTextField();
-        genreTxtField = new javax.swing.JTextField();
-        platformTxtField = new javax.swing.JTextField();
+        sizeTxtField = new javax.swing.JTextField();
+        brandTxtField = new javax.swing.JTextField();
         nameLabel = new javax.swing.JLabel();
         genreLabel = new javax.swing.JLabel();
         platformLabel = new javax.swing.JLabel();
-        publisherTxtField = new javax.swing.JTextField();
+        typeTxtField = new javax.swing.JTextField();
         priceTxtField = new javax.swing.JTextField();
         publisherLabel = new javax.swing.JLabel();
         priceLabel = new javax.swing.JLabel();
@@ -133,8 +133,8 @@ public class AddDataGUI extends JFrame {
                         .addGap(20, 20, 20)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nameTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                            .addComponent(genreTxtField)
-                            .addComponent(platformTxtField))
+                            .addComponent(sizeTxtField)
+                            .addComponent(brandTxtField))
                         .addGap(31, 31, 31)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(priceLabel)
@@ -145,7 +145,6 @@ public class AddDataGUI extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -153,7 +152,7 @@ public class AddDataGUI extends JFrame {
                             .addComponent(priceTxtField))
                         .addGap(21, 21, 21))
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
-                        .addComponent(publisherTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                        .addComponent(typeTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         textFieldsPanelLayout.setVerticalGroup(
@@ -168,20 +167,20 @@ public class AddDataGUI extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(priceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(publisherTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(typeTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nameLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(genreTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sizeTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(genreLabel)
                             .addComponent(priceLabel))
                         .addGap(18, 18, 18)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(platformLabel)
-                            .addComponent(platformTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(brandTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(publisherLabel))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -271,12 +270,11 @@ public class AddDataGUI extends JFrame {
             int quantityValue = (int) quantityPicker.getValue();
             String tempPrice = priceTxtField.getText();
             String tempName = nameTxtField.getText();
-            String tempGenre = genreTxtField.getText();
-            String tempConsole = platformTxtField.getText();
-            
-            String tempPublisher = publisherTxtField.getText();
+            String tempSize = sizeTxtField.getText();
+            String tempBrand = brandTxtField.getText();
+            String tempType = typeTxtField.getText();
 
-            if (tempName.isEmpty() || tempGenre.isEmpty() || tempConsole.isEmpty() || tempPublisher.isEmpty() || tempPrice.isEmpty()) {
+            if (tempName.isEmpty() || tempSize.isEmpty() || tempBrand.isEmpty() || tempType.isEmpty() || tempPrice.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Error: No Inputs Detected", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 double validPrice = 0;
@@ -295,8 +293,6 @@ public class AddDataGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Invalid Price Input. Please enter a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
 
-                
-
                 // Check if Quantity is valid aka not 0 or negative
                 if (quantityValue <= 0) {
                     isValid = false;
@@ -311,16 +307,15 @@ public class AddDataGUI extends JFrame {
                                            quantityValue, 
                                            validPrice, 
                                            tempName, 
-                                           tempGenre, 
-                                           tempConsole, 
-                                           tempPublisher);
+                                           tempSize, 
+                                           tempBrand, 
+                                           tempType);
                     
                     // Reset text fields and generate a new product ID
                     priceTxtField.setText("");
-                    
-                    genreTxtField.setText("");
-                    platformTxtField.setText("");
-                    publisherTxtField.setText("");
+                    sizeTxtField.setText("");
+                    brandTxtField.setText("");
+                    typeTxtField.setText("");
                     nameTxtField.setText("");
                     newProductID = prodId.generateProductID();
                     productIDTxtField.setText(newProductID);
@@ -341,23 +336,23 @@ public class AddDataGUI extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
+    private javax.swing.JTextField brandTxtField;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JLabel genreLabel;
-    private javax.swing.JTextField genreTxtField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTxtField;
     private javax.swing.JLabel platformLabel;
-    private javax.swing.JTextField platformTxtField;
     private javax.swing.JLabel priceLabel;
     private javax.swing.JTextField priceTxtField;
     private javax.swing.JLabel productIDLabel;
     private javax.swing.JTextField productIDTxtField;
     private javax.swing.JLabel publisherLabel;
-    private javax.swing.JTextField publisherTxtField;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
+    private javax.swing.JTextField sizeTxtField;
     private javax.swing.JPanel textFieldsPanel;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JTextField typeTxtField;
     // End of variables declaration//GEN-END:variables
 }

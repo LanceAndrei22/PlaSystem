@@ -4,7 +4,7 @@ import plasystem_functions.DataHandling;
 import plasystem_functions.DatabaseFileChooser;
 import plasystem_functions.TableRowSelector;
 import plasystem_functions.TableAlignmentRenderer;
-import plasystem_functions.GameData;
+import plasystem_functions.ProductData;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -26,8 +26,8 @@ public class MainProgramGUI extends JFrame {
     // Instance of DataHandling to manage data operations
     DataHandling dataHandling = new DataHandling(filePath);
     
-    // List of GameData retrieved from the file
-    LinkedList<GameData> gameList = dataHandling.getList();
+    // List of ProductData retrieved from the file
+    LinkedList<ProductData> productList = dataHandling.getList();
     
     /**
      * Constructor initializing the Main Program GUI.
@@ -36,26 +36,25 @@ public class MainProgramGUI extends JFrame {
     public MainProgramGUI() {
         initComponents(); // Initialize components of the GUI
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
-        new TableAlignmentRenderer(datamineTbl); // Apply table alignment
+        new TableAlignmentRenderer(plasystemTbl); // Apply table alignment
         
         /** 
          *  If the Main Program is opened, data will be automatically added to the 
          */
-        if (gameList != null && !gameList.isEmpty()) {
-            DefaultTableModel model = (DefaultTableModel) datamineTbl.getModel();
+        if (productList != null && !productList.isEmpty()) {
+            DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
             model.setRowCount(0); // Clear the existing table content
             
-            // Loop through the gameList and add each element's details to the table
-            for(GameData element : gameList){
+            // Loop through the productList and add each element's details to the table
+            for(ProductData element : productList){
                 Object[] rowData = { 
                     element.getProductID(),
-                    element.getQuantity(),
-                    element.getPrice(),
-                    element.getName(),
-                    element.getGenre(),
-                    element.getPlatform(),
-                    
-                    element.getPublisher(),
+                    element.getProductQuantity(),
+                    element.getProductPrice(),
+                    element.getProductName(),
+                    element.getProductSize(),
+                    element.getProductBrand(),    
+                    element.getProductType(),
                 };
                 model.addRow(rowData); // Add each row of data to the table model
             }
@@ -74,8 +73,8 @@ public class MainProgramGUI extends JFrame {
     private void initComponents() {
 
         menuBar1 = new java.awt.MenuBar();
-        datamineTblScrollPane = new javax.swing.JScrollPane();
-        datamineTbl = new javax.swing.JTable();
+        plasystemTblScrollPane = new javax.swing.JScrollPane();
+        plasystemTbl = new javax.swing.JTable();
         dataPanel = new javax.swing.JPanel();
         editBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
@@ -91,8 +90,8 @@ public class MainProgramGUI extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(2600, 1300));
 
-        datamineTbl.setAutoCreateRowSorter(true);
-        datamineTbl.setModel(new javax.swing.table.DefaultTableModel(
+        plasystemTbl.setAutoCreateRowSorter(true);
+        plasystemTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -115,13 +114,13 @@ public class MainProgramGUI extends JFrame {
                 return canEdit [columnIndex];
             }
         });
-        datamineTbl.getTableHeader().setReorderingAllowed(false);
-        datamineTblScrollPane.setViewportView(datamineTbl);
-        if (datamineTbl.getColumnModel().getColumnCount() > 0) {
-            datamineTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
-            datamineTbl.getColumnModel().getColumn(1).setPreferredWidth(20);
-            datamineTbl.getColumnModel().getColumn(2).setPreferredWidth(25);
-            datamineTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
+        plasystemTbl.getTableHeader().setReorderingAllowed(false);
+        plasystemTblScrollPane.setViewportView(plasystemTbl);
+        if (plasystemTbl.getColumnModel().getColumnCount() > 0) {
+            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(1).setPreferredWidth(20);
+            plasystemTbl.getColumnModel().getColumn(2).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
         }
 
         dataPanel.setOpaque(false);
@@ -243,7 +242,7 @@ public class MainProgramGUI extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(datamineTblScrollPane)
+                    .addComponent(plasystemTblScrollPane)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,7 +265,7 @@ public class MainProgramGUI extends JFrame {
                     .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(datamineTblScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -291,7 +290,7 @@ public class MainProgramGUI extends JFrame {
      * @param evt Action event generated by the button click
      */
     private void transactBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_transactBtnActionPerformed
-        TransactionGUI transactPanel = new TransactionGUI(gameList, filePath, datamineTbl);
+        TransactionGUI transactPanel = new TransactionGUI(productList, filePath, plasystemTbl);
         transactPanel.setVisible(true);
         transactPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_transactBtnActionPerformed
@@ -303,7 +302,7 @@ public class MainProgramGUI extends JFrame {
      * @param evt Action event generated by the button click
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        JFrame addPanel = new AddDataGUI(gameList, datamineTbl, filePath);
+        JFrame addPanel = new AddDataGUI(productList, plasystemTbl, filePath);
         addPanel.setVisible(true);
         addPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_addBtnActionPerformed
@@ -315,36 +314,36 @@ public class MainProgramGUI extends JFrame {
      */
     private void editBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         // Get the index of the selected row in the main table
-        int selectedRow = datamineTbl.getSelectedRow();
+        int selectedRow = plasystemTbl.getSelectedRow();
         
         // Check if a row is selected (row index starts from 0, -1 means no selection)
         if (selectedRow != -1) {
             // Create an instance of TableRowSelector to extract data from the selected row
-            TableRowSelector rowSelector = new TableRowSelector(datamineTbl);
+            TableRowSelector rowSelector = new TableRowSelector(plasystemTbl);
         
             // Retrieve data using TableRowSelector getters
             String tblProductID = rowSelector.getTblProductID();
             String tblQuantity = rowSelector.getQuantity();
             String tblPrice = rowSelector.getTblPrice();
             String tblName = rowSelector.getTblName();
-            String tblGenre = rowSelector.getTblGenre();
-            String tblPlatform = rowSelector.getTblPlatform();
-            String tblPublisher = rowSelector.getTblPublsher();
+            String tblSize = rowSelector.getTblSize();
+            String tblBrand = rowSelector.getTblBrand();
+            String tblType = rowSelector.getTblType();
             selectedRow = rowSelector.getRow(); // Update the selected row index
 
             // Pass the retrieved data to the EditDataGUI for editing
             EditDataGUI edit = new EditDataGUI(
                     selectedRow, 
                     filePath, 
-                    gameList, 
-                    datamineTbl,
+                    productList, 
+                    plasystemTbl,
                     tblProductID,
                     tblQuantity,
                     tblPrice, 
                     tblName, 
-                    tblGenre, 
-                    tblPlatform, 
-                    tblPublisher
+                    tblSize, 
+                    tblBrand, 
+                    tblType
             );
 
             // Set properties for the edit frame
@@ -364,9 +363,9 @@ public class MainProgramGUI extends JFrame {
      */
     private void deleteBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         // Check if a row is selected in the main table
-        if(datamineTbl.getSelectedRow() != -1){
+        if(plasystemTbl.getSelectedRow() != -1){
             // Delete data corresponding to the selected row
-            dataHandling.deleteData(datamineTbl, gameList, datamineTbl.getSelectedRow());
+            dataHandling.deleteData(plasystemTbl, productList, plasystemTbl.getSelectedRow());
         } else {
             JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -378,9 +377,9 @@ public class MainProgramGUI extends JFrame {
      * @param evt Key event generated when a key is released in the search text field
      */
     private void searchTxtFieldKeyReleased(KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
-        DefaultTableModel model = (DefaultTableModel) datamineTbl.getModel();
+        DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        datamineTbl.setRowSorter(sorter);
+        plasystemTbl.setRowSorter(sorter);
         
         // Get the selected column name from the search parameter box
         String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString(); // Replace "ColumnName" with the actual column name
@@ -394,13 +393,13 @@ public class MainProgramGUI extends JFrame {
     private javax.swing.JButton addBtn;
     private javax.swing.JPanel dataPanel;
     private javax.swing.JLabel datamineLogoLabel;
-    private javax.swing.JTable datamineTbl;
-    private javax.swing.JScrollPane datamineTblScrollPane;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private java.awt.MenuBar menuBar1;
+    private javax.swing.JTable plasystemTbl;
+    private javax.swing.JScrollPane plasystemTblScrollPane;
     private javax.swing.JPanel searchPanel;
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;

@@ -11,10 +11,9 @@ public class TableRowSelector {
     private String tblQuantity = "";
     private String tblPrice = "";
     private String tblName = "";
-    private String tblGenre = "";
-    private String tblPlatform = "";
-   
-    private String tblPublisher = "";
+    private String tblSize = "";
+    private String tblBrand = "";
+    private String tblType = "";
     private int viewRow = 0;
 
     /**
@@ -35,9 +34,9 @@ public class TableRowSelector {
             tblQuantity = tblModel.getValueAt(modelRow, 1).toString();
             tblPrice = tblModel.getValueAt(modelRow, 2).toString();
             tblName = tblModel.getValueAt(modelRow, 3).toString();
-            tblGenre = tblModel.getValueAt(modelRow, 4).toString();
-            tblPlatform = tblModel.getValueAt(modelRow, 5).toString();
-           tblPublisher = tblModel.getValueAt(modelRow, 6).toString();
+            tblSize = tblModel.getValueAt(modelRow, 4).toString();
+            tblBrand = tblModel.getValueAt(modelRow, 5).toString();
+            tblType = tblModel.getValueAt(modelRow, 6).toString();
             viewRow = modelRow;
         }
     }
@@ -51,18 +50,16 @@ public class TableRowSelector {
         return tblName;
     }
 
-    public String getTblGenre() {
-        return tblGenre;
+    public String getTblSize() {
+        return tblSize;
     }
 
-    public String getTblPlatform() {
-        return tblPlatform;
+    public String getTblBrand() {
+        return tblBrand;
     }
 
-    
-
-    public String getTblPublsher() {
-        return tblPublisher;
+    public String getTblType() {
+        return tblType;
     }
 
     public String getTblProductID() {
