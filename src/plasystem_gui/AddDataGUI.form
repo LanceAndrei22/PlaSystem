@@ -98,8 +98,8 @@
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="nameTxtField" pref="144" max="32767" attributes="0"/>
-                              <Component id="genreTxtField" max="32767" attributes="0"/>
-                              <Component id="platformTxtField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="sizeTxtField" max="32767" attributes="0"/>
+                              <Component id="brandTxtField" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -124,7 +124,7 @@
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="publisherTxtField" pref="151" max="32767" attributes="0"/>
+                          <Component id="typeTxtField" pref="151" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -144,7 +144,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="priceTxtField" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="publisherTxtField" min="-2" max="-2" attributes="0"/>
+                          <Component id="typeTxtField" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -153,14 +153,14 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="genreTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="sizeTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="genreLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="platformLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="platformTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="brandTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="publisherLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -181,9 +181,9 @@
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="genreTxtField">
+        <Component class="javax.swing.JTextField" name="sizeTxtField">
         </Component>
-        <Component class="javax.swing.JTextField" name="platformTxtField">
+        <Component class="javax.swing.JTextField" name="brandTxtField">
         </Component>
         <Component class="javax.swing.JLabel" name="nameLabel">
           <Properties>
@@ -209,7 +209,7 @@
             <Property name="text" type="java.lang.String" value="BRAND"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="publisherTxtField">
+        <Component class="javax.swing.JTextField" name="typeTxtField">
         </Component>
         <Component class="javax.swing.JTextField" name="priceTxtField">
         </Component>

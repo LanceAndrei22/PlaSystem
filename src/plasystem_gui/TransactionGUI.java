@@ -6,7 +6,7 @@ import plasystem_functions.RandomIDGenerator;
 import plasystem_functions.TransactionHandling;
 import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.FrameExporter;
-import plasystem_functions.GameData;
+import plasystem_functions.ProductData;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -20,7 +20,7 @@ import javax.swing.table.*;
  */
 public class TransactionGUI extends JFrame {
     // Attributes for handling data
-    private LinkedList<GameData> list;
+    private LinkedList<ProductData> list;
     TransactionHandling handling = new TransactionHandling();
     ErrorValueHandling isDataValid = new ErrorValueHandling();
     RandomIDGenerator receiptID = new RandomIDGenerator();
@@ -42,14 +42,14 @@ public class TransactionGUI extends JFrame {
     /**
      * Creates a new instance of TransactionGUI with specific parameters.
      *
-     * @param list      The list of GameData for transaction handling.
+     * @param list      The list of ProductData for transaction handling.
      * @param path      The path for file handling.
      * @param tableData The JTable for displaying transaction data.
      */    
-    public TransactionGUI(LinkedList<GameData> list,String path, JTable tableData){
+    public TransactionGUI(LinkedList<ProductData> list,String path, JTable tableData){
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the frame's location to the center of the screen
-        this.list = list; // Set the GameData list
+        this.list = list; // Set the ProductData list
         this.path = path; // Set the file path
         this.tableData = tableData; // Set the JTable for transaction data
         dateTxtField.setText(LocalDate.now().toString()); // Set the current date
@@ -563,13 +563,13 @@ public class TransactionGUI extends JFrame {
         boolean check = false;
         
         // Looping through the list to find the matching product
-        for(GameData element: list){
+        for(ProductData element: list){
             if(element.getProductID().equals(prodIDCheck) ){
                 // If product exists, display its details
                 check = true;
-                itemPriceTxtField.setText(Double.toString(element.getPrice()));
-                prodNameTxtField.setText(element.getName());
-                quantityChecker = element.getQuantity();
+                itemPriceTxtField.setText(Double.toString(element.getProductPrice()));
+                prodNameTxtField.setText(element.getProductName());
+                quantityChecker = element.getProductQuantity();
                 addBtn.setEnabled(true); // Enable the "Add" button for valid product
                 break;
             }

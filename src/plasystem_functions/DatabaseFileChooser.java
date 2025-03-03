@@ -10,7 +10,7 @@ import java.util.Properties;
  */
 public class DatabaseFileChooser {
     // Default file path for the inventory file
-    private static String filepath = "src/plasystem_inventory/inventory.txt";
+    private static String filepath = "src/plasystem_inventory/inventory.dat";
     
     // Configuration file constants
     private static final String CONFIG_FILE = "src/plasystem_inventory/config.properties";
@@ -23,7 +23,7 @@ public class DatabaseFileChooser {
     public static void chooseFile() {
         // Create a file chooser and set file filter to .txt files only
         JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Data Files", "dat");
         chooser.setFileFilter(filter);
 
         // Load the last chosen file path and set it as the initial directory
@@ -38,12 +38,12 @@ public class DatabaseFileChooser {
         // If a file is chosen and it's a .txt file, update the filepath and save the new chosen path
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File database = chooser.getSelectedFile();
-            if (database.getName().toLowerCase().endsWith(".txt")) {
+            if (database.getName().toLowerCase().endsWith(".dat")) {
                 filepath = database.getAbsolutePath();
                 saveLastChosenFilePath(filepath);
             } else {
                 // If the chosen file is not a .txt file, show an error message and prompt for selection again
-                JOptionPane.showMessageDialog(null, "Please select a .txt file!");
+                JOptionPane.showMessageDialog(null, "Please select a .dat file!");
                 chooseFile(); // Recursive call to select a file again
             }
         }
