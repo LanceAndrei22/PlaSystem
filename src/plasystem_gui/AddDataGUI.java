@@ -278,7 +278,6 @@ public class AddDataGUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Error: No Inputs Detected", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 double validPrice = 0;
-                int validYear = 0;
                 boolean isValid = true;
 
                 // Check if price is a valid double and not negative
