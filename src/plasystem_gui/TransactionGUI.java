@@ -7,6 +7,7 @@ import plasystem_functions.TransactionHandling;
 import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.FrameExporter;
 import plasystem_functions.ProductData;
+import plasystem_functions.TableRowSelector;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -30,6 +31,7 @@ public class TransactionGUI extends JFrame {
     private JTable tableData;
     private Double customerMoney;
     private Double totalPurchase;
+    private DataHandling dataHandling;
     
     /**
      * Default constructor for the EditDataGUI.
@@ -52,6 +54,7 @@ public class TransactionGUI extends JFrame {
         this.list = list; // Set the ProductData list
         this.path = path; // Set the file path
         this.tableData = tableData; // Set the JTable for transaction data
+        this.dataHandling = new DataHandling(path); // Instantiate DataHandling with the file path
         dateTxtField.setText(LocalDate.now().toString()); // Set the current date
         
         // Disable certain buttons and textfields initially
@@ -63,6 +66,9 @@ public class TransactionGUI extends JFrame {
         transactionTable.setEnabled(false);
         printReceiptBtn.setEnabled(false);
         
+        // Populate the product table (plasystemTbl) with the list of products
+        populateProductTable();
+        
         // Add a change listener to ensure quantityPicker accepts only non-negative values
         quantityPicker.addChangeListener((ChangeEvent e) -> {
             int value = (int) quantityPicker.getValue();
@@ -70,7 +76,40 @@ public class TransactionGUI extends JFrame {
                 quantityPicker.setValue(0); // Set the value to 0 if it's negative
             }
         });
+        
+        // Add a selection listener so that when a row is selected, we update the prodIDTxtField using TableRowSelector
+        plasystemTbl.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && plasystemTbl.getSelectedRow() != -1) {
+                TableRowSelector selector = new TableRowSelector(plasystemTbl);
+                prodIDTxtField.setText(selector.getTblProductID());
+                // You could also update other fields (e.g., name, price) if needed.
+            }
+        });
     }
+    
+     /**
+     * Populates the product table (plasystemTbl) with all products from the list.
+     */
+    private void populateProductTable() {
+       // Reload the latest list from the file
+       list = dataHandling.getList();
+       DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
+       model.setRowCount(0);  // Clear any existing rows
+       for (ProductData product : list) {
+           Object[] rowData = {
+               product.getProductID(),
+               product.getProductQuantity(),
+               product.getProductPrice(),
+               product.getProductName(),
+               product.getProductSize(),
+               product.getProductBrand(),
+               product.getProductType(),
+               product.getProductRestockValue()
+           };
+           model.addRow(rowData);
+       }
+   }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -494,7 +533,7 @@ public class TransactionGUI extends JFrame {
             return;
         }
         
-// Check if payment amount is provided
+        // Check if payment amount is provided
         if (!paymentAmountTxtField.getText().trim().isEmpty()) {
             String customerMoneyStr = paymentAmountTxtField.getText().trim();
             String totalPurchaseStr = totalAmountTxtField.getText().trim();
@@ -513,6 +552,9 @@ public class TransactionGUI extends JFrame {
                         // Decrease the quantity of purchased items in the data
                         DataHandling dataHandling = new DataHandling(path);
                         dataHandling.decreaseQuantity(list, transactionList, tableData);
+                        
+                        // Update the product table dynamically using the helper method
+                        populateProductTable();
                         
                         // Disable further actions and enable printing the receipt
                         addBtn.setEnabled(false);
@@ -649,7 +691,16 @@ public class TransactionGUI extends JFrame {
     }//GEN-LAST:event_verifyBtnActionPerformed
 
     private void searchTxtField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtField9KeyReleased
+        DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        plasystemTbl.setRowSorter(sorter);
         
+        // Get the selected search parameter (which should match one of the table's column names)
+        String columnName = searchPrmtrBox9.getSelectedItem().toString();
+        int columnIndex = model.findColumn(columnName);
+        if(columnIndex >= 0) {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField9.getText(), columnIndex));
+        }
     }//GEN-LAST:event_searchTxtField9KeyReleased
       
     // Variables declaration - do not modify//GEN-BEGIN:variables
