@@ -25,36 +25,38 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="37" max="32767" attributes="0"/>
+              <EmptySpace pref="52" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="titleLabel" min="-2" pref="121" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="cancelBtn" min="-2" pref="99" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="addBtn" min="-2" pref="89" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="cancelBtn" min="-2" pref="99" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                      <Component id="addBtn" min="-2" pref="89" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="textFieldsPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
               </Group>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <Component id="titleLabel" min="-2" pref="212" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jLabel1" min="-2" pref="567" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              </Group>
+              <Component id="jLabel1" alignment="0" pref="567" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-              <Component id="titleLabel" min="-2" pref="29" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <Component id="titleLabel" min="-2" pref="66" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="textFieldsPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="cancelBtn" max="32767" attributes="0"/>
                   <Component id="addBtn" min="-2" pref="37" max="-2" attributes="0"/>
@@ -62,9 +64,9 @@
               <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="346" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabel1" min="-2" pref="74" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="291" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -80,7 +82,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="textFieldsPanel.setBackground(new Color(255, 255, 153, 150));"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="textFieldsPanel.setBackground(new Color(255, 255, 51, 80));"/>
       </AuxValues>
 
       <Layout>
@@ -89,7 +91,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="genreLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -97,37 +99,32 @@
                           </Group>
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="nameTxtField" pref="144" max="32767" attributes="0"/>
-                              <Component id="genreTxtField" max="32767" attributes="0"/>
-                              <Component id="platformTxtField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="nameTxtField" max="32767" attributes="0"/>
+                              <Component id="sizeTxtField" max="32767" attributes="0"/>
+                              <Component id="brandTxtField" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="priceLabel" min="-2" max="-2" attributes="0"/>
                               <Component id="productIDLabel" min="-2" max="-2" attributes="0"/>
-                              <Component id="publisherLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="publisherLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="quantityLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="quantityPicker" min="-2" pref="75" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="productIDTxtField" pref="136" max="32767" attributes="0"/>
-                              <Component id="priceTxtField" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="publisherTxtField" pref="151" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="typeTxtField" max="32767" attributes="0"/>
+                      <Component id="productIDTxtField" alignment="0" pref="136" max="32767" attributes="0"/>
+                      <Component id="priceTxtField" alignment="0" max="32767" attributes="0"/>
+                      <Component id="restockValueTxtField" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace min="21" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -137,38 +134,39 @@
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="productIDTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="productIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="productIDTxtField" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="priceTxtField" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="publisherTxtField" min="-2" max="-2" attributes="0"/>
+                          <Component id="typeTxtField" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="nameTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="productIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="genreTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="sizeTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="genreLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="platformLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="platformTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="brandTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="publisherLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="quantityPicker" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="quantityPicker" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="restockValueTxtField" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="44" max="32767" attributes="0"/>
               </Group>
@@ -181,9 +179,9 @@
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="genreTxtField">
+        <Component class="javax.swing.JTextField" name="sizeTxtField">
         </Component>
-        <Component class="javax.swing.JTextField" name="platformTxtField">
+        <Component class="javax.swing.JTextField" name="brandTxtField">
         </Component>
         <Component class="javax.swing.JLabel" name="nameLabel">
           <Properties>
@@ -209,7 +207,7 @@
             <Property name="text" type="java.lang.String" value="BRAND"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="publisherTxtField">
+        <Component class="javax.swing.JTextField" name="typeTxtField">
         </Component>
         <Component class="javax.swing.JTextField" name="priceTxtField">
         </Component>
@@ -249,6 +247,11 @@
         </Component>
         <Component class="javax.swing.JSpinner" name="quantityPicker">
         </Component>
+        <Component class="javax.swing.JTextField" name="restockValueTxtField">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="restockValueTxtFieldActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="cancelBtn">
@@ -278,14 +281,18 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Microsoft YaHei UI" size="15" style="3"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Add Inventory"/>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/plasystem_main/add.png"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/plasystem_main/SOFTWARE (1000 x 500 px) (8).png"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="cc" green="ff" red="ff" type="rgb"/>
         </Property>
+        <Property name="opaque" type="boolean" value="true"/>
       </Properties>
     </Component>
   </SubComponents>

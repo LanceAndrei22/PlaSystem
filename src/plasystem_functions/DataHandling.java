@@ -9,8 +9,8 @@ import javax.swing.table.*;
  * DataHandling class manages game data, handles file operations,
  * and provides methods to read, edit, and save game data.
  */
-public class DataHandling extends GameData {
-    private LinkedList<GameData> gameList; // Stores the list of game data
+public class DataHandling extends ProductData {
+    private LinkedList<ProductData> productList; // Stores the list of game data
     private String path = ""; // Stores the file path
 
     /**
@@ -21,10 +21,10 @@ public class DataHandling extends GameData {
      */
     public DataHandling(String filePath) {
         // Call the parent class constructor
-        super("", 0, 0, "", "", "", "");
+        super("", 0, 0, "", "", "", "", 0);
 
         // Initialize variables and load data from file if it exists
-        this.gameList = new LinkedList<>();
+        this.productList = new LinkedList<>();
         File file = new File(filePath);
         
         if (file.exists()) {
@@ -68,27 +68,28 @@ public class DataHandling extends GameData {
             
             // Loop through each line in the file
             while (scan.hasNextLine()) {
-                // Read a line of game data from the file
-                String gameData = scan.nextLine();
-                // Split the gameData string into an array using the " | " delimiter
-                String[] fileData = gameData.split(" \\| ");
+                // Read a line of product data from the file
+                String productData = scan.nextLine();
+                // Split the productData string into an array using the " | " delimiter
+                String[] fileData = productData.split(" \\| ");
                 
                 // Check if the data has all required fields
-                // If complete data, create a GameData object and add it to the linked list
-                if (fileData.length == 7) {
+                // If complete data, create a ProductData object and add it to the linked list
+                if (fileData.length == 8) {
                     // Extract individual data elements from the fileData array
                     String productID = fileData[0];
                     int quantity = Integer.parseInt(fileData[1]);
                     double price = Double.parseDouble(fileData[2]);
                     String name = fileData[3];
-                    String genre = fileData[4];
-                    String platform = fileData[5];
-                    String publisher = fileData[6];
+                    String size = fileData[4];
+                    String brand = fileData[5];
+                    String type = fileData[6];
+                    int restockvalue = Integer.parseInt(fileData[7]);
                     
-                    // Create a GameData object with extracted data
-                    GameData data = new GameData(productID, quantity, price, name, genre, platform, publisher);
-                    // Add the data to the gameList (LinkedList)
-                    gameList.add(data);
+                    // Create a ProductData object with extracted data
+                    ProductData data = new ProductData(productID, quantity, price, name, size, brand, type, restockvalue);
+                    // Add the data to the productList (LinkedList)
+                    productList.add(data);
                 } else {
                     // Display an error message for invalid data format
                     JOptionPane.showMessageDialog(null, "Invalid Data Format", "Error", JOptionPane.ERROR_MESSAGE);
@@ -107,26 +108,26 @@ public class DataHandling extends GameData {
     /**
      * Retrieves the linked list containing game data.
      *
-     * @return The LinkedList containing GameData objects.
+     * @return The LinkedList containing ProductData objects.
      */
-    public LinkedList<GameData> getList() {
-        return gameList;
+    public LinkedList<ProductData> getList() {
+        return productList;
     }
 
     /**
      * Saves changes made to the inventory by writing the updated game data to the specified file.
      *
-     * @param gameList The LinkedList containing GameData to be saved.
+     * @param gameList The LinkedList containing ProductData to be saved.
      * @param path     The file path where the data will be saved.
      * @return True if the inventory changes are successfully saved, false otherwise.
      */
-    public static boolean saveInventoryChanges(LinkedList<GameData> gameList, String path ){
+    public static boolean saveInventoryChanges(LinkedList<ProductData> gameList, String path ){
         try (FileWriter fileWriter = new FileWriter(path)) {
-            // Loop through each GameData object in the list
-            for (GameData element : gameList) {
+            // Loop through each ProductData object in the list
+            for (ProductData element : gameList) {
                 // Constructing the line to write in the file
-                String line = element.getProductID() + " | " + element.getQuantity() + " | " + element.getPrice() + " | "
-                        + element.getName() + " | " + element.getGenre() + " | " + element.getPlatform() + " | " + element.getPublisher() + "\n";
+                String line = element.getProductID() + " | " + element.getProductQuantity() + " | " + element.getProductPrice() + " | "
+                        + element.getProductName() + " | " + element.getProductSize() + " | " + element.getProductBrand() + " | " + element.getProductType() +  " | " + element.getProductRestockValue() + "\n";
                 fileWriter.write(line); // Writing the constructed line to the file
             }
         } catch (IOException e) {
@@ -140,18 +141,19 @@ public class DataHandling extends GameData {
     /**
      * Edits the selected row of the JTable with new values and updates the linked list accordingly.
      *
-     * @param list          The LinkedList containing GameData.
+     * @param list          The LinkedList containing ProductData.
      * @param table         The JTable displaying the data.
      * @param selectedRow   The index of the selected row to be edited.
      * @param newQuantity   The new quantity value for the selected row.
      * @param newPrice      The new price value for the selected row.
      * @param newName       The new name value for the selected row.
-     * @param newGenre      The new genre value for the selected row.
-     * @param newPlatform   The new platform value for the selected row.
+     * @param newSize      The new genre value for the selected row.
+     * @param newBrand   The new platform value for the selected row.
      
-     * @param newPublisher  The new publisher value for the selected row.
+     * @param newType  The new publisher value for the selected row.
+     * @param newRestockValue The new RestockValue for the selected Row
      */
-    public void editSelectedData(LinkedList<GameData> list, JTable table, int selectedRow, int newQuantity, double newPrice, String newName, String newGenre, String newPlatform, String newPublisher) {
+    public void editSelectedData(LinkedList<ProductData> list, JTable table, int selectedRow, int newQuantity, double newPrice, String newName, String newSize, String newBrand, String newType, int newRestockValue) {
         // Check if the selected row is valid
         if (selectedRow >= 0 && selectedRow < list.size()) {
             DefaultTableModel model = (DefaultTableModel) table.getModel(); // Get the table's model
@@ -160,18 +162,20 @@ public class DataHandling extends GameData {
             model.setValueAt(newQuantity, selectedRow, 1);   // Update quantity
             model.setValueAt(newPrice, selectedRow, 2);      // Update price
             model.setValueAt(newName, selectedRow, 3);       // Update name
-            model.setValueAt(newGenre, selectedRow, 4);      // Update genre
-            model.setValueAt(newPlatform, selectedRow, 5);   // Update platform
-            model.setValueAt(newPublisher, selectedRow, 6);  // Update publisher
+            model.setValueAt(newSize, selectedRow, 4);      // Update genre
+            model.setValueAt(newBrand, selectedRow, 5);   // Update Brand
+            model.setValueAt(newType, selectedRow, 6);  // Update Type
+            model.setValueAt(newRestockValue, selectedRow, 7);  // Update Type
 
             // Update the data in the linked list
-            GameData editedGameData = list.get(selectedRow);    // Get the selected GameData object
-            editedGameData.setQuantity(newQuantity);          // Update quantity
-            editedGameData.setPrice(newPrice);                  // Update price
-            editedGameData.setName(newName);                     // Update name
-            editedGameData.setGenre(newGenre);                  // Update genre
-            editedGameData.setPlatform(newPlatform);          // Update platform
-            editedGameData.setPublisher(newPublisher);        // Update publisher
+            ProductData editedGameData = list.get(selectedRow);         // Get the selected ProductData object
+            editedGameData.setProductQuantity(newQuantity);             // Update quantity
+            editedGameData.setProductPrice(newPrice);                  // Update price
+            editedGameData.setProductName(newName);                   // Update name
+            editedGameData.setProductSize(newSize);                  // Update size
+            editedGameData.setProductBrand(newBrand);                // Update brand
+            editedGameData.setProductType(newType);                // Update type
+            editedGameData.setProductRestockValue(newRestockValue);                // Update RestockValue
 
             // Save the changes to the file and display appropriate messages
             if (!saveInventoryChanges(list, path)) {
@@ -187,26 +191,28 @@ public class DataHandling extends GameData {
     /**
      * Adds new data to the LinkedList and updates the table and file accordingly.
      *
-     * @param list       The LinkedList containing GameData.
+     * @param list       The LinkedList containing ProductData.
      * @param table      The JTable displaying the data.
      * @param productID  The product ID for the new data.
      * @param quantity   The quantity for the new data.
      * @param price      The price for the new data.
      * @param name       The name for the new data.
-     * @param genre      The genre for the new data.
-     * @param platform   The platform for the new data.
-     * @param publisher  The publisher for the new data.
+     * @param size      The size for the new data.
+     * @param brand   The brand for the new data.
+     * @param type  The type for the new data.
+     * @param restockvalue the restock value for the new data
      */
-    public void addNewData(LinkedList<GameData> list, JTable table, String productID, int quantity, double price, String name, String genre, String platform, String publisher ) {
-        // Create a new GameData object
-        GameData data = new GameData(
+    public void addNewData(LinkedList<ProductData> list, JTable table, String productID, int quantity, double price, String name, String size, String brand, String type, int restockvalue ) {
+        // Create a new ProductData object
+        ProductData data = new ProductData(
                 productID,
                 quantity,
                 price,
                 name,
-                genre,
-                platform,
-                publisher);
+                size,
+                brand,
+                type,
+                restockvalue);
 
         // Add the new data to the LinkedList
         list.add(data);
@@ -218,9 +224,10 @@ public class DataHandling extends GameData {
                 quantity,
                 price,
                 name,
-                genre,
-                platform,
-                publisher,
+                size,
+                brand,
+                type,
+                restockvalue
         };
 
         // Check if the changes are saved to the file
@@ -238,10 +245,10 @@ public class DataHandling extends GameData {
      * Deletes selected data from the table and updates the file accordingly.
      *
      * @param TableData     The JTable containing the data.
-     * @param list          The LinkedList containing GameData.
+     * @param list          The LinkedList containing ProductData.
      * @param selectedRow   The index of the selected row to delete.
      */
-    public void deleteData(JTable TableData, LinkedList<GameData> list, int selectedRow) {
+    public void deleteData(JTable TableData, LinkedList<ProductData> list, int selectedRow) {
         // Retrieves the DefaultTableModel instance associated with the JTable 'TableData'.
         DefaultTableModel model = (DefaultTableModel) TableData.getModel();
         
@@ -272,21 +279,20 @@ public class DataHandling extends GameData {
     }
 
     /**
-     * Decreases the quantity of items in the inventory list based on the purchase list.
-     * Updates both the table and file data accordingly.
+     * Decreases the quantity of items in the inventory list based on the purchase list.Updates both the table and file data accordingly.
      *
-     * @param list          The LinkedList containing GameData.
+     * @param list          The LinkedList containing ProductData.
      * @param purchaseList  The LinkedList containing TransactionHandling for purchased items.
      * @param table         The JTable representing the inventory.
      */
-    public void decreaseQuantity(LinkedList<GameData> list, LinkedList<TransactionHandling> purchaseList, JTable table) {
+    public void decreaseQuantity(LinkedList<ProductData> list, LinkedList<TransactionHandling> purchaseList, JTable table) {
         // Loop through each transaction in the purchase list
         for(TransactionHandling element: purchaseList) {
             int index = -1; // Initialize index to -1 (indicating not found initially)
 
             // Search for the matching product ID in the game list
             for (int i = 0; i < list.size(); i++) {
-                GameData inventory = list.get(i);
+                ProductData inventory = list.get(i);
                 if (inventory.getProductID().equals(element.getProductID())) {
                     index = i; // Store the index when the condition is met
                     break;
@@ -295,16 +301,16 @@ public class DataHandling extends GameData {
 
             // If the product ID is found in the game list
             if (index != -1) {
-                GameData selectedData = list.get(index);
-                int newQuantity = selectedData.getQuantity() - element.getQuantity();
+                ProductData selectedData = list.get(index);
+                int newQuantity = selectedData.getProductQuantity() - element.getQuantity();
 
                 // Update the table view with the new quantity
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.setValueAt(newQuantity, index, 1);
 
                 // Update the quantity in the list
-                GameData editedGameData = list.get(index);
-                editedGameData.setQuantity(newQuantity);
+                ProductData editedGameData = list.get(index);
+                editedGameData.setProductQuantity(newQuantity);
             }
         }
 
