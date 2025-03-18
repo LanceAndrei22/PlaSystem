@@ -86,6 +86,7 @@ public class AddDataGUI extends JFrame {
         productIDLabel = new javax.swing.JLabel();
         quantityPicker = new javax.swing.JSpinner();
         restockValueTxtField = new javax.swing.JTextField();
+        publisherLabel1 = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
         titleLabel = new javax.swing.JLabel();
@@ -125,6 +126,9 @@ public class AddDataGUI extends JFrame {
             }
         });
 
+        publisherLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        publisherLabel1.setText("RE-STOCK VALUE");
+
         javax.swing.GroupLayout textFieldsPanelLayout = new javax.swing.GroupLayout(textFieldsPanel);
         textFieldsPanel.setLayout(textFieldsPanelLayout);
         textFieldsPanelLayout.setHorizontalGroup(
@@ -142,17 +146,18 @@ public class AddDataGUI extends JFrame {
                             .addComponent(nameTxtField)
                             .addComponent(sizeTxtField)
                             .addComponent(brandTxtField))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(priceLabel)
-                            .addComponent(productIDLabel)
-                            .addComponent(publisherLabel))
-                        .addGap(19, 19, 19))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(textFieldsPanelLayout.createSequentialGroup()
                         .addComponent(quantityLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(167, 167, 167)))
+                        .addGap(76, 76, 76)))
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(priceLabel)
+                    .addComponent(productIDLabel)
+                    .addComponent(publisherLabel)
+                    .addComponent(publisherLabel1))
+                .addGap(19, 19, 19)
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(typeTxtField)
                     .addComponent(productIDTxtField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
@@ -191,7 +196,9 @@ public class AddDataGUI extends JFrame {
                     .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(quantityLabel)
                         .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(restockValueTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(restockValueTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(publisherLabel1)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -223,7 +230,7 @@ public class AddDataGUI extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+                .addContainerGap(26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -376,6 +383,7 @@ public class AddDataGUI extends JFrame {
     private javax.swing.JLabel productIDLabel;
     private javax.swing.JTextField productIDTxtField;
     private javax.swing.JLabel publisherLabel;
+    private javax.swing.JLabel publisherLabel1;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
     private javax.swing.JTextField restockValueTxtField;
