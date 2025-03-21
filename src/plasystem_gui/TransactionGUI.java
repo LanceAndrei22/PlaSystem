@@ -7,6 +7,7 @@ import plasystem_functions.TransactionHandling;
 import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.FrameExporter;
 import plasystem_functions.ProductData;
+import plasystem_functions.TableRowSelector;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -30,6 +31,7 @@ public class TransactionGUI extends JFrame {
     private JTable tableData;
     private Double customerMoney;
     private Double totalPurchase;
+    private DataHandling dataHandling;
     
     /**
      * Default constructor for the EditDataGUI.
@@ -52,6 +54,7 @@ public class TransactionGUI extends JFrame {
         this.list = list; // Set the ProductData list
         this.path = path; // Set the file path
         this.tableData = tableData; // Set the JTable for transaction data
+        this.dataHandling = new DataHandling(path); // Instantiate DataHandling with the file path
         dateTxtField.setText(LocalDate.now().toString()); // Set the current date
         
         // Disable certain buttons and textfields initially
@@ -63,6 +66,9 @@ public class TransactionGUI extends JFrame {
         transactionTable.setEnabled(false);
         printReceiptBtn.setEnabled(false);
         
+        // Populate the product table (plasystemTbl) with the list of products
+        populateProductTable();
+        
         // Add a change listener to ensure quantityPicker accepts only non-negative values
         quantityPicker.addChangeListener((ChangeEvent e) -> {
             int value = (int) quantityPicker.getValue();
@@ -70,7 +76,40 @@ public class TransactionGUI extends JFrame {
                 quantityPicker.setValue(0); // Set the value to 0 if it's negative
             }
         });
+        
+        // Add a selection listener so that when a row is selected, we update the prodIDTxtField using TableRowSelector
+        plasystemTbl.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && plasystemTbl.getSelectedRow() != -1) {
+                TableRowSelector selector = new TableRowSelector(plasystemTbl);
+                prodIDTxtField.setText(selector.getTblProductID());
+                // You could also update other fields (e.g., name, price) if needed.
+            }
+        });
     }
+    
+     /**
+     * Populates the product table (plasystemTbl) with all products from the list.
+     */
+    private void populateProductTable() {
+       // Reload the latest list from the file
+       list = dataHandling.getList();
+       DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
+       model.setRowCount(0);  // Clear any existing rows
+       for (ProductData product : list) {
+           Object[] rowData = {
+               product.getProductID(),
+               product.getProductQuantity(),
+               product.getProductPrice(),
+               product.getProductName(),
+               product.getProductSize(),
+               product.getProductBrand(),
+               product.getProductType(),
+               product.getProductRestockValue()
+           };
+           model.addRow(rowData);
+       }
+   }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,6 +140,10 @@ public class TransactionGUI extends JFrame {
         clearBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         transactionTable = new javax.swing.JTable();
+        plasystemTblScrollPane = new javax.swing.JScrollPane();
+        plasystemTbl = new javax.swing.JTable();
+        searchTxtField9 = new javax.swing.JTextField();
+        searchPrmtrBox9 = new javax.swing.JComboBox<>();
         titleLabel = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         printReceiptBtn = new javax.swing.JButton();
@@ -189,60 +232,115 @@ public class TransactionGUI extends JFrame {
             transactionTable.getColumnModel().getColumn(2).setPreferredWidth(25);
         }
 
+        plasystemTbl.setAutoCreateRowSorter(true);
+        plasystemTbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Product ID", "Quantity", "Price", "Name", "Size", "Brand", "Type", "Restock Value"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        plasystemTbl.getTableHeader().setReorderingAllowed(false);
+        plasystemTblScrollPane.setViewportView(plasystemTbl);
+
+        searchTxtField9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTxtField9KeyReleased(evt);
+            }
+        });
+
+        searchPrmtrBox9.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name", "Size", "Brand", "Type", "Price", "Quantity" }));
+
         javax.swing.GroupLayout transactPanelLayout = new javax.swing.GroupLayout(transactPanel);
         transactPanel.setLayout(transactPanelLayout);
         transactPanelLayout.setHorizontalGroup(
             transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transactPanelLayout.createSequentialGroup()
-                .addGap(0, 16, Short.MAX_VALUE)
-                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGap(71, 71, 71)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addComponent(paymentAmountLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(paymentAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, transactPanelLayout.createSequentialGroup()
-                        .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(prodNameLabel)
-                            .addComponent(itemPriceLabel)
-                            .addComponent(quantityLabel)
-                            .addComponent(prodIDLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(itemPriceTxtField)
-                            .addComponent(prodNameTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                            .addComponent(prodIDTxtField)
-                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(totalAmountLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addComponent(dateLabel)
+                        .addComponent(searchTxtField9, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                        .addComponent(searchPrmtrBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 488, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(plasystemTblScrollPane)
+                        .addGroup(transactPanelLayout.createSequentialGroup()
+                            .addGap(12, 12, 12)
+                            .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(transactPanelLayout.createSequentialGroup()
+                                        .addComponent(paymentAmountLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(paymentAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, transactPanelLayout.createSequentialGroup()
+                                        .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(12, 12, 12)
+                                        .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(transactPanelLayout.createSequentialGroup()
+                                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(prodNameLabel)
+                                            .addComponent(itemPriceLabel)
+                                            .addComponent(quantityLabel))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(itemPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(prodNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(transactPanelLayout.createSequentialGroup()
+                                    .addComponent(prodIDLabel)
+                                    .addGap(61, 61, 61)
+                                    .addComponent(prodIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(transactPanelLayout.createSequentialGroup()
+                                    .addGap(73, 73, 73)
+                                    .addComponent(totalAmountLabel)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(transactPanelLayout.createSequentialGroup()
+                                    .addComponent(dateLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(42, 42, 42))
         );
         transactPanelLayout.setVerticalGroup(
             transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transactPanelLayout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addGap(35, 35, 35)
                 .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(prodIDLabel)
-                    .addComponent(prodIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchTxtField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPrmtrBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dateLabel)
-                    .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(prodIDLabel)
+                    .addComponent(prodIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(transactPanelLayout.createSequentialGroup()
                         .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(prodNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,17 +361,17 @@ public class TransactionGUI extends JFrame {
                         .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(totalAmountLabel)
                     .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         titleLabel.setFont(new java.awt.Font("Microsoft YaHei UI", 3, 15)); // NOI18N
-        titleLabel.setText("PlaSystem Transaction");
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/transact.png"))); // NOI18N
 
         cancelBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         cancelBtn.setText("CANCEL");
@@ -299,45 +397,50 @@ public class TransactionGUI extends JFrame {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (10).png"))); // NOI18N
+        jLabel1.setBackground(new java.awt.Color(255, 153, 153));
+        jLabel1.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 25, Short.MAX_VALUE)
+                .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(printReceiptBtn))
-                        .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(652, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(printReceiptBtn)
+                .addGap(5, 5, 5))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 782, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(13, 13, 13)
-                .addComponent(titleLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(printReceiptBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(submitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(printReceiptBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 645, Short.MAX_VALUE)))
         );
 
         transactPanel.setBackground(new Color(255, 102, 102, 100));
@@ -430,7 +533,7 @@ public class TransactionGUI extends JFrame {
             return;
         }
         
-// Check if payment amount is provided
+        // Check if payment amount is provided
         if (!paymentAmountTxtField.getText().trim().isEmpty()) {
             String customerMoneyStr = paymentAmountTxtField.getText().trim();
             String totalPurchaseStr = totalAmountTxtField.getText().trim();
@@ -449,6 +552,9 @@ public class TransactionGUI extends JFrame {
                         // Decrease the quantity of purchased items in the data
                         DataHandling dataHandling = new DataHandling(path);
                         dataHandling.decreaseQuantity(list, transactionList, tableData);
+                        
+                        // Update the product table dynamically using the helper method
+                        populateProductTable();
                         
                         // Disable further actions and enable printing the receipt
                         addBtn.setEnabled(false);
@@ -583,6 +689,19 @@ public class TransactionGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "Product not found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_verifyBtnActionPerformed
+
+    private void searchTxtField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtField9KeyReleased
+        DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        plasystemTbl.setRowSorter(sorter);
+        
+        // Get the selected search parameter (which should match one of the table's column names)
+        String columnName = searchPrmtrBox9.getSelectedItem().toString();
+        int columnIndex = model.findColumn(columnName);
+        if(columnIndex >= 0) {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField9.getText(), columnIndex));
+        }
+    }//GEN-LAST:event_searchTxtField9KeyReleased
       
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
@@ -596,6 +715,8 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel paymentAmountLabel;
     private javax.swing.JTextField paymentAmountTxtField;
+    private javax.swing.JTable plasystemTbl;
+    private javax.swing.JScrollPane plasystemTblScrollPane;
     private javax.swing.JButton printReceiptBtn;
     private javax.swing.JLabel prodIDLabel;
     private javax.swing.JTextField prodIDTxtField;
@@ -603,6 +724,8 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JTextField prodNameTxtField;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
+    private javax.swing.JComboBox<String> searchPrmtrBox9;
+    private javax.swing.JTextField searchTxtField9;
     private javax.swing.JButton submitBtn;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel totalAmountLabel;

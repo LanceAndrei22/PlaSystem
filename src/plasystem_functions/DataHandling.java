@@ -21,7 +21,7 @@ public class DataHandling extends ProductData {
      */
     public DataHandling(String filePath) {
         // Call the parent class constructor
-        super("", 0, 0, "", "", "", "");
+        super("", 0, 0, "", "", "", "", 0);
 
         // Initialize variables and load data from file if it exists
         this.productList = new LinkedList<>();
@@ -75,7 +75,7 @@ public class DataHandling extends ProductData {
                 
                 // Check if the data has all required fields
                 // If complete data, create a ProductData object and add it to the linked list
-                if (fileData.length == 7) {
+                if (fileData.length == 8) {
                     // Extract individual data elements from the fileData array
                     String productID = fileData[0];
                     int quantity = Integer.parseInt(fileData[1]);
@@ -84,9 +84,10 @@ public class DataHandling extends ProductData {
                     String size = fileData[4];
                     String brand = fileData[5];
                     String type = fileData[6];
+                    int restockvalue = Integer.parseInt(fileData[7]);
                     
                     // Create a ProductData object with extracted data
-                    ProductData data = new ProductData(productID, quantity, price, name, size, brand, type);
+                    ProductData data = new ProductData(productID, quantity, price, name, size, brand, type, restockvalue);
                     // Add the data to the productList (LinkedList)
                     productList.add(data);
                 } else {
@@ -126,7 +127,7 @@ public class DataHandling extends ProductData {
             for (ProductData element : gameList) {
                 // Constructing the line to write in the file
                 String line = element.getProductID() + " | " + element.getProductQuantity() + " | " + element.getProductPrice() + " | "
-                        + element.getProductName() + " | " + element.getProductSize() + " | " + element.getProductBrand() + " | " + element.getProductType() + "\n";
+                        + element.getProductName() + " | " + element.getProductSize() + " | " + element.getProductBrand() + " | " + element.getProductType() +  " | " + element.getProductRestockValue() + "\n";
                 fileWriter.write(line); // Writing the constructed line to the file
             }
         } catch (IOException e) {
@@ -150,8 +151,9 @@ public class DataHandling extends ProductData {
      * @param newBrand   The new platform value for the selected row.
      
      * @param newType  The new publisher value for the selected row.
+     * @param newRestockValue The new RestockValue for the selected Row
      */
-    public void editSelectedData(LinkedList<ProductData> list, JTable table, int selectedRow, int newQuantity, double newPrice, String newName, String newSize, String newBrand, String newType) {
+    public void editSelectedData(LinkedList<ProductData> list, JTable table, int selectedRow, int newQuantity, double newPrice, String newName, String newSize, String newBrand, String newType, int newRestockValue) {
         // Check if the selected row is valid
         if (selectedRow >= 0 && selectedRow < list.size()) {
             DefaultTableModel model = (DefaultTableModel) table.getModel(); // Get the table's model
@@ -161,8 +163,9 @@ public class DataHandling extends ProductData {
             model.setValueAt(newPrice, selectedRow, 2);      // Update price
             model.setValueAt(newName, selectedRow, 3);       // Update name
             model.setValueAt(newSize, selectedRow, 4);      // Update genre
-            model.setValueAt(newBrand, selectedRow, 5);   // Update platform
-            model.setValueAt(newType, selectedRow, 6);  // Update publisher
+            model.setValueAt(newBrand, selectedRow, 5);   // Update Brand
+            model.setValueAt(newType, selectedRow, 6);  // Update Type
+            model.setValueAt(newRestockValue, selectedRow, 7);  // Update Type
 
             // Update the data in the linked list
             ProductData editedGameData = list.get(selectedRow);         // Get the selected ProductData object
@@ -172,6 +175,7 @@ public class DataHandling extends ProductData {
             editedGameData.setProductSize(newSize);                  // Update size
             editedGameData.setProductBrand(newBrand);                // Update brand
             editedGameData.setProductType(newType);                // Update type
+            editedGameData.setProductRestockValue(newRestockValue);                // Update RestockValue
 
             // Save the changes to the file and display appropriate messages
             if (!saveInventoryChanges(list, path)) {
@@ -196,8 +200,9 @@ public class DataHandling extends ProductData {
      * @param size      The size for the new data.
      * @param brand   The brand for the new data.
      * @param type  The type for the new data.
+     * @param restockvalue the restock value for the new data
      */
-    public void addNewData(LinkedList<ProductData> list, JTable table, String productID, int quantity, double price, String name, String size, String brand, String type ) {
+    public void addNewData(LinkedList<ProductData> list, JTable table, String productID, int quantity, double price, String name, String size, String brand, String type, int restockvalue ) {
         // Create a new ProductData object
         ProductData data = new ProductData(
                 productID,
@@ -206,7 +211,8 @@ public class DataHandling extends ProductData {
                 name,
                 size,
                 brand,
-                type);
+                type,
+                restockvalue);
 
         // Add the new data to the LinkedList
         list.add(data);
@@ -221,6 +227,7 @@ public class DataHandling extends ProductData {
                 size,
                 brand,
                 type,
+                restockvalue
         };
 
         // Check if the changes are saved to the file
