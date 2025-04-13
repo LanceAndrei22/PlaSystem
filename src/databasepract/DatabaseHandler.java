@@ -2,7 +2,7 @@ package databasepract;
 import java.sql.*;
 
 public class DatabaseHandler {
-    private static final String URL = "jdbc:sqlite:information.db";
+    private static final String URL = "jdbc:sqlite:products.db";
 
     static {
         createTable(); // Ensure table exists when the class loads

@@ -43,7 +43,7 @@
               </Group>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Component id="jLabel1" alignment="0" pref="590" max="32767" attributes="0"/>
+              <Component id="Design" alignment="0" pref="590" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -63,7 +63,7 @@
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jLabel1" min="-2" pref="73" max="-2" attributes="0"/>
+                  <Component id="Design" min="-2" pref="73" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="282" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -319,7 +319,7 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="Design">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="cc" red="99" type="rgb"/>
