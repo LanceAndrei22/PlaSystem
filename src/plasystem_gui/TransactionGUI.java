@@ -148,7 +148,7 @@ public class TransactionGUI extends JFrame {
         cancelBtn = new javax.swing.JButton();
         printReceiptBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        Design = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -208,7 +208,7 @@ public class TransactionGUI extends JFrame {
         });
 
         transactionTable.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 10)); // NOI18N
-        transactionTable.setForeground(new java.awt.Color(255, 102, 51));
+        transactionTable.setForeground(new java.awt.Color(0, 0, 0));
         transactionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -397,8 +397,8 @@ public class TransactionGUI extends JFrame {
             }
         });
 
-        jLabel1.setBackground(new java.awt.Color(255, 153, 153));
-        jLabel1.setOpaque(true);
+        Design.setBackground(new java.awt.Color(255, 153, 153));
+        Design.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -407,12 +407,9 @@ public class TransactionGUI extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(652, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(transactPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -422,7 +419,7 @@ public class TransactionGUI extends JFrame {
                 .addComponent(printReceiptBtn)
                 .addGap(5, 5, 5))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE))
+                .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,7 +436,7 @@ public class TransactionGUI extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 645, Short.MAX_VALUE)))
         );
 
@@ -704,6 +701,7 @@ public class TransactionGUI extends JFrame {
     }//GEN-LAST:event_searchTxtField9KeyReleased
       
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Design;
     private javax.swing.JButton addBtn;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JButton clearBtn;
@@ -711,7 +709,6 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JTextField dateTxtField;
     private javax.swing.JLabel itemPriceLabel;
     private javax.swing.JTextField itemPriceTxtField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel paymentAmountLabel;
     private javax.swing.JTextField paymentAmountTxtField;

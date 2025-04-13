@@ -90,7 +90,7 @@ public class AddDataGUI extends JFrame {
         cancelBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
         titleLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        Design = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -222,8 +222,8 @@ public class AddDataGUI extends JFrame {
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/add.png"))); // NOI18N
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 204));
-        jLabel1.setOpaque(true);
+        Design.setBackground(new java.awt.Color(255, 255, 204));
+        Design.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -245,7 +245,7 @@ public class AddDataGUI extends JFrame {
                 .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE))
+                .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,7 +261,7 @@ public class AddDataGUI extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 291, Short.MAX_VALUE)))
         );
 
@@ -370,11 +370,11 @@ public class AddDataGUI extends JFrame {
     }//GEN-LAST:event_restockValueTxtFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Design;
     private javax.swing.JButton addBtn;
     private javax.swing.JTextField brandTxtField;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JLabel genreLabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTxtField;
     private javax.swing.JLabel platformLabel;
