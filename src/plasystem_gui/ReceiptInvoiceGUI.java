@@ -86,7 +86,6 @@ public class ReceiptInvoiceGUI extends JFrame {
 
         jLabelSubtotal1 = new javax.swing.JLabel();
         receiptPanel = new javax.swing.JPanel();
-        titleLabel = new javax.swing.JLabel();
         locationLabel = new javax.swing.JLabel();
         receiptIDTxtField = new javax.swing.JLabel();
         itemLabel = new javax.swing.JLabel();
@@ -121,11 +120,6 @@ public class ReceiptInvoiceGUI extends JFrame {
         receiptPanel.setBackground(new java.awt.Color(255, 255, 255));
         receiptPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 2));
         receiptPanel.setForeground(new java.awt.Color(51, 51, 51));
-
-        titleLabel.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
-        titleLabel.setForeground(new java.awt.Color(51, 51, 51));
-        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleLabel.setText("TJB ACHACON STORE");
 
         locationLabel.setForeground(new java.awt.Color(51, 51, 51));
         locationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -279,20 +273,15 @@ public class ReceiptInvoiceGUI extends JFrame {
                         .addGap(123, 123, 123)
                         .addComponent(salesInvoiceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(receiptPanelLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(receiptPanelLayout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(titleLabel)))
+                        .addGap(57, 57, 57)
+                        .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         receiptPanelLayout.setVerticalGroup(
             receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(receiptPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(titleLabel)
+                .addGap(49, 49, 49)
+                .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(locationLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -380,7 +369,6 @@ public class ReceiptInvoiceGUI extends JFrame {
     private javax.swing.JLabel salesInvoiceLabel;
     private javax.swing.JLabel subTotalLabel;
     private javax.swing.JLabel taxLabel;
-    private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel totalAmountLabel;
     private javax.swing.JLabel totalLabel;
     private javax.swing.JLabel totalSaleLabel;

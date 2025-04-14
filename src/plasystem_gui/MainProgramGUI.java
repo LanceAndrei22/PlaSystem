@@ -7,7 +7,6 @@ import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.ProductData;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -43,23 +42,23 @@ public class MainProgramGUI extends JFrame {
          */
         if (productList != null && !productList.isEmpty()) {
             DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
-            model.setRowCount(0); // Clear the existing table content
-            
-            // Loop through the productList and add each element's details to the table
-            for(ProductData element : productList){
-                Object[] rowData = { 
+            model.setRowCount(0);
+
+            for (ProductData element : productList) {
+                Object[] rowData = {
                     element.getProductID(),
                     element.getProductQuantity(),
                     element.getProductPrice(),
                     element.getProductName(),
                     element.getProductSize(),
-                    element.getProductBrand(),    
+                    element.getProductBrand(),
                     element.getProductType(),
+                    element.getProductRestockValue() // Ensure Restock Value is added
                 };
-                model.addRow(rowData); // Add each row of data to the table model
+                model.addRow(rowData);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Database is empty"); // Show a message if the database is empty
+            JOptionPane.showMessageDialog(null, "Database is empty");
         }
     }
 
@@ -72,56 +71,221 @@ public class MainProgramGUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menuBar1 = new java.awt.MenuBar();
-        plasystemTblScrollPane = new javax.swing.JScrollPane();
-        plasystemTbl = new javax.swing.JTable();
+        Main_Button_Panel = new javax.swing.JPanel();
+        addBtn = new javax.swing.JButton();
+        transactBtn = new javax.swing.JButton();
+        rstockBtn = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        lowstockBtn = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         dataPanel = new javax.swing.JPanel();
         editBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
-        addBtn = new javax.swing.JButton();
-        transactBtn = new javax.swing.JButton();
-        datamineLogoLabel = new javax.swing.JLabel();
         searchPanel = new javax.swing.JPanel();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        plasystemTblScrollPane = new javax.swing.JScrollPane();
+        plasystemTbl = new javax.swing.JTable();
+        Secondary_Buttons = new javax.swing.JPanel();
+        Roles = new javax.swing.JButton();
+        Print = new javax.swing.JButton();
+        Logout = new javax.swing.JButton();
+        TransactionHistory = new javax.swing.JButton();
+        Background_Design = new javax.swing.JDesktopPane();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(2600, 1300));
 
-        plasystemTbl.setAutoCreateRowSorter(true);
-        plasystemTbl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        Main_Button_Panel.setBackground(new java.awt.Color(0, 153, 255));
+        Main_Button_Panel.setForeground(new java.awt.Color(51, 153, 255));
 
-            },
-            new String [] {
-                "Product ID", "Quantity", "Price", "Name", "Size", "Brand", "Type"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        addBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (500 x 500 px) (1).png"))); // NOI18N
+        addBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        addBtn.setContentAreaFilled(false);
+        addBtn.setInheritsPopupMenu(true);
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
             }
         });
-        plasystemTbl.getTableHeader().setReorderingAllowed(false);
-        plasystemTblScrollPane.setViewportView(plasystemTbl);
-        if (plasystemTbl.getColumnModel().getColumnCount() > 0) {
-            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
-            plasystemTbl.getColumnModel().getColumn(1).setPreferredWidth(20);
-            plasystemTbl.getColumnModel().getColumn(2).setPreferredWidth(25);
-            plasystemTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
-        }
+
+        transactBtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (500 x 500 px) (2).png"))); // NOI18N
+        transactBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        transactBtn.setContentAreaFilled(false);
+        transactBtn.setInheritsPopupMenu(true);
+        transactBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transactBtnActionPerformed(evt);
+            }
+        });
+
+        rstockBtn.setBackground(new java.awt.Color(51, 204, 0));
+        rstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/restock_button.png"))); // NOI18N
+        rstockBtn.setText("Re-stock");
+        rstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        rstockBtn.setContentAreaFilled(false);
+        rstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        rstockBtn.setInheritsPopupMenu(true);
+        rstockBtn.setOpaque(true);
+        rstockBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rstockBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("|");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("|");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("|");
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("|");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("|");
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("|");
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jLabel10.setBackground(new java.awt.Color(51, 102, 255));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/plasystem.png"))); // NOI18N
+        jLabel10.setInheritsPopupMenu(false);
+        jLabel10.setOpaque(true);
+
+        lowstockBtn.setBackground(new java.awt.Color(51, 204, 0));
+        lowstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lowstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstock.png"))); // NOI18N
+        lowstockBtn.setText("Re-stock");
+        lowstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        lowstockBtn.setContentAreaFilled(false);
+        lowstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        lowstockBtn.setInheritsPopupMenu(true);
+        lowstockBtn.setOpaque(true);
+        lowstockBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lowstockBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("|");
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("|");
+
+        javax.swing.GroupLayout Main_Button_PanelLayout = new javax.swing.GroupLayout(Main_Button_Panel);
+        Main_Button_Panel.setLayout(Main_Button_PanelLayout);
+        Main_Button_PanelLayout.setHorizontalGroup(
+            Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel12))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(transactBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rstockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lowstockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel11)))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        Main_Button_PanelLayout.setVerticalGroup(
+            Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Main_Button_PanelLayout.createSequentialGroup()
+                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Main_Button_PanelLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(51, 51, 51))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Main_Button_PanelLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(49, 49, 49)))
+                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addComponent(transactBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Main_Button_PanelLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(75, 75, 75))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Main_Button_PanelLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(77, 77, 77)))
+                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rstockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel8))
+                .addGroup(Main_Button_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel11))
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel12))
+                    .addGroup(Main_Button_PanelLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(lowstockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(245, 245, 245)
+                .addComponent(jLabel3)
+                .addContainerGap(239, Short.MAX_VALUE))
+        );
 
         dataPanel.setOpaque(false);
 
@@ -160,31 +324,6 @@ public class MainProgramGUI extends JFrame {
                 .addContainerGap())
         );
 
-        addBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (500 x 500 px) (1).png"))); // NOI18N
-        addBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        addBtn.setContentAreaFilled(false);
-        addBtn.setInheritsPopupMenu(true);
-        addBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBtnActionPerformed(evt);
-            }
-        });
-
-        transactBtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (500 x 500 px) (2).png"))); // NOI18N
-        transactBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        transactBtn.setContentAreaFilled(false);
-        transactBtn.setInheritsPopupMenu(true);
-        transactBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                transactBtnActionPerformed(evt);
-            }
-        });
-
-        datamineLogoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        datamineLogoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (12).png"))); // NOI18N
-
         searchPanel.setOpaque(false);
 
         searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -216,22 +355,118 @@ public class MainProgramGUI extends JFrame {
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
+        plasystemTbl.setAutoCreateRowSorter(true);
+        plasystemTbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Product ID", "Quantity", "Price", "Name", "Size", "Brand", "Type", "Restock Value"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        plasystemTbl.getTableHeader().setReorderingAllowed(false);
+        plasystemTblScrollPane.setViewportView(plasystemTbl);
+        if (plasystemTbl.getColumnModel().getColumnCount() > 0) {
+            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(1).setPreferredWidth(20);
+            plasystemTbl.getColumnModel().getColumn(2).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
+        }
+
+        Secondary_Buttons.setOpaque(false);
+
+        Roles.setText("👤 User Roles");
+        Roles.setInheritsPopupMenu(true);
+        Roles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RolesActionPerformed(evt);
+            }
+        });
+
+        Print.setText("🖨️ Print Inventory");
+        Print.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrintActionPerformed(evt);
+            }
+        });
+
+        Logout.setBackground(new java.awt.Color(255, 102, 102));
+        Logout.setForeground(new java.awt.Color(255, 255, 255));
+        Logout.setText("↩ Logout");
+        Logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutActionPerformed(evt);
+            }
+        });
+
+        TransactionHistory.setText("🔄 Transaction History");
+        TransactionHistory.setInheritsPopupMenu(true);
+        TransactionHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TransactionHistoryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout Secondary_ButtonsLayout = new javax.swing.GroupLayout(Secondary_Buttons);
+        Secondary_Buttons.setLayout(Secondary_ButtonsLayout);
+        Secondary_ButtonsLayout.setHorizontalGroup(
+            Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 927, Short.MAX_VALUE)
+            .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(326, 326, 326)
+                    .addComponent(TransactionHistory)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(Print, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        Secondary_ButtonsLayout.setVerticalGroup(
+            Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 64, Short.MAX_VALUE)
+            .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
+                    .addGap(9, 9, 9)
+                    .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Print, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TransactionHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap(9, Short.MAX_VALUE)))
+        );
+
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (11).png"))); // NOI18N
 
-        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        Background_Design.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        javax.swing.GroupLayout Background_DesignLayout = new javax.swing.GroupLayout(Background_Design);
+        Background_Design.setLayout(Background_DesignLayout);
+        Background_DesignLayout.setHorizontalGroup(
+            Background_DesignLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1236, Short.MAX_VALUE)
         );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, Short.MAX_VALUE)
+        Background_DesignLayout.setVerticalGroup(
+            Background_DesignLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("");
@@ -240,45 +475,42 @@ public class MainProgramGUI extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(plasystemTblScrollPane)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Main_Button_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 291, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 686, Short.MAX_VALUE)
-                        .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(512, 512, 512)
+                                .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(100, 100, 100)
-                        .addComponent(datamineLogoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(91, 91, 91)
-                        .addComponent(transactBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Secondary_Buttons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jDesktopPane1))
+                .addComponent(Background_Design))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(transactBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(datamineLogoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
+                .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Secondary_Buttons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(Main_Button_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addComponent(Background_Design, javax.swing.GroupLayout.Alignment.TRAILING))
         );
+
+        setBackground(Color. BLUE);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -295,6 +527,7 @@ public class MainProgramGUI extends JFrame {
         transactPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_transactBtnActionPerformed
 
+    
     /**
      * Method triggered when the 'Add' button is clicked in the GUI.
      * Initializes and opens a new AddDataGUI to add new game data.
@@ -321,29 +554,20 @@ public class MainProgramGUI extends JFrame {
             // Create an instance of TableRowSelector to extract data from the selected row
             TableRowSelector rowSelector = new TableRowSelector(plasystemTbl);
         
-            // Retrieve data using TableRowSelector getters
-            String tblProductID = rowSelector.getTblProductID();
-            String tblQuantity = rowSelector.getQuantity();
-            String tblPrice = rowSelector.getTblPrice();
-            String tblName = rowSelector.getTblName();
-            String tblSize = rowSelector.getTblSize();
-            String tblBrand = rowSelector.getTblBrand();
-            String tblType = rowSelector.getTblType();
-            selectedRow = rowSelector.getRow(); // Update the selected row index
-
-            // Pass the retrieved data to the EditDataGUI for editing
             EditDataGUI edit = new EditDataGUI(
-                    selectedRow, 
-                    filePath, 
-                    productList, 
-                    plasystemTbl,
-                    tblProductID,
-                    tblQuantity,
-                    tblPrice, 
-                    tblName, 
-                    tblSize, 
-                    tblBrand, 
-                    tblType
+             selectedRow, 
+             filePath, 
+             productList, 
+             plasystemTbl,
+            // Retrieve data using TableRowSelector getters
+            rowSelector.getTblProductID(),
+            rowSelector.getQuantity(),
+            rowSelector.getTblPrice(),
+            rowSelector.getTblName(),
+            rowSelector.getTblSize(),
+            rowSelector.getTblBrand(),
+            rowSelector.getTblType(),
+            rowSelector.getRestockValue() // Update the selected row index
             );
 
             // Set properties for the edit frame
@@ -389,17 +613,70 @@ public class MainProgramGUI extends JFrame {
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex));
     }//GEN-LAST:event_searchTxtFieldKeyReleased
 
+    private void rstockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rstockBtnActionPerformed
+        JFrame panel = new RestockGUI(productList, plasystemTbl, filePath);
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_rstockBtnActionPerformed
+
+    private void lowstockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowstockBtnActionPerformed
+        JFrame panel = new LowStockGUI(productList, filePath);
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_lowstockBtnActionPerformed
+
+    private void RolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RolesActionPerformed
+        JFrame panel = new UserRolesGUI();
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_RolesActionPerformed
+
+    private void PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PrintActionPerformed
+
+    private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
+        launchLaunchPanel();
+    }//GEN-LAST:event_LogoutActionPerformed
+
+    private void TransactionHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TransactionHistoryActionPerformed
+        JFrame panel = new TransactionHistoryGUI();
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_TransactionHistoryActionPerformed
+    private void launchLaunchPanel() {
+        JFrame launchPanel = new LaunchPanelGUI(); // Create an instance of the main program GUI
+        launchPanel.setVisible(true); // Set the main program frame visible
+        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane Background_Design;
+    private javax.swing.JButton Logout;
+    private javax.swing.JPanel Main_Button_Panel;
+    private javax.swing.JButton Print;
+    private javax.swing.JButton Roles;
+    private javax.swing.JPanel Secondary_Buttons;
+    private javax.swing.JButton TransactionHistory;
     private javax.swing.JButton addBtn;
     private javax.swing.JPanel dataPanel;
-    private javax.swing.JLabel datamineLogoLabel;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
-    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
-    private java.awt.MenuBar menuBar1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton lowstockBtn;
     private javax.swing.JTable plasystemTbl;
     private javax.swing.JScrollPane plasystemTblScrollPane;
+    private javax.swing.JButton rstockBtn;
     private javax.swing.JPanel searchPanel;
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;
