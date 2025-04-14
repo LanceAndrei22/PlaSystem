@@ -104,7 +104,7 @@ public class TransactionGUI extends JFrame {
                product.getProductSize(),
                product.getProductBrand(),
                product.getProductType(),
-               product.getProductRestockValue()
+               product.getProductRestockvalue()
            };
            model.addRow(rowData);
        }

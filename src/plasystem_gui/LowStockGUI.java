@@ -34,11 +34,11 @@ public class LowStockGUI extends javax.swing.JFrame {
         // Populate table with low stock items
         productList = dataHandling.getList();
         for (ProductData product : productList) {
-            if (product.getProductQuantity() < product.getProductRestockValue()) {
+            if (product.getProductQuantity() < product.getProductRestockvalue()) {
                 model.addRow(new Object[]{
                         product.getProductID(),
                         product.getProductQuantity(),
-                        product.getProductRestockValue(),
+                        product.getProductRestockvalue(),
                         product.getProductName()
                 });
             }
