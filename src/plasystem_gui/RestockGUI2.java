@@ -41,7 +41,7 @@ public class RestockGUI2 extends javax.swing.JFrame {
     private LinkedList<ProductData> filterRestockItems(LinkedList<ProductData> fullList) {
         LinkedList<ProductData> restockItems = new LinkedList<>();
         for (ProductData product : fullList) {
-            if (product.getProductRestockValue() < 45) {
+            if (product.getProductRestockvalue() < 45) {
                 restockItems.add(product);
             }
         }
@@ -63,7 +63,7 @@ public class RestockGUI2 extends javax.swing.JFrame {
         };
 
         for (ProductData product : productList) {
-            model.addRow(new Object[]{false, product.getProductID(), product.getProductName(), product.getProductQuantity(), product.getProductRestockValue(), 0});
+            model.addRow(new Object[]{false, product.getProductID(), product.getProductName(), product.getProductQuantity(), product.getProductRestockvalue(), 0});
         }
 
         jTable2.setModel(model);

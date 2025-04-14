@@ -61,7 +61,7 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         launchButton.setBackground(new java.awt.Color(0, 153, 255));
         launchButton.setForeground(new java.awt.Color(255, 255, 255));
-        launchButton.setText("Launch");
+        launchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/launchbtn_icon.png"))); // NOI18N
         launchButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         launchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,9 +69,9 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
             }
         });
 
-        exitButton.setBackground(new java.awt.Color(0, 153, 255));
+        exitButton.setBackground(new java.awt.Color(255, 102, 102));
         exitButton.setForeground(new java.awt.Color(255, 255, 255));
-        exitButton.setText("Exit");
+        exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/exitbtn_icon.png"))); // NOI18N
         exitButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         exitButton.setInheritsPopupMenu(true);
         exitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +82,11 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         PasswordLabel.setText(" Password :");
 
-        UsernameTextField.setText("jTextField1");
+        UsernameTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UsernameTextFieldActionPerformed(evt);
+            }
+        });
 
         UsernameLabel.setText("Username :");
 
@@ -113,7 +117,7 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
                         .addComponent(launchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(219, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Background_Design, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE))
+                .addComponent(Background_Design, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,6 +193,10 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
     private void PasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PasswordTextFieldActionPerformed
+
+    private void UsernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UsernameTextFieldActionPerformed
 
     /**
      * @param args the command line arguments

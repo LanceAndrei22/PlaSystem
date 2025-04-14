@@ -12,6 +12,7 @@ public class ProductData {
     protected String productSize;
     protected String productBrand;
     protected String productType;
+    protected int productRestockvalue;
     
     /**
      * Constructor to initialize GameData with provided values.
@@ -23,15 +24,17 @@ public class ProductData {
      * @param prodSize        The Size of the product.
      * @param prodBrand       The Brand the product.
      * @param prodType        The Type of the product.
+     * @param prodRestockvalue        The Restockvalue of the product.
      */
-    public ProductData(String prodID, int prodQuantity, double prodPrice, String prodName, String prodSize, String prodBrand, String prodType){
+    public ProductData(String prodID, int prodQuantity, double prodPrice, String prodName, String prodSize, String prodBrand, String prodType, int prodRestockvalue){
         this.productID = prodID;
         this.productQuantity = prodQuantity;
         this.productPrice = prodPrice;
         this.productName = prodName;
         this.productSize = prodSize;
         this.productBrand = prodBrand;
-        this.productType = prodType;  
+        this.productType = prodType;
+        this.productRestockvalue = prodRestockvalue;
     }
     
     /**
@@ -96,5 +99,13 @@ public class ProductData {
     }
     public String getProductType(){
         return productType;
-    }    
+    }
+
+    // Setters and getters for Quantity
+    public void setProductRestockvalue(int productRestockvalue){
+        this.productRestockvalue=productRestockvalue;
+    }
+    public int getProductRestockvalue(){
+        return productRestockvalue;
+    }
 }

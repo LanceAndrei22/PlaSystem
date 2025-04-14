@@ -14,6 +14,7 @@ public class TableRowSelector {
     private String tblSize = "";
     private String tblBrand = "";
     private String tblType = "";
+    private String tblRestockvalue = "";
     private int viewRow = 0;
 
     /**
@@ -37,6 +38,7 @@ public class TableRowSelector {
             tblSize = tblModel.getValueAt(modelRow, 4).toString();
             tblBrand = tblModel.getValueAt(modelRow, 5).toString();
             tblType = tblModel.getValueAt(modelRow, 6).toString();
+            tblRestockvalue = tblModel.getValueAt(modelRow, 7).toString();
             viewRow = modelRow;
         }
     }
@@ -68,6 +70,10 @@ public class TableRowSelector {
 
     public String getQuantity() {
         return tblQuantity;
+    }
+    
+    public String getRestockvalue() {
+        return tblRestockvalue;
     }
 
     public int getRow() {
