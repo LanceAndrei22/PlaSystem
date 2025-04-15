@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class TransactionHandling {
     // Fields to store transaction information
-    private String gameName;
+    private String productName;
     private int quantity;
     private double price;
     private String productID;
@@ -28,7 +28,7 @@ public class TransactionHandling {
      * @param price     The price of the product.
      */
     public TransactionHandling(String productID, String gameName, int quantity, double price){
-        this.gameName = gameName;
+        this.productName = gameName;
         this.quantity = quantity;
         this.price = price;
         this.productID = productID;
@@ -95,7 +95,7 @@ public class TransactionHandling {
      * @param gameName The name of the game/product.
      */
     public void setName(String gameName){
-        this.gameName = gameName;
+        this.productName = gameName;
     }
     
     /**
@@ -104,7 +104,7 @@ public class TransactionHandling {
      * @return The name of the game/product.
      */
     public String getName(){
-        return gameName;
+        return productName;
     }
     
     /**
