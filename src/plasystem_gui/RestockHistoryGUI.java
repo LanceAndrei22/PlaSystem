@@ -34,31 +34,23 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
         RHTable = new javax.swing.JTable();
         DetailsBtn = new javax.swing.JButton();
         TitleLabel = new javax.swing.JLabel();
+        Design1 = new javax.swing.JLabel();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
-        Design1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         RHTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "ID", "Date", "Price"
+                "ID", "Date"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Double.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        ));
         jScrollPane1.setViewportView(RHTable);
 
         DetailsBtn.setText("See Details");
@@ -70,6 +62,9 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
         });
 
         TitleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/restockhist_title.png"))); // NOI18N
+
+        Design1.setBackground(new java.awt.Color(153, 204, 0));
+        Design1.setOpaque(true);
 
         searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -84,21 +79,18 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
             }
         });
 
-        Design1.setBackground(new java.awt.Color(153, 204, 0));
-        Design1.setOpaque(true);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,11 +127,11 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DetailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetailsBtnActionPerformed
-        /*
+        
         JFrame panel = new RHDetailsGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        /*
+        
         /* this is the code for selecting row 
         // Get the index of the selected row in the main table
         int selectedRow = plasystemTbl.getSelectedRow();
