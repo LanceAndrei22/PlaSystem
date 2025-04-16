@@ -100,6 +100,7 @@ public class MainProgramGUI extends JFrame {
         Print = new javax.swing.JButton();
         Logout = new javax.swing.JButton();
         TransactionHistory = new javax.swing.JButton();
+        RestockHistory = new javax.swing.JButton();
         Background_Design = new javax.swing.JDesktopPane();
         jLabel1 = new javax.swing.JLabel();
 
@@ -110,7 +111,7 @@ public class MainProgramGUI extends JFrame {
         Main_Button_Panel.setForeground(new java.awt.Color(51, 153, 255));
 
         addBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (500 x 500 px) (1).png"))); // NOI18N
+        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/addinventory_button.png"))); // NOI18N
         addBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         addBtn.setContentAreaFilled(false);
         addBtn.setInheritsPopupMenu(true);
@@ -121,7 +122,7 @@ public class MainProgramGUI extends JFrame {
         });
 
         transactBtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (500 x 500 px) (2).png"))); // NOI18N
+        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/transactbutton.png"))); // NOI18N
         transactBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         transactBtn.setContentAreaFilled(false);
         transactBtn.setInheritsPopupMenu(true);
@@ -182,7 +183,7 @@ public class MainProgramGUI extends JFrame {
 
         lowstockBtn.setBackground(new java.awt.Color(51, 204, 0));
         lowstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lowstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstock.png"))); // NOI18N
+        lowstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstockbutton.png"))); // NOI18N
         lowstockBtn.setText("Re-stock");
         lowstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         lowstockBtn.setContentAreaFilled(false);
@@ -422,39 +423,46 @@ public class MainProgramGUI extends JFrame {
             }
         });
 
+        RestockHistory.setText("🔄 Restock History");
+        RestockHistory.setInheritsPopupMenu(true);
+        RestockHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RestockHistoryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout Secondary_ButtonsLayout = new javax.swing.GroupLayout(Secondary_Buttons);
         Secondary_Buttons.setLayout(Secondary_ButtonsLayout);
         Secondary_ButtonsLayout.setHorizontalGroup(
             Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 927, Short.MAX_VALUE)
-            .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(326, 326, 326)
-                    .addComponent(TransactionHistory)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(Print, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                .addComponent(RestockHistory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TransactionHistory)
+                .addGap(18, 18, 18)
+                .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Print)
+                .addContainerGap())
         );
         Secondary_ButtonsLayout.setVerticalGroup(
             Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 64, Short.MAX_VALUE)
-            .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
-                    .addGap(9, 9, 9)
-                    .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Print, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(TransactionHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(9, Short.MAX_VALUE)))
+            .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Secondary_ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(RestockHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Print, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TransactionHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (11).png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/bg_mainprogram.png"))); // NOI18N
 
         Background_Design.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -462,35 +470,30 @@ public class MainProgramGUI extends JFrame {
         Background_Design.setLayout(Background_DesignLayout);
         Background_DesignLayout.setHorizontalGroup(
             Background_DesignLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1236, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         Background_DesignLayout.setVerticalGroup(
             Background_DesignLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jLabel1.getAccessibleContext().setAccessibleName("");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(Main_Button_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 291, Short.MAX_VALUE)
+                .addComponent(Main_Button_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(512, 512, 512)
+                        .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(512, 512, 512)
-                                .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Secondary_Buttons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Background_Design))
         );
@@ -644,6 +647,12 @@ public class MainProgramGUI extends JFrame {
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_TransactionHistoryActionPerformed
+
+    private void RestockHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestockHistoryActionPerformed
+        JFrame panel = new RestockHistoryGUI();
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_RestockHistoryActionPerformed
     private void launchLaunchPanel() {
         JFrame launchPanel = new LaunchPanelGUI(); // Create an instance of the main program GUI
         launchPanel.setVisible(true); // Set the main program frame visible
@@ -654,6 +663,7 @@ public class MainProgramGUI extends JFrame {
     private javax.swing.JButton Logout;
     private javax.swing.JPanel Main_Button_Panel;
     private javax.swing.JButton Print;
+    private javax.swing.JButton RestockHistory;
     private javax.swing.JButton Roles;
     private javax.swing.JPanel Secondary_Buttons;
     private javax.swing.JButton TransactionHistory;
