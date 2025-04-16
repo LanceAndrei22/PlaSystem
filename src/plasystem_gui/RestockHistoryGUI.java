@@ -5,17 +5,19 @@
 package plasystem_gui;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import plasystem_functions.TableRowSelector;
 
 /**
  *
  * @author mjbal
  */
-public class TransactionHistoryGUI extends javax.swing.JFrame {
+public class RestockHistoryGUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form TransactionHistoryGUI
+     * Creates new form RestockHistoryGUI
      */
-    public TransactionHistoryGUI() {
+    public RestockHistoryGUI() {
         initComponents();
     }
 
@@ -29,53 +31,27 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        TitleLabel = new javax.swing.JLabel();
-        ExportBtn = new javax.swing.JButton();
+        RHTable = new javax.swing.JTable();
         DetailsBtn = new javax.swing.JButton();
+        TitleLabel = new javax.swing.JLabel();
+        Design1 = new javax.swing.JLabel();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
-        Design1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 153, 153));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        RHTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "ID", "Date", "Total Amount", "Payment Amount", "Change Given"
+                "ID", "Date"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-
-        TitleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/transact_history_title.png"))); // NOI18N
-
-        ExportBtn.setText("🖨️ Export");
-        ExportBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ExportBtnActionPerformed(evt);
-            }
-        });
+        ));
+        jScrollPane1.setViewportView(RHTable);
 
         DetailsBtn.setText("See Details");
         DetailsBtn.setInheritsPopupMenu(true);
@@ -85,85 +61,74 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             }
         });
 
+        TitleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/restockhist_title.png"))); // NOI18N
+
+        Design1.setBackground(new java.awt.Color(153, 204, 0));
+        Design1.setOpaque(true);
+
         searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchTxtFieldKeyReleased(evt);
             }
         });
 
-        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Date", "Total Amount", "Payment Amount", "Change Given" }));
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Date" }));
         searchPrmtrBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchPrmtrBoxActionPerformed(evt);
             }
         });
 
-        Design1.setBackground(new java.awt.Color(255, 102, 102));
-        Design1.setOpaque(true);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ExportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83)
+                .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))
+                .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ExportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 337, Short.MAX_VALUE)))
+                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 253, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ExportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ExportBtnActionPerformed
-
-    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
-
-    }//GEN-LAST:event_searchTxtFieldKeyReleased
-
-    private void searchPrmtrBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchPrmtrBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchPrmtrBoxActionPerformed
-
     private void DetailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetailsBtnActionPerformed
-        JFrame panel = new THDetailsGUI();
+        
+        JFrame panel = new RHDetailsGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
@@ -203,6 +168,14 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         */
     }//GEN-LAST:event_DetailsBtnActionPerformed
 
+    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+
+    }//GEN-LAST:event_searchTxtFieldKeyReleased
+
+    private void searchPrmtrBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchPrmtrBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchPrmtrBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -220,20 +193,20 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestockHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestockHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestockHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestockHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TransactionHistoryGUI().setVisible(true);
+                new RestockHistoryGUI().setVisible(true);
             }
         });
     }
@@ -241,10 +214,9 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design1;
     private javax.swing.JButton DetailsBtn;
-    private javax.swing.JButton ExportBtn;
+    private javax.swing.JTable RHTable;
     private javax.swing.JLabel TitleLabel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;
     // End of variables declaration//GEN-END:variables
