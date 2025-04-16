@@ -27,26 +27,21 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Component id="Main_Button_Panel" pref="291" max="32767" attributes="0"/>
+              <Component id="Main_Button_Panel" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="searchPanel" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="512" max="-2" attributes="0"/>
-                              <Component id="dataPanel" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="plasystemTblScrollPane" alignment="1" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="searchPanel" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="512" max="-2" attributes="0"/>
+                      <Component id="dataPanel" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="plasystemTblScrollPane" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="Secondary_Buttons" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Component id="Background_Design" alignment="0" max="32767" attributes="0"/>
@@ -204,7 +199,7 @@
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/plasystem_main/SOFTWARE (500 x 500 px) (1).png"/>
+              <Image iconType="3" name="/plasystem_main/addinventory_button.png"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -224,7 +219,7 @@
               <Font name="Segoe UI" size="24" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/plasystem_main/SOFTWARE (500 x 500 px) (2).png"/>
+              <Image iconType="3" name="/plasystem_main/transactbutton.png"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -362,7 +357,7 @@
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/plasystem_main/lowstock.png"/>
+              <Image iconType="3" name="/plasystem_main/lowstockbutton.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Re-stock"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -588,36 +583,33 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="927" max="32767" attributes="0"/>
-              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="Logout" min="-2" pref="138" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="326" max="-2" attributes="0"/>
-                      <Component id="TransactionHistory" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="Roles" min="-2" pref="138" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="Print" min="-2" pref="138" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="Logout" min="-2" pref="138" max="-2" attributes="0"/>
+                  <EmptySpace pref="220" max="32767" attributes="0"/>
+                  <Component id="RestockHistory" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="TransactionHistory" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="Roles" min="-2" pref="114" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="Print" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="64" max="32767" attributes="0"/>
-              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="Roles" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                          <Component id="Print" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                          <Component id="Logout" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                          <Component id="TransactionHistory" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="9" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="RestockHistory" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                      <Component id="Print" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                      <Component id="Roles" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                      <Component id="TransactionHistory" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                      <Component id="Logout" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace pref="19" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -663,6 +655,15 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TransactionHistoryActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JButton" name="RestockHistory">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="\ud83d\udd04 Restock History" containsInvalidXMLChars="true"/>
+            <Property name="inheritsPopupMenu" type="boolean" value="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RestockHistoryActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JDesktopPane" name="Background_Design">
@@ -670,7 +671,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jLabel1" alignment="0" pref="1236" max="32767" attributes="0"/>
+              <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -684,12 +685,9 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/plasystem_main/SOFTWARE (1000 x 500 px) (11).png"/>
+              <Image iconType="3" name="/plasystem_main/bg_mainprogram.png"/>
             </Property>
           </Properties>
-          <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
-          </AccessibilityProperties>
         </Component>
       </SubComponents>
     </Container>
