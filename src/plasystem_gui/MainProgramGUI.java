@@ -87,14 +87,14 @@ public class MainProgramGUI extends JFrame {
         lowstockBtn = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        plasystemTblScrollPane = new javax.swing.JScrollPane();
+        plasystemTbl = new javax.swing.JTable();
         dataPanel = new javax.swing.JPanel();
         editBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
         searchPanel = new javax.swing.JPanel();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
-        plasystemTblScrollPane = new javax.swing.JScrollPane();
-        plasystemTbl = new javax.swing.JTable();
         Secondary_Buttons = new javax.swing.JPanel();
         Roles = new javax.swing.JButton();
         Print = new javax.swing.JButton();
@@ -109,6 +109,7 @@ public class MainProgramGUI extends JFrame {
 
         Main_Button_Panel.setBackground(new java.awt.Color(0, 153, 255));
         Main_Button_Panel.setForeground(new java.awt.Color(51, 153, 255));
+        Main_Button_Panel.setFocusable(false);
 
         addBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/addinventory_button.png"))); // NOI18N
@@ -135,7 +136,6 @@ public class MainProgramGUI extends JFrame {
         rstockBtn.setBackground(new java.awt.Color(51, 204, 0));
         rstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         rstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/restock_button.png"))); // NOI18N
-        rstockBtn.setText("Re-stock");
         rstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         rstockBtn.setContentAreaFilled(false);
         rstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -184,7 +184,6 @@ public class MainProgramGUI extends JFrame {
         lowstockBtn.setBackground(new java.awt.Color(51, 204, 0));
         lowstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lowstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstockbutton.png"))); // NOI18N
-        lowstockBtn.setText("Re-stock");
         lowstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         lowstockBtn.setContentAreaFilled(false);
         lowstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -288,6 +287,39 @@ public class MainProgramGUI extends JFrame {
                 .addContainerGap(239, Short.MAX_VALUE))
         );
 
+        plasystemTbl.setAutoCreateRowSorter(true);
+        plasystemTbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Product ID", "Quantity", "Price", "Name", "Size", "Brand", "Type", "Restock Value"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        plasystemTbl.getTableHeader().setReorderingAllowed(false);
+        plasystemTblScrollPane.setViewportView(plasystemTbl);
+        if (plasystemTbl.getColumnModel().getColumnCount() > 0) {
+            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(1).setPreferredWidth(20);
+            plasystemTbl.getColumnModel().getColumn(2).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
+        }
+
         dataPanel.setOpaque(false);
 
         editBtn.setText("Edit");
@@ -309,7 +341,7 @@ public class MainProgramGUI extends JFrame {
         dataPanelLayout.setHorizontalGroup(
             dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dataPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(202, Short.MAX_VALUE)
                 .addComponent(editBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteBtn)
@@ -344,7 +376,7 @@ public class MainProgramGUI extends JFrame {
                 .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         searchPanelLayout.setVerticalGroup(
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,39 +387,6 @@ public class MainProgramGUI extends JFrame {
                     .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
-
-        plasystemTbl.setAutoCreateRowSorter(true);
-        plasystemTbl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Product ID", "Quantity", "Price", "Name", "Size", "Brand", "Type", "Restock Value"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        plasystemTbl.getTableHeader().setReorderingAllowed(false);
-        plasystemTblScrollPane.setViewportView(plasystemTbl);
-        if (plasystemTbl.getColumnModel().getColumnCount() > 0) {
-            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
-            plasystemTbl.getColumnModel().getColumn(1).setPreferredWidth(20);
-            plasystemTbl.getColumnModel().getColumn(2).setPreferredWidth(25);
-            plasystemTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
-        }
 
         Secondary_Buttons.setOpaque(false);
 
@@ -438,14 +437,14 @@ public class MainProgramGUI extends JFrame {
             .addGroup(Secondary_ButtonsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 428, Short.MAX_VALUE)
                 .addComponent(RestockHistory)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addComponent(TransactionHistory)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Print)
+                .addComponent(Print, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         Secondary_ButtonsLayout.setVerticalGroup(
@@ -458,7 +457,7 @@ public class MainProgramGUI extends JFrame {
                     .addComponent(Roles, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TransactionHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -482,18 +481,16 @@ public class MainProgramGUI extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(Main_Button_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Main_Button_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(512, 512, 512)
-                        .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Secondary_Buttons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(602, 602, 602)
+                        .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Secondary_Buttons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(766, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Background_Design))
         );
@@ -504,8 +501,8 @@ public class MainProgramGUI extends JFrame {
                     .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(plasystemTblScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(Secondary_Buttons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(Main_Button_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
