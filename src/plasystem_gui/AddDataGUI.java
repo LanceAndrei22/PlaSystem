@@ -15,7 +15,7 @@ import java.awt.event.*;
  */
 public class AddDataGUI extends JFrame {
     // Attributes for handling data
-    LinkedList<ProductData> gameList;
+    LinkedList<ProductData> productList;
     private String filePath;
     private JTable tableData;
     private String newProductID;
@@ -33,17 +33,17 @@ public class AddDataGUI extends JFrame {
     /**
      * Constructor initializing the AddDataGUI with necessary data.
      *
-     * @param gameList   The list of ProductData to be updated.
+     * @param productList   The list of ProductData to be updated.
      * @param tableData  The JTable to display and modify data.
      * @param filePath   The path to the file storing the game data.
      */
-    public AddDataGUI(LinkedList<ProductData> gameList, JTable tableData, String filePath) {
+    public AddDataGUI(LinkedList<ProductData> productList, JTable tableData, String filePath) {
         initComponents(); // Initialize components defined in the form
         
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
         
         // Assign provided parameters to class attributes
-        this.gameList = gameList;
+        this.productList = productList;
         this.tableData = tableData;
         this.filePath = filePath;
         
@@ -329,7 +329,7 @@ public class AddDataGUI extends JFrame {
 
                 if (isValid) {
                     // Add the new data using the DataHandling object
-                    addHandling.addNewData(gameList, 
+                    addHandling.addNewData(productList, 
                                            tableData, 
                                            newProductID, 
                                            quantityValue, 

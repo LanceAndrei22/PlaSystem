@@ -439,7 +439,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/plasystem_main/SOFTWARE (1000 x 500 px) (4).png"/>
+              <Image iconType="3" name="/plasystem_main/logo_1.png"/>
             </Property>
           </Properties>
         </Component>

@@ -135,11 +135,11 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DetailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetailsBtnActionPerformed
-        
+        /*
         JFrame panel = new RHDetailsGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+        /*
         /* this is the code for selecting row 
         // Get the index of the selected row in the main table
         int selectedRow = plasystemTbl.getSelectedRow();

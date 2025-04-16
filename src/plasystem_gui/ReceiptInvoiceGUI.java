@@ -201,7 +201,7 @@ public class ReceiptInvoiceGUI extends JFrame {
         currentDataLabel.setText("date");
 
         logoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/SOFTWARE (1000 x 500 px) (4).png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/logo_1.png"))); // NOI18N
 
         javax.swing.GroupLayout receiptPanelLayout = new javax.swing.GroupLayout(receiptPanel);
         receiptPanel.setLayout(receiptPanelLayout);
