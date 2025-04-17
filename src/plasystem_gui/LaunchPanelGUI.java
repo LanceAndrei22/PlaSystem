@@ -1,14 +1,44 @@
 package plasystem_gui;
 
+import plasystem_functions.UserAccountManager;
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LaunchPanelGUI extends javax.swing.JFrame {
-     
+    
+    private UserAccountManager loginAccount;
+    
     public LaunchPanelGUI() {
         initComponents(); // Initialize GUI components
-        setLocationRelativeTo(null); // Set the location of the frame to the center of the screen       
+        setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
+        
+        // Initialize the UserAccountManager and load user accounts
+        loginAccount = new UserAccountManager();
+        loginAccount.loadUserAccounts(); // Load user accounts from the database
+        
+        // Add KeyListeners for Enter key action
+        addEnterKeyListener(UsernameTextField);
+        addEnterKeyListener(PasswordTextField);
     }
-
+    
+    private void addEnterKeyListener(JTextField textField) {
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    launchButtonActionPerformed(null); // Simulate button click when Enter is pressed
+                }
+            }
+        });
+    }
+    
+    private void launchMainProgram() {
+        JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
+        mainProgram.setVisible(true); // Set the main program frame visible
+        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,12 +60,6 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
-        PasswordTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PasswordTextFieldActionPerformed(evt);
-            }
-        });
 
         VersionTextField.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         VersionTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -64,12 +88,6 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         PasswordLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         PasswordLabel.setText(" Password :");
-
-        UsernameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UsernameTextFieldActionPerformed(evt);
-            }
-        });
 
         UsernameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         UsernameLabel.setText("Username :");
@@ -146,29 +164,25 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void launchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchButtonActionPerformed
-        launchMainProgram();
+        String username = UsernameTextField.getText().trim();
+        String password = new String(PasswordTextField.getPassword()).trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter both username and password.");
+            return;
+        }
+
+        // Validate user login credentials using the loaded user accounts
+        if (loginAccount.validateUserLogin(username, password)) {
+            launchMainProgram();
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password.");
+        }
     }//GEN-LAST:event_launchButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-       System.exit(0); // Close the application
+        System.exit(0); // Close the application
     }//GEN-LAST:event_exitButtonActionPerformed
-
-    private void PasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PasswordTextFieldActionPerformed
-
-    private void UsernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UsernameTextFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    private void launchMainProgram() {
-        JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
-        mainProgram.setVisible(true); // Set the main program frame visible
-        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background_Design;

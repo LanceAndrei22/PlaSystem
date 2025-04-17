@@ -44,7 +44,15 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
             new String [] {
                 "ID", "Date"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(RHTable);
 
         DetailsBtn.setText("See Details");

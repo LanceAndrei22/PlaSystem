@@ -1,5 +1,11 @@
 package plasystem_gui;
 
+import plasystem_functions.UserAccount;
+import plasystem_functions.UserAccountManager;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+
 public class UserAccountsGUI extends javax.swing.JFrame {
 
     /**
@@ -8,6 +14,27 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     public UserAccountsGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
+        loadUserAccounts();
+    }
+    
+    // Method to load user accounts into the JTable
+    private void loadUserAccounts() {
+        // Fetch all user accounts from the database
+        UserAccountManager userAccountManager = new UserAccountManager();
+        userAccountManager.loadUserAccounts();  // Load user accounts from DB
+
+        List<UserAccount> userList = userAccountManager.getUserAccounts();  // Get the list of user accounts
+        DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+        model.setRowCount(0); // Clear existing rows
+
+        // Add each user to the table
+        for (UserAccount user : userList) {
+            model.addRow(new Object[] {
+                user.getUsername(),
+                user.getUserPassword(),
+                user.getUserRole()
+            });
+        }
     }
 
     /**
@@ -19,14 +46,14 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        UserRolesTable = new javax.swing.JTable();
+        userAccScrollPane = new javax.swing.JScrollPane();
+        UserAccountsTable = new javax.swing.JTable();
         Design = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        UserRolesTable.setModel(new javax.swing.table.DefaultTableModel(
+        UserAccountsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -40,12 +67,19 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(UserRolesTable);
+        userAccScrollPane.setViewportView(UserAccountsTable);
 
         Design.setBackground(new java.awt.Color(255, 204, 102));
         Design.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -56,7 +90,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+            .addComponent(userAccScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
         );
@@ -64,7 +98,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
+                .addComponent(userAccScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 61, Short.MAX_VALUE)
@@ -77,7 +111,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
-    private javax.swing.JTable UserRolesTable;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable UserAccountsTable;
+    private javax.swing.JScrollPane userAccScrollPane;
     // End of variables declaration//GEN-END:variables
 }
