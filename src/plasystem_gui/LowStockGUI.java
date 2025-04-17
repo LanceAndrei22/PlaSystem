@@ -53,7 +53,6 @@ public class LowStockGUI extends javax.swing.JFrame{
 
         lowstockScrollPane = new javax.swing.JScrollPane();
         lowstockTable = new javax.swing.JTable();
-        Titlelabel = new javax.swing.JLabel();
         Design = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -84,8 +83,6 @@ public class LowStockGUI extends javax.swing.JFrame{
         });
         lowstockScrollPane.setViewportView(lowstockTable);
 
-        Titlelabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstocktitle.png"))); // NOI18N
-
         Design.setBackground(new java.awt.Color(51, 51, 51));
         Design.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/lowstocktitle.png"))); // NOI18N
@@ -96,19 +93,13 @@ public class LowStockGUI extends javax.swing.JFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lowstockScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Titlelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Titlelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(74, 74, 74)
                 .addComponent(lowstockScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -122,7 +113,6 @@ public class LowStockGUI extends javax.swing.JFrame{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
-    private javax.swing.JLabel Titlelabel;
     private javax.swing.JScrollPane lowstockScrollPane;
     private javax.swing.JTable lowstockTable;
     // End of variables declaration//GEN-END:variables
