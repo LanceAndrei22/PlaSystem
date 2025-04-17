@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package plasystem_gui;
 
 import javax.swing.JFrame;
 
-/**
- *
- * @author mjbal
- */
 public class TransactionHistoryGUI extends javax.swing.JFrame {
 
     /**

@@ -38,7 +38,7 @@ public class EditDataGUI extends JFrame {
      * @param type   The type of the product.
      * @param restockValue
      */
-    public EditDataGUI(int selectedRow, String path, LinkedList<ProductData> list, JTable TableData,String productID, String quantity, String price, String name, String size, String brand, String type, String restockValue) {
+    public EditDataGUI(int selectedRow, String path, LinkedList<ProductData> list, JTable TableData,String productID, String name, String brand, String size, String type, String price, String quantity, String restockValue) {
         initComponents(); // Initialize components defined in the GUI
         
         setLocationRelativeTo(null); // Set the location of the window to the center of the screen

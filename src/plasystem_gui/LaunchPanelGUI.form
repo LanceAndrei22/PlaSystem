@@ -40,7 +40,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace pref="204" max="32767" attributes="0"/>
+                  <EmptySpace pref="203" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="VersionTextField" min="-2" pref="73" max="-2" attributes="0"/>
@@ -50,8 +50,8 @@
                           <Component id="exitButton" min="-2" pref="185" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="UsernameLabel" min="-2" pref="63" max="-2" attributes="0"/>
-                              <Component id="PasswordLabel" min="-2" pref="63" max="-2" attributes="0"/>
+                              <Component id="UsernameLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="PasswordLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -62,7 +62,7 @@
                           <Component id="launchButton" min="-2" pref="185" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="222" max="32767" attributes="0"/>
+                  <EmptySpace pref="220" max="32767" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Component id="Background_Design" alignment="1" pref="1089" max="32767" attributes="0"/>
@@ -115,6 +115,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="VersionTextField">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="2"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="version 2.0.0"/>
           </Properties>
@@ -156,6 +159,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="PasswordLabel">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value=" Password :"/>
           </Properties>
         </Component>
@@ -166,6 +172,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="UsernameLabel">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Username :"/>
           </Properties>
         </Component>
