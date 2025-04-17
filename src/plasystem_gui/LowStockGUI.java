@@ -87,6 +87,8 @@ public class LowStockGUI extends javax.swing.JFrame{
         Titlelabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstocktitle.png"))); // NOI18N
 
         Design.setBackground(new java.awt.Color(51, 51, 51));
+        Design.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/lowstocktitle.png"))); // NOI18N
         Design.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

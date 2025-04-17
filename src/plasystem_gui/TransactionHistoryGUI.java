@@ -9,6 +9,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
      */
     public TransactionHistoryGUI() {
         initComponents();
+        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
     }
 
     /**
@@ -22,7 +23,6 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        TitleLabel = new javax.swing.JLabel();
         ExportBtn = new javax.swing.JButton();
         DetailsBtn = new javax.swing.JButton();
         searchTxtField = new javax.swing.JTextField();
@@ -31,6 +31,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
+        setResizable(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -60,14 +61,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        TitleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/transact_history_title.png"))); // NOI18N
-
         ExportBtn.setText("🖨️ Export");
-        ExportBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ExportBtnActionPerformed(evt);
-            }
-        });
 
         DetailsBtn.setText("See Details");
         DetailsBtn.setInheritsPopupMenu(true);
@@ -77,164 +71,62 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             }
         });
 
-        searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                searchTxtFieldKeyReleased(evt);
-            }
-        });
-
         searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Date", "Total Amount", "Payment Amount", "Change Given" }));
-        searchPrmtrBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchPrmtrBoxActionPerformed(evt);
-            }
-        });
 
         Design1.setBackground(new java.awt.Color(255, 102, 102));
+        Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/transact_history_title.png"))); // NOI18N
         Design1.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(7, 7, 7)
+                .addComponent(ExportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                .addGap(459, 459, 459)
+                .addComponent(DetailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                .addGap(6, 6, 6))
+            .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ExportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))
+                .addComponent(searchPrmtrBox, 0, 90, Short.MAX_VALUE)
+                .addGap(438, 438, 438))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchPrmtrBox)
+                    .addComponent(searchTxtField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ExportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ExportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(DetailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 337, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ExportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ExportBtnActionPerformed
-
-    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
-
-    }//GEN-LAST:event_searchTxtFieldKeyReleased
-
-    private void searchPrmtrBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchPrmtrBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchPrmtrBoxActionPerformed
-
     private void DetailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetailsBtnActionPerformed
         JFrame panel = new THDetailsGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        /* this is the code for selecting row 
-        // Get the index of the selected row in the main table
-        int selectedRow = plasystemTbl.getSelectedRow();
-        
-        // Check if a row is selected (row index starts from 0, -1 means no selection)
-        if (selectedRow != -1) {
-            // Create an instance of TableRowSelector to extract data from the selected row
-            TableRowSelector rowSelector = new TableRowSelector(plasystemTbl);
-        
-            EditDataGUI edit = new EditDataGUI(
-             selectedRow, 
-             filePath, 
-             productList, 
-             plasystemTbl,
-            // Retrieve data using TableRowSelector getters
-            rowSelector.getTblProductID(),
-            rowSelector.getQuantity(),
-            rowSelector.getTblPrice(),
-            rowSelector.getTblName(),
-            rowSelector.getTblSize(),
-            rowSelector.getTblBrand(),
-            rowSelector.getTblType(),
-            rowSelector.getRestockValue() // Update the selected row index
-            );
-
-            // Set properties for the edit frame
-            edit.setVisible(true);
-            edit.pack();
-            edit.setLocationRelativeTo(null);
-            edit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Please select a row to edit.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        */
     }//GEN-LAST:event_DetailsBtnActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TransactionHistoryGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TransactionHistoryGUI().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design1;
     private javax.swing.JButton DetailsBtn;
     private javax.swing.JButton ExportBtn;
-    private javax.swing.JLabel TitleLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<String> searchPrmtrBox;

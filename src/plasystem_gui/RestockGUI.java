@@ -104,7 +104,7 @@ public class RestockGUI extends javax.swing.JFrame {
         Titlelabel.setBackground(new java.awt.Color(0, 204, 51));
         Titlelabel.setForeground(new java.awt.Color(0, 204, 51));
         Titlelabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Titlelabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/restocktitle.png"))); // NOI18N
+        Titlelabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/restocktitle.png"))); // NOI18N
 
         restockScrollPane.setBorder(null);
 

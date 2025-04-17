@@ -177,7 +177,7 @@ public class EditDataGUI extends JFrame {
                     .addComponent(priceTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                     .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(typeTxtField))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
         textFieldsPanelLayout.setVerticalGroup(
             textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,7 +211,7 @@ public class EditDataGUI extends JFrame {
                             .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(restockValueTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(publisherLabel1))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         cancelBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -232,7 +232,7 @@ public class EditDataGUI extends JFrame {
 
         titleTabel.setFont(new java.awt.Font("Microsoft YaHei UI", 3, 15)); // NOI18N
         titleTabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleTabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/edit.png"))); // NOI18N
+        titleTabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/edit.png"))); // NOI18N
 
         Design.setBackground(new java.awt.Color(153, 204, 255));
         Design.setOpaque(true);

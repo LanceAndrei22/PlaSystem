@@ -21,10 +21,10 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         UserRolesTable = new javax.swing.JTable();
-        TitleLabel = new javax.swing.JLabel();
         Design = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         UserRolesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -47,9 +47,9 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(UserRolesTable);
 
-        TitleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/userrolestitle.png"))); // NOI18N
-
         Design.setBackground(new java.awt.Color(255, 204, 102));
+        Design.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/userrolestitle.png"))); // NOI18N
         Design.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -57,23 +57,18 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(TitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(67, 67, 67)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 398, Short.MAX_VALUE)))
+                    .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 61, Short.MAX_VALUE)
+                    .addGap(398, 398, 398)))
         );
 
         pack();
@@ -82,7 +77,6 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
-    private javax.swing.JLabel TitleLabel;
     private javax.swing.JTable UserRolesTable;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

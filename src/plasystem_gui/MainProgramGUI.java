@@ -103,7 +103,7 @@ public class MainProgramGUI extends JFrame {
         Logout = new javax.swing.JButton();
         TransactionHistory = new javax.swing.JButton();
         RestockHistory = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        backgroundDesign = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1586, 799));
@@ -116,7 +116,7 @@ public class MainProgramGUI extends JFrame {
         Main_Button_Panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         addBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/addinventory_button.png"))); // NOI18N
+        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/addinventory_button.png"))); // NOI18N
         addBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         addBtn.setContentAreaFilled(false);
         addBtn.setInheritsPopupMenu(true);
@@ -128,7 +128,7 @@ public class MainProgramGUI extends JFrame {
         Main_Button_Panel.add(addBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 162, 128, 121));
 
         transactBtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/transactbutton.png"))); // NOI18N
+        transactBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/transactbutton.png"))); // NOI18N
         transactBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         transactBtn.setContentAreaFilled(false);
         transactBtn.setInheritsPopupMenu(true);
@@ -141,7 +141,7 @@ public class MainProgramGUI extends JFrame {
 
         rstockBtn.setBackground(new java.awt.Color(51, 204, 0));
         rstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        rstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/restock_button.png"))); // NOI18N
+        rstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/restock_button.png"))); // NOI18N
         rstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         rstockBtn.setContentAreaFilled(false);
         rstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -192,14 +192,14 @@ public class MainProgramGUI extends JFrame {
 
         jLabel10.setBackground(new java.awt.Color(51, 102, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/plasystem.png"))); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/plasystem.png"))); // NOI18N
         jLabel10.setInheritsPopupMenu(false);
         jLabel10.setOpaque(true);
         Main_Button_Panel.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 318, 138));
 
         lowstockBtn.setBackground(new java.awt.Color(51, 204, 0));
         lowstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lowstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/lowstockbutton.png"))); // NOI18N
+        lowstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/lowstockbutton.png"))); // NOI18N
         lowstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         lowstockBtn.setContentAreaFilled(false);
         lowstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -350,12 +350,12 @@ public class MainProgramGUI extends JFrame {
 
         mainPanel.add(Secondary_Buttons, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 720, 1250, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/bg_mainprogram.png"))); // NOI18N
-        jLabel1.setText("designLabel");
-        jLabel1.setMaximumSize(new java.awt.Dimension(3000, 1207));
-        jLabel1.setMinimumSize(new java.awt.Dimension(3000, 1207));
-        jLabel1.setPreferredSize(new java.awt.Dimension(3000, 1207));
-        mainPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1410, 920));
+        backgroundDesign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/bg_mainprogram.png"))); // NOI18N
+        backgroundDesign.setText("designLabel");
+        backgroundDesign.setMaximumSize(new java.awt.Dimension(3000, 1207));
+        backgroundDesign.setMinimumSize(new java.awt.Dimension(3000, 1207));
+        backgroundDesign.setPreferredSize(new java.awt.Dimension(3000, 1207));
+        mainPanel.add(backgroundDesign, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1410, 920));
 
         getContentPane().add(mainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(296, -7, 1390, 920));
 
@@ -510,10 +510,10 @@ public class MainProgramGUI extends JFrame {
     private javax.swing.JPanel Secondary_Buttons;
     private javax.swing.JButton TransactionHistory;
     private javax.swing.JButton addBtn;
+    private javax.swing.JLabel backgroundDesign;
     private javax.swing.JPanel dataPanel;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

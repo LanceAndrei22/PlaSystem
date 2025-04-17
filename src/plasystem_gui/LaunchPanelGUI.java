@@ -75,7 +75,7 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
         UsernameLabel.setText("Username :");
 
         Background_Design.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        Background_Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/launchpanel_mainmenu.gif"))); // NOI18N
+        Background_Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/launchpanel_mainmenu.gif"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
