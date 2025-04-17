@@ -17,8 +17,8 @@ public class UserAccountManager {
     // Method to fetch and load user accounts from the database
     public void loadUserAccounts() {
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SELECT_ALL_USERS_QUERY)) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SELECT_ALL_USERS_QUERY)) {
             
             while (rs.next()) {
                 int userId = rs.getInt("USER_ID");
@@ -29,8 +29,12 @@ public class UserAccountManager {
                 UserAccount userAccount = new UserAccount(userId, userName, userPassword, userRole);
                 userAccounts.add(userAccount); // Add to LinkedList
             }
-        } catch (SQLException e) {
-            System.err.println("Error loading user accounts: " + e.getMessage());
+        } catch (SQLException error) {
+            System.err.println("Error loading user accounts: " + error.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(null, 
+                "An error occurred while loading user accounts:\n" + error.getMessage(),
+                "Database Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }
 
