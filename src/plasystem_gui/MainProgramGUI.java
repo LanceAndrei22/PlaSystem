@@ -103,6 +103,7 @@ public class MainProgramGUI extends JFrame {
         Logout = new javax.swing.JButton();
         TransactionHistory = new javax.swing.JButton();
         RestockHistory = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         backgroundDesign = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -351,6 +352,11 @@ public class MainProgramGUI extends JFrame {
         });
         Secondary_Buttons.add(RestockHistory, new org.netbeans.lib.awtextra.AbsoluteConstraints(597, 6, -1, 46));
 
+        jLabel1.setFont(new java.awt.Font("Luckiest Guy", 0, 28)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("WELCOME TO PLASYSTEM, USER! ");
+        Secondary_Buttons.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, -1, -1));
+
         mainPanel.add(Secondary_Buttons, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 720, 1250, -1));
 
         backgroundDesign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/bg_mainprogram.png"))); // NOI18N
@@ -517,6 +523,7 @@ public class MainProgramGUI extends JFrame {
     private javax.swing.JPanel dataPanel;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
