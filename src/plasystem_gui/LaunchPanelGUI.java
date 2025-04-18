@@ -1,32 +1,44 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package plasystem_gui;
 
-import plasystem_functions.KeycodeVerification;
-import plasystem_functions.DatabaseFileChooser;
+import plasystem_functions.UserAccountManager;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-/**
- *
- * @author mjbal
- */
 public class LaunchPanelGUI extends javax.swing.JFrame {
-
     
-      KeycodeVerification keyValidator = new KeycodeVerification();
-     
+    private UserAccountManager loginAccount;
+    
     public LaunchPanelGUI() {
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
         
-        // Update the label with the file name obtained from DatabaseFileChooser
-       
+        // Initialize the UserAccountManager and load user accounts
+        loginAccount = new UserAccountManager();
+        loginAccount.loadUserAccounts(); // Load user accounts from the database
+        
+        // Add KeyListeners for Enter key action
+        addEnterKeyListener(UsernameTextField);
+        addEnterKeyListener(PasswordTextField);
     }
-
+    
+    private void addEnterKeyListener(JTextField textField) {
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    launchButtonActionPerformed(null); // Simulate button click when Enter is pressed
+                }
+            }
+        });
+    }
+    
+    private void launchMainProgram() {
+        JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
+        mainProgram.setVisible(true); // Set the main program frame visible
+        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,12 +61,7 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        PasswordTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PasswordTextFieldActionPerformed(evt);
-            }
-        });
-
+        VersionTextField.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         VersionTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         VersionTextField.setText("version 2.0.0");
 
@@ -79,25 +86,21 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
             }
         });
 
+        PasswordLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         PasswordLabel.setText(" Password :");
 
-        UsernameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UsernameTextFieldActionPerformed(evt);
-            }
-        });
-
+        UsernameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         UsernameLabel.setText("Username :");
 
         Background_Design.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        Background_Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/launchpanel_mainmenu.gif"))); // NOI18N
+        Background_Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/launchpanel_mainmenu.gif"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(204, Short.MAX_VALUE)
+                .addContainerGap(203, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(VersionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -106,15 +109,15 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
                         .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(UsernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PasswordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(UsernameLabel)
+                            .addComponent(PasswordLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(UsernameTextField)
                             .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(38, 38, 38)
                         .addComponent(launchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(222, Short.MAX_VALUE))
+                .addContainerGap(220, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Background_Design, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE))
         );
@@ -161,85 +164,25 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void launchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchButtonActionPerformed
-        // Check if the keycode file is visible; if so, return
-        if(keyValidator.isKeycodeFileVisible()){
+        String username = UsernameTextField.getText().trim();
+        String password = new String(PasswordTextField.getPassword()).trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter both username and password.");
             return;
         }
-        
-        // Check if the keycode file is empty; if empty, launch the main program
-        if (keyValidator.isKeycodeFileEmpty()) {
+
+        // Validate user login credentials using the loaded user accounts
+        if (loginAccount.validateUserLogin(username, password)) {
             launchMainProgram();
         } else {
-            // Prompt the user to input the keycode
-            String userInput = JOptionPane.showInputDialog(null, "Enter Keycode:");
-            if (userInput != null) {
-                // Validate the entered keycode
-                boolean isValidKeycode = keyValidator.verifyKeycode(userInput);
-                if (isValidKeycode) {
-                    launchMainProgram();
-                } else {
-                    // Show error message for incorrect keycode, prompt again
-                    JOptionPane.showMessageDialog(null, "Incorrect Keycode! Please try again.","Error", JOptionPane.ERROR_MESSAGE);
-                    launchButtonActionPerformed(evt); // Recursive call to prompt again
-                }
-            }
+            JOptionPane.showMessageDialog(this, "Invalid username or password.");
         }
     }//GEN-LAST:event_launchButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-       System.exit(0); // Close the application
+        System.exit(0); // Close the application
     }//GEN-LAST:event_exitButtonActionPerformed
-
-    private void PasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PasswordTextFieldActionPerformed
-
-    private void UsernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UsernameTextFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    private void launchMainProgram() {
-        JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
-        mainProgram.setVisible(true); // Set the main program frame visible
-        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
-    }
-    
-    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LaunchPanelGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LaunchPanelGUI().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background_Design;

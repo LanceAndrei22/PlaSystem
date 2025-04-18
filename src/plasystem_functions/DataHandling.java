@@ -159,12 +159,12 @@ public class DataHandling extends ProductData {
             DefaultTableModel model = (DefaultTableModel) table.getModel(); // Get the table's model
 
             // Update the JTable with the new values
-            model.setValueAt(newQuantity, selectedRow, 1);   // Update quantity
-            model.setValueAt(newPrice, selectedRow, 2);      // Update price
-            model.setValueAt(newName, selectedRow, 3);       // Update name
-            model.setValueAt(newSize, selectedRow, 4);      // Update genre
-            model.setValueAt(newBrand, selectedRow, 5);   // Update Brand
-            model.setValueAt(newType, selectedRow, 6);  // Update Type
+            model.setValueAt(newName, selectedRow, 1);   // Update quantity
+            model.setValueAt(newBrand, selectedRow, 2);      // Update price
+            model.setValueAt(newSize, selectedRow, 3);       // Update name
+            model.setValueAt(newType, selectedRow, 4);      // Update genre
+            model.setValueAt(newPrice, selectedRow, 5);   // Update Brand
+            model.setValueAt(newQuantity, selectedRow, 6);  // Update Type
             model.setValueAt(newRestockValue, selectedRow, 7);  // Update Type
 
             // Update the data in the linked list
@@ -221,12 +221,12 @@ public class DataHandling extends ProductData {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         Object[] newRowData = {
                 productID,
-                quantity,
-                price,
                 name,
-                size,
                 brand,
+                size,
                 type,
+                price,
+                quantity,
                 restockvalue
         };
 
