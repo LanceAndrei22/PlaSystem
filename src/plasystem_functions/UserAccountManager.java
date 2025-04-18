@@ -3,6 +3,7 @@ package plasystem_functions;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.*;
 
 public class UserAccountManager {
     private static final String SELECT_ALL_USERS_QUERY = "SELECT * FROM UserAccount";
@@ -43,15 +44,26 @@ public class UserAccountManager {
         return userAccounts;
     }
 
-    // Method to validate user login credentials
+    // Method to validate user login credentials securely
     public boolean validateUserLogin(String username, String password) {
-        for (UserAccount userAccount : userAccounts) {
-            if (userAccount.getUsername().equals(username) && userAccount.getUserPassword().equals(password)) {
-                return true;
+        String sql = "SELECT 1 FROM UserAccount WHERE USER_NAME = ? AND USER_PASSWORD = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); // If a record is found, login is valid
             }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return false;
     }
+
 
     // Additional methods for adding, updating, or deleting users can go here
 }

@@ -15,7 +15,6 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
         
         // Initialize the UserAccountManager and load user accounts
         loginAccount = new UserAccountManager();
-        loginAccount.loadUserAccounts(); // Load user accounts from the database
         
         // Add KeyListeners for Enter key action
         addEnterKeyListener(UsernameTextField);
@@ -172,7 +171,6 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Validate user login credentials using the loaded user accounts
         if (loginAccount.validateUserLogin(username, password)) {
             launchMainProgram();
         } else {
