@@ -220,7 +220,7 @@ public class AddDataGUI extends JFrame {
 
         titleLabel.setFont(new java.awt.Font("Microsoft YaHei UI", 3, 15)); // NOI18N
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_main/add.png"))); // NOI18N
+        titleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/add.png"))); // NOI18N
 
         Design.setBackground(new java.awt.Color(255, 255, 204));
         Design.setOpaque(true);

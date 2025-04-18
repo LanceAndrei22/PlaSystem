@@ -32,12 +32,12 @@ public class TableRowSelector {
 
             // Retrieve data using the model index
             tblProductID = tblModel.getValueAt(modelRow, 0).toString();
-            tblQuantity = tblModel.getValueAt(modelRow, 1).toString();
-            tblPrice = tblModel.getValueAt(modelRow, 2).toString();
-            tblName = tblModel.getValueAt(modelRow, 3).toString();
-            tblSize = tblModel.getValueAt(modelRow, 4).toString();
-            tblBrand = tblModel.getValueAt(modelRow, 5).toString();
-            tblType = tblModel.getValueAt(modelRow, 6).toString();
+            tblName = tblModel.getValueAt(modelRow, 1).toString();
+            tblBrand = tblModel.getValueAt(modelRow, 2).toString();
+            tblSize = tblModel.getValueAt(modelRow, 3).toString();
+            tblType = tblModel.getValueAt(modelRow, 4).toString();
+            tblPrice = tblModel.getValueAt(modelRow, 5).toString();
+            tblQuantity = tblModel.getValueAt(modelRow, 6).toString();
             tblRestockValue = tblModel.getValueAt(modelRow, 7).toString();
             viewRow = modelRow;
         }
@@ -79,6 +79,4 @@ public class TableRowSelector {
     public int getRow() {
         return viewRow;
     }
-
-    
 }
