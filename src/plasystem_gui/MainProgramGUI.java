@@ -75,7 +75,7 @@ public class MainProgramGUI extends JFrame {
         Main_Button_Panel = new javax.swing.JPanel();
         addBtn = new javax.swing.JButton();
         transactBtn = new javax.swing.JButton();
-        rstockBtn = new javax.swing.JButton();
+        restockBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -98,11 +98,11 @@ public class MainProgramGUI extends JFrame {
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
         Secondary_Buttons = new javax.swing.JPanel();
-        Roles = new javax.swing.JButton();
-        Print = new javax.swing.JButton();
-        Logout = new javax.swing.JButton();
-        TransactionHistory = new javax.swing.JButton();
-        RestockHistory = new javax.swing.JButton();
+        userAccountsBtn = new javax.swing.JButton();
+        printInventoryBtn = new javax.swing.JButton();
+        logoutBtn = new javax.swing.JButton();
+        transactHistoryBtn = new javax.swing.JButton();
+        restockHistoryBtn = new javax.swing.JButton();
         backgroundDesign = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -139,20 +139,20 @@ public class MainProgramGUI extends JFrame {
         });
         Main_Button_Panel.add(transactBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 301, 124, 127));
 
-        rstockBtn.setBackground(new java.awt.Color(51, 204, 0));
-        rstockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        rstockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/restock_button.png"))); // NOI18N
-        rstockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        rstockBtn.setContentAreaFilled(false);
-        rstockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        rstockBtn.setInheritsPopupMenu(true);
-        rstockBtn.setOpaque(true);
-        rstockBtn.addActionListener(new java.awt.event.ActionListener() {
+        restockBtn.setBackground(new java.awt.Color(51, 204, 0));
+        restockBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        restockBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/restock_button.png"))); // NOI18N
+        restockBtn.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        restockBtn.setContentAreaFilled(false);
+        restockBtn.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        restockBtn.setInheritsPopupMenu(true);
+        restockBtn.setOpaque(true);
+        restockBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rstockBtnActionPerformed(evt);
+                restockBtnActionPerformed(evt);
             }
         });
-        Main_Button_Panel.add(rstockBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 465, 124, 104));
+        Main_Button_Panel.add(restockBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 465, 124, 104));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 55)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -306,50 +306,50 @@ public class MainProgramGUI extends JFrame {
         Secondary_Buttons.setOpaque(false);
         Secondary_Buttons.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Roles.setText("👤 User Accounts");
-        Roles.setInheritsPopupMenu(true);
-        Roles.addActionListener(new java.awt.event.ActionListener() {
+        userAccountsBtn.setText("👤 User Accounts");
+        userAccountsBtn.setInheritsPopupMenu(true);
+        userAccountsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RolesActionPerformed(evt);
+                userAccountsBtnActionPerformed(evt);
             }
         });
-        Secondary_Buttons.add(Roles, new org.netbeans.lib.awtextra.AbsoluteConstraints(899, 6, -1, 46));
+        Secondary_Buttons.add(userAccountsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(899, 6, -1, 46));
 
-        Print.setText("🖨️ Print Inventory");
-        Print.addActionListener(new java.awt.event.ActionListener() {
+        printInventoryBtn.setText("🖨️ Print Inventory");
+        printInventoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PrintActionPerformed(evt);
+                printInventoryBtnActionPerformed(evt);
             }
         });
-        Secondary_Buttons.add(Print, new org.netbeans.lib.awtextra.AbsoluteConstraints(1034, 6, 170, 46));
+        Secondary_Buttons.add(printInventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1034, 6, 170, 46));
 
-        Logout.setBackground(new java.awt.Color(255, 102, 102));
-        Logout.setForeground(new java.awt.Color(255, 255, 255));
-        Logout.setText("↩ Logout");
-        Logout.addActionListener(new java.awt.event.ActionListener() {
+        logoutBtn.setBackground(new java.awt.Color(255, 102, 102));
+        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        logoutBtn.setText("↩ Logout");
+        logoutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LogoutActionPerformed(evt);
+                logoutBtnActionPerformed(evt);
             }
         });
-        Secondary_Buttons.add(Logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 138, 46));
+        Secondary_Buttons.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 138, 46));
 
-        TransactionHistory.setText("🔄 Transaction History");
-        TransactionHistory.setInheritsPopupMenu(true);
-        TransactionHistory.addActionListener(new java.awt.event.ActionListener() {
+        transactHistoryBtn.setText("🔄 Transaction History");
+        transactHistoryBtn.setInheritsPopupMenu(true);
+        transactHistoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TransactionHistoryActionPerformed(evt);
+                transactHistoryBtnActionPerformed(evt);
             }
         });
-        Secondary_Buttons.add(TransactionHistory, new org.netbeans.lib.awtextra.AbsoluteConstraints(738, 6, -1, 46));
+        Secondary_Buttons.add(transactHistoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(738, 6, -1, 46));
 
-        RestockHistory.setText("🔄 Restock History");
-        RestockHistory.setInheritsPopupMenu(true);
-        RestockHistory.addActionListener(new java.awt.event.ActionListener() {
+        restockHistoryBtn.setText("🔄 Restock History");
+        restockHistoryBtn.setInheritsPopupMenu(true);
+        restockHistoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RestockHistoryActionPerformed(evt);
+                restockHistoryBtnActionPerformed(evt);
             }
         });
-        Secondary_Buttons.add(RestockHistory, new org.netbeans.lib.awtextra.AbsoluteConstraints(597, 6, -1, 46));
+        Secondary_Buttons.add(restockHistoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(597, 6, -1, 46));
 
         mainPanel.add(Secondary_Buttons, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 720, 1250, -1));
 
@@ -372,11 +372,12 @@ public class MainProgramGUI extends JFrame {
      * @param evt Action event generated by the button click
      */
     private void transactBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_transactBtnActionPerformed
+        /*
         TransactionGUI transactPanel = new TransactionGUI(productList, filePath, plasystemTbl);
         transactPanel.setVisible(true);
         transactPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        */
     }//GEN-LAST:event_transactBtnActionPerformed
-
     
     /**
      * Method triggered when the 'Add' button is clicked in the GUI.
@@ -464,11 +465,13 @@ public class MainProgramGUI extends JFrame {
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex));
     }//GEN-LAST:event_searchTxtFieldKeyReleased
 
-    private void rstockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rstockBtnActionPerformed
+    private void restockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockBtnActionPerformed
+        /*
         JFrame panel = new RestockGUI(productList, plasystemTbl, filePath);
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_rstockBtnActionPerformed
+        */
+    }//GEN-LAST:event_restockBtnActionPerformed
 
     private void lowstockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowstockBtnActionPerformed
         JFrame panel = new LowStockGUI(productList, filePath);
@@ -476,42 +479,37 @@ public class MainProgramGUI extends JFrame {
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_lowstockBtnActionPerformed
 
-    private void RolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RolesActionPerformed
+    private void userAccountsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userAccountsBtnActionPerformed
         JFrame panel = new UserAccountsGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_RolesActionPerformed
+    }//GEN-LAST:event_userAccountsBtnActionPerformed
 
-    private void PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintActionPerformed
+    private void printInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printInventoryBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_PrintActionPerformed
+    }//GEN-LAST:event_printInventoryBtnActionPerformed
 
-    private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
+    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         JFrame launchPanel = new LaunchPanelGUI(); // Create an instance of the main program GUI
         launchPanel.setVisible(true); // Set the main program frame visible
         this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
-    }//GEN-LAST:event_LogoutActionPerformed
+    }//GEN-LAST:event_logoutBtnActionPerformed
 
-    private void TransactionHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TransactionHistoryActionPerformed
+    private void transactHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactHistoryBtnActionPerformed
         JFrame panel = new TransactionHistoryGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_TransactionHistoryActionPerformed
+    }//GEN-LAST:event_transactHistoryBtnActionPerformed
 
-    private void RestockHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestockHistoryActionPerformed
+    private void restockHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockHistoryBtnActionPerformed
         JFrame panel = new RestockHistoryGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_RestockHistoryActionPerformed
+    }//GEN-LAST:event_restockHistoryBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Logout;
     private javax.swing.JPanel Main_Button_Panel;
-    private javax.swing.JButton Print;
-    private javax.swing.JButton RestockHistory;
-    private javax.swing.JButton Roles;
     private javax.swing.JPanel Secondary_Buttons;
-    private javax.swing.JButton TransactionHistory;
     private javax.swing.JButton addBtn;
     private javax.swing.JLabel backgroundDesign;
     private javax.swing.JPanel dataPanel;
@@ -528,14 +526,19 @@ public class MainProgramGUI extends JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton logoutBtn;
     private javax.swing.JButton lowstockBtn;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTable plasystemTbl;
     private javax.swing.JScrollPane plasystemTblScrollPane;
-    private javax.swing.JButton rstockBtn;
+    private javax.swing.JButton printInventoryBtn;
+    private javax.swing.JButton restockBtn;
+    private javax.swing.JButton restockHistoryBtn;
     private javax.swing.JPanel searchPanel;
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;
     private javax.swing.JButton transactBtn;
+    private javax.swing.JButton transactHistoryBtn;
+    private javax.swing.JButton userAccountsBtn;
     // End of variables declaration//GEN-END:variables
 }

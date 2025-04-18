@@ -4,16 +4,25 @@ import plasystem_functions.UserAccount;
 import plasystem_functions.UserAccountManager;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class UserAccountsGUI extends javax.swing.JFrame {
+    
+    private TableRowSorter<DefaultTableModel> sorter; // Store the sorter for reuse
 
     public UserAccountsGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
         loadUserAccounts();
+        
+        // Initialize the TableRowSorter
+        DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+        sorter = new TableRowSorter<>(model);
+        UserAccountsTable.setRowSorter(sorter);
     }
     
     // Method to load user accounts into the JTable
@@ -39,6 +48,10 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     // Method to refresh the table
     public void refreshTable() {
         loadUserAccounts();
+        // Reapply the current filter if any
+        if (searchTxtField.getText().trim().length() > 0) {
+            searchTxtFieldKeyReleased(null);
+        }
     }
 
     /**
@@ -56,6 +69,9 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         editUserActBtn = new javax.swing.JButton();
         addUserActBtn = new javax.swing.JButton();
         deleteUserActBtn = new javax.swing.JButton();
+        searchPanel = new javax.swing.JPanel();
+        searchTxtField = new javax.swing.JTextField();
+        searchPrmtrBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -122,37 +138,74 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             }
         });
 
+        searchPanel.setOpaque(false);
+
+        searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTxtFieldKeyReleased(evt);
+            }
+        });
+
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Username", "Password", "Role" }));
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
+                .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        searchPanelLayout.setVerticalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(userAccScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(deleteUserActBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editUserActBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addUserActBtn)
+            .addComponent(userAccScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(editUserActBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addUserActBtn))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteUserActBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
+                .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
-                .addComponent(userAccScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(99, 99, 99)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteUserActBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(userAccScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editUserActBtn)
-                    .addComponent(addUserActBtn)
-                    .addComponent(deleteUserActBtn))
+                    .addComponent(addUserActBtn))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 61, Short.MAX_VALUE)
-                    .addGap(398, 398, 398)))
+                    .addComponent(Design, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 446, Short.MAX_VALUE)))
         );
 
         pack();
@@ -224,6 +277,30 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_editUserActBtnActionPerformed
 
+    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        String searchText = searchTxtField.getText().trim();
+        String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
+        DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+        
+        // Find the column index
+        int columnIndex = model.findColumn(columnNameToSearch);
+        
+        if (columnIndex == -1) {
+            JOptionPane.showMessageDialog(this, 
+                "Invalid column selected for search.",
+                "Search Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Apply the row filter
+        if (searchText.isEmpty()) {
+            sorter.setRowFilter(null); // Clear filter if search text is empty
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
+        }
+    }//GEN-LAST:event_searchTxtFieldKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
@@ -231,6 +308,9 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     private javax.swing.JButton addUserActBtn;
     private javax.swing.JButton deleteUserActBtn;
     private javax.swing.JButton editUserActBtn;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JComboBox<String> searchPrmtrBox;
+    private javax.swing.JTextField searchTxtField;
     private javax.swing.JScrollPane userAccScrollPane;
     // End of variables declaration//GEN-END:variables
 }
