@@ -1,7 +1,7 @@
 package plasystem_gui;
 
 import plasystem_functions.ErrorValueHandling;
-import plasystem_functions.DataHandling;
+import plasystem_functions.ProductDataManager;
 import plasystem_functions.RandomIDGenerator;
 import plasystem_functions.TransactionHandling;
 import plasystem_functions.TableAlignmentRenderer;
@@ -31,7 +31,7 @@ public class TransactionGUI extends JFrame {
     private JTable tableData;
     private Double customerMoney;
     private Double totalPurchase;
-    private DataHandling dataHandling;
+    private ProductDataManager dataHandling;
     
     /**
      * Default constructor for the EditDataGUI.
@@ -54,7 +54,7 @@ public class TransactionGUI extends JFrame {
         this.list = list; // Set the ProductData list
         this.path = path; // Set the file path
         this.tableData = tableData; // Set the JTable for transaction data
-        this.dataHandling = new DataHandling(path); // Instantiate DataHandling with the file path
+        this.dataHandling = new ProductDataManager(path); // Instantiate ProductDataManager with the file path
         dateTxtField.setText(LocalDate.now().toString()); // Set the current date
         
         // Disable certain buttons and textfields initially
@@ -549,7 +549,7 @@ public class TransactionGUI extends JFrame {
                     
                     if (confirm == JOptionPane.YES_OPTION) {
                         // Decrease the quantity of purchased items in the data
-                        DataHandling dataHandling = new DataHandling(path);
+                        ProductDataManager dataHandling = new ProductDataManager(path);
                         dataHandling.decreaseQuantity(list, transactionList, tableData);
                         
                         // Update the product table dynamically using the helper method

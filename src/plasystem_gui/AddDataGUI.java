@@ -1,7 +1,7 @@
 package plasystem_gui;
 
 import plasystem_functions.ErrorValueHandling;
-import plasystem_functions.DataHandling;
+import plasystem_functions.ProductDataManager;
 import plasystem_functions.RandomIDGenerator;
 import plasystem_functions.ProductData;
 import java.util.*;
@@ -276,8 +276,8 @@ public class AddDataGUI extends JFrame {
      * @param evt The ActionEvent captured from the GUI.
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        // Create a DataHandling object with the provided file path
-        DataHandling addHandling = new DataHandling(filePath);
+        // Create a ProductDataManager object with the provided file path
+        ProductDataManager addHandling = new ProductDataManager(filePath);
         
         // Display a confirmation dialog to add the item
         int confirm = JOptionPane.showConfirmDialog(null, "Do you want to add this item?", "Add New Data", JOptionPane.YES_NO_OPTION);
@@ -328,7 +328,7 @@ public class AddDataGUI extends JFrame {
                 }
 
                 if (isValid) {
-                    // Add the new data using the DataHandling object
+                    // Add the new data using the ProductDataManager object
                     addHandling.addNewData(productList, 
                                            tableData, 
                                            newProductID, 

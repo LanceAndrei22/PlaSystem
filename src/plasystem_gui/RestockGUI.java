@@ -1,6 +1,6 @@
 package plasystem_gui;
 
-import plasystem_functions.DataHandling;
+import plasystem_functions.ProductDataManager;
 import plasystem_functions.ProductData;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class RestockGUI extends javax.swing.JFrame {
 
-    private DataHandling dataHandler;
+    private ProductDataManager dataHandler;
     private JTable mainTable;
     private String filePath;
     private LinkedList<ProductData> productList;
@@ -20,7 +20,7 @@ public class RestockGUI extends javax.swing.JFrame {
     
     public RestockGUI(LinkedList<ProductData> productList1, JTable plasystemTbl, String filePath) {
         this.filePath = filePath;
-        this.dataHandler = new DataHandling(filePath);
+        this.dataHandler = new ProductDataManager(filePath);
         this.mainTable = plasystemTbl;
         this.productList = dataHandler.getList(); // Load full product list
         initComponents();
@@ -60,7 +60,7 @@ public class RestockGUI extends javax.swing.JFrame {
         }
 
         if (updated) {
-            if (DataHandling.saveInventoryChanges(fullList, filePath)) {
+            if (ProductDataManager.saveInventoryChanges(fullList, filePath)) {
                 DefaultTableModel mainModel = (DefaultTableModel) mainTable.getModel();
                 mainModel.setRowCount(0);
                 for (ProductData product : fullList) {

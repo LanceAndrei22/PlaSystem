@@ -6,10 +6,10 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 /**
- * DataHandling class manages game data, handles file operations,
- * and provides methods to read, edit, and save game data.
+ * ProductDataManager class manages game data, handles file operations,
+ and provides methods to read, edit, and save game data.
  */
-public class DataHandling extends ProductData {
+public class ProductDataManager extends ProductData {
     private LinkedList<ProductData> productList; // Stores the list of game data
     private String path = ""; // Stores the file path
 
@@ -19,7 +19,7 @@ public class DataHandling extends ProductData {
      *
      * @param filePath The file path to read or create for storing game data.
      */
-    public DataHandling(String filePath) {
+    public ProductDataManager(String filePath) {
         // Call the parent class constructor
         super("", 0, 0, "", "", "", "", 0);
 

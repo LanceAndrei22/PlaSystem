@@ -5,12 +5,11 @@ import plasystem_functions.UserAccountManager;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class UserAccountsGUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form UserRolesGUI
-     */
     public UserAccountsGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
@@ -36,6 +35,11 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             });
         }
     }
+    
+    // Method to refresh the table
+    public void refreshTable() {
+        loadUserAccounts();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,13 +53,14 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         userAccScrollPane = new javax.swing.JScrollPane();
         UserAccountsTable = new javax.swing.JTable();
         Design = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        DeleteBtn = new javax.swing.JButton();
+        editUserActBtn = new javax.swing.JButton();
+        addUserActBtn = new javax.swing.JButton();
+        deleteUserActBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        UserAccountsTable.setAutoCreateRowSorter(true);
         UserAccountsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -82,6 +87,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        UserAccountsTable.getTableHeader().setReorderingAllowed(false);
         userAccScrollPane.setViewportView(UserAccountsTable);
 
         Design.setBackground(new java.awt.Color(255, 204, 102));
@@ -89,20 +95,30 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/userrolestitle.png"))); // NOI18N
         Design.setOpaque(true);
 
-        jButton1.setText("Edit");
-        jButton1.setInheritsPopupMenu(true);
-
-        jButton2.setText("Add");
-        jButton2.setInheritsPopupMenu(true);
-
-        DeleteBtn.setBackground(new java.awt.Color(255, 102, 102));
-        DeleteBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        DeleteBtn.setForeground(new java.awt.Color(255, 255, 255));
-        DeleteBtn.setText("Delete");
-        DeleteBtn.setInheritsPopupMenu(true);
-        DeleteBtn.addActionListener(new java.awt.event.ActionListener() {
+        editUserActBtn.setText("Edit");
+        editUserActBtn.setInheritsPopupMenu(true);
+        editUserActBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteBtnActionPerformed(evt);
+                editUserActBtnActionPerformed(evt);
+            }
+        });
+
+        addUserActBtn.setText("Add");
+        addUserActBtn.setInheritsPopupMenu(true);
+        addUserActBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUserActBtnActionPerformed(evt);
+            }
+        });
+
+        deleteUserActBtn.setBackground(new java.awt.Color(255, 102, 102));
+        deleteUserActBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        deleteUserActBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteUserActBtn.setText("Delete");
+        deleteUserActBtn.setInheritsPopupMenu(true);
+        deleteUserActBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteUserActBtnActionPerformed(evt);
             }
         });
 
@@ -113,11 +129,11 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             .addComponent(userAccScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deleteUserActBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(editUserActBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(addUserActBtn)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Design, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
@@ -125,13 +141,13 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(67, Short.MAX_VALUE)
+                .addContainerGap(61, Short.MAX_VALUE)
                 .addComponent(userAccScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(DeleteBtn))
+                    .addComponent(editUserActBtn)
+                    .addComponent(addUserActBtn)
+                    .addComponent(deleteUserActBtn))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -142,17 +158,79 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeleteBtnActionPerformed
+    private void addUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActBtnActionPerformed
+        JFrame panel = new AddUserAccountGUI(this);
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_addUserActBtnActionPerformed
+
+    private void deleteUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserActBtnActionPerformed
+        int selectedRow = UserAccountsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                "Please select a user to delete.",
+                "Selection Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Convert view row index to model row index to handle sorting
+        int modelRow = UserAccountsTable.convertRowIndexToModel(selectedRow);
+
+        // Get the username from the selected row (column 0)
+        String username = (String) UserAccountsTable.getModel().getValueAt(modelRow, 0);
+
+        // Confirm deletion
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Are you sure you want to delete the user '" + username + "'?",
+            "Confirm Delete", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            UserAccountManager manager = new UserAccountManager();
+            boolean success = manager.deleteUserAccount(username);
+            if (success) {
+                JOptionPane.showMessageDialog(this, 
+                    "User account deleted successfully!",
+                    "Success", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                refreshTable(); // Refresh the table
+            }
+        }
+    }//GEN-LAST:event_deleteUserActBtnActionPerformed
+
+    private void editUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editUserActBtnActionPerformed
+        int selectedRow = UserAccountsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                "Please select a user to edit.",
+                "Selection Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Convert view row index to model row index to handle sorting
+        int modelRow = UserAccountsTable.convertRowIndexToModel(selectedRow);
+
+        // Get user details from the selected row
+        String username = (String) UserAccountsTable.getModel().getValueAt(modelRow, 0);
+        String password = (String) UserAccountsTable.getModel().getValueAt(modelRow, 1);
+        String role = (String) UserAccountsTable.getModel().getValueAt(modelRow, 2);
+
+        // Launch EditUserAccountGUI with the selected user's details
+        EditUserAccountGUI panel = new EditUserAccountGUI(this, username, password, role);
+        panel.setVisible(true);
+        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_editUserActBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton DeleteBtn;
     private javax.swing.JLabel Design;
     private javax.swing.JTable UserAccountsTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton addUserActBtn;
+    private javax.swing.JButton deleteUserActBtn;
+    private javax.swing.JButton editUserActBtn;
     private javax.swing.JScrollPane userAccScrollPane;
     // End of variables declaration//GEN-END:variables
 }

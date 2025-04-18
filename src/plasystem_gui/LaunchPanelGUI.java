@@ -60,6 +60,8 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        PasswordTextField.setText("tjb123");
+
         VersionTextField.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         VersionTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         VersionTextField.setText("version 2.0.0");
@@ -87,6 +89,8 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         PasswordLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         PasswordLabel.setText(" Password :");
+
+        UsernameTextField.setText("admin");
 
         UsernameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         UsernameLabel.setText("Username :");

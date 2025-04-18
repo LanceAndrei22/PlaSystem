@@ -1,7 +1,7 @@
 package plasystem_gui;
 
 import plasystem_functions.ErrorValueHandling;
-import plasystem_functions.DataHandling;
+import plasystem_functions.ProductDataManager;
 import plasystem_functions.ProductData;
 import java.util.*;
 import javax.swing.*;
@@ -287,8 +287,8 @@ public class EditDataGUI extends JFrame {
      * @param evt The ActionEvent triggered by clicking the save button.
      */
     private void saveBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        // Create an instance of DataHandling class with the provided 'path'
-        DataHandling dataHandling = new DataHandling(path);
+        // Create an instance of ProductDataManager class with the provided 'path'
+        ProductDataManager dataHandling = new ProductDataManager(path);
         
         // Show a confirmation dialog for saving changes for the item in the 'nameTxtField'
         int confirm = JOptionPane.showConfirmDialog(null, "Do you wish to save changes for " + nameTxtField.getText() + " ?", "Edit Data", JOptionPane.YES_NO_OPTION);
@@ -320,7 +320,7 @@ public class EditDataGUI extends JFrame {
                     String editedBrand = brandTxtField.getText();
                     String editedType = typeTxtField.getText();
 
-                // Update the data in the list and table using DataHandling's editSelectedData method
+                // Update the data in the list and table using ProductDataManager's editSelectedData method
                 dataHandling.editSelectedData(list,
                         TableData,
                         selectedRow, 

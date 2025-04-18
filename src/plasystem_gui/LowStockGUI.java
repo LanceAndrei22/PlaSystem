@@ -1,15 +1,15 @@
 package plasystem_gui;
 
-import plasystem_functions.DataHandling;
+import plasystem_functions.ProductDataManager;
 import plasystem_functions.ProductData;
 import javax.swing.table.*;
 import java.util.LinkedList;
 
 public class LowStockGUI extends javax.swing.JFrame{
     
-    private DataHandling dataHandler;
+    private ProductDataManager dataHandler;
     private LinkedList<ProductData> productList;
-    private DataHandling dataHandling;
+    private ProductDataManager dataHandling;
     private String filePath;
     
     public LowStockGUI(){
@@ -19,7 +19,7 @@ public class LowStockGUI extends javax.swing.JFrame{
 
     public LowStockGUI(LinkedList<ProductData> productList, String path){
         this.filePath = path;
-        this.dataHandler = new DataHandling(filePath);
+        this.dataHandler = new ProductDataManager(filePath);
         this.productList = dataHandler.getList(); // Load full product list;
 
         initComponents(); // always initialize GUI components
