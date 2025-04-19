@@ -2,6 +2,7 @@ package plasystem_gui;
 
 import plasystem_functions.UserAccountManager;
 import javax.swing.JOptionPane;
+import java.awt.event.*;
 
 public class EditUserAccountGUI extends javax.swing.JFrame {
     private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
@@ -22,6 +23,17 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
         usernameTxtField.setText(username);
         passwordTxtField.setText(password);
         roleComboBox.setSelectedItem(role);
+        
+        // Register with parent
+        parentGUI.addChildWindow(this);
+
+        // Unregister when window is closed
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                parentGUI.removeChildWindow(EditUserAccountGUI.this);
+            }
+        });
     }
 
     /**
@@ -77,8 +89,8 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(roleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(roleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48))
+                .addComponent(roleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
         textFieldsPanelLayout.setVerticalGroup(
             textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

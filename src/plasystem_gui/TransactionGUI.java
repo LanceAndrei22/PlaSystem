@@ -3,7 +3,7 @@ package plasystem_gui;
 import plasystem_functions.ErrorValueHandling;
 import plasystem_functions.ProductDataManager;
 import plasystem_functions.RandomIDGenerator;
-import plasystem_functions.TransactionHandling;
+import plasystem_functions.TransactionManager;
 import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.FrameExporter;
 import plasystem_functions.ProductData;
@@ -22,10 +22,10 @@ import javax.swing.table.*;
 public class TransactionGUI extends JFrame {
     // Attributes for handling data
     private LinkedList<ProductData> list;
-    TransactionHandling handling = new TransactionHandling();
+    TransactionManager handling = new TransactionManager();
     ErrorValueHandling isDataValid = new ErrorValueHandling();
     RandomIDGenerator receiptID = new RandomIDGenerator();
-    private LinkedList<TransactionHandling> transactionList = new LinkedList<>();
+    private LinkedList<TransactionManager> transactionList = new LinkedList<>();
     private int quantityChecker;
     private String path;
     private JTable tableData;
@@ -49,6 +49,7 @@ public class TransactionGUI extends JFrame {
      * @param tableData The JTable for displaying transaction data.
      */    
     public TransactionGUI(LinkedList<ProductData> list,String path, JTable tableData){
+        /*
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the frame's location to the center of the screen
         this.list = list; // Set the ProductData list
@@ -85,13 +86,15 @@ public class TransactionGUI extends JFrame {
                 // You could also update other fields (e.g., name, price) if needed.
             }
         });
+        */
     }
     
      /**
      * Populates the product table (plasystemTbl) with all products from the list.
      */
     private void populateProductTable() {
-       // Reload the latest list from the file
+       /*
+        // Reload the latest list from the file
        list = dataHandling.getList();
        DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
        model.setRowCount(0);  // Clear any existing rows
@@ -111,6 +114,7 @@ public class TransactionGUI extends JFrame {
            new TableAlignmentRenderer(productSelectionTbl, 5);
            new TableAlignmentRenderer(cartTable, 2);
        }
+       */
    }
 
 
@@ -459,7 +463,7 @@ public class TransactionGUI extends JFrame {
         
         // Format and set content to be displayed on the receipt
         StringBuilder content = new StringBuilder();
-        for (TransactionHandling item : transactionList) {
+        for (TransactionManager item : transactionList) {
             // Get the item name and ensure it's limited to 14 characters and without leading/trailing spaces
             String itemName = item.getName().trim().replace(" ", "");
             itemName = itemName.length() > 14 ? itemName.substring(0, 14) : itemName;
@@ -526,6 +530,7 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void submitBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        /*
         // Check if the transaction list is empty
         if(transactionList.isEmpty()){
             JOptionPane.showMessageDialog(null, "Transaction is Empty!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -575,6 +580,7 @@ public class TransactionGUI extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "There is no input. Input payment amount!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        */
     }//GEN-LAST:event_submitBtnActionPerformed
     
     /**
@@ -584,6 +590,7 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */  
     private void clearBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        /*
         // Clear the transaction list and reset the transaction table
         transactionList.clear();
         DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
@@ -598,6 +605,7 @@ public class TransactionGUI extends JFrame {
         
         // Disable the "Add" button after clearing
         addBtn.setEnabled(false);
+        */
     }//GEN-LAST:event_clearBtnActionPerformed
     
     /**
@@ -607,12 +615,13 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        /*
         // Checking if quantity is provided
         if((int) quantityPicker.getValue() == 0){
             JOptionPane.showMessageDialog(null, "Input Quantity!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            // Creating TransactionHandling object with provided details
-            TransactionHandling data = new TransactionHandling(
+            // Creating TransactionManager object with provided details
+            TransactionManager data = new TransactionManager(
                 prodIDTxtField.getText(),
                 prodNameTxtField.getText(),
                 (int) quantityPicker.getValue(),
@@ -651,6 +660,7 @@ public class TransactionGUI extends JFrame {
             // Disabling the "Add" button
             addBtn.setEnabled(false);
         }
+        */
     }//GEN-LAST:event_addBtnActionPerformed
     
     /**
@@ -660,6 +670,7 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void verifyBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_verifyBtnActionPerformed
+        /*
         // Fetching the product ID from the input field
         String prodIDCheck = prodIDTxtField.getText();
         boolean check = false;
@@ -684,9 +695,11 @@ public class TransactionGUI extends JFrame {
         if(!check){
             JOptionPane.showMessageDialog(null, "Product not found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        */
     }//GEN-LAST:event_verifyBtnActionPerformed
 
     private void searchTxtField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtField9KeyReleased
+        /*
         DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
         productSelectionTbl.setRowSorter(sorter);
@@ -697,6 +710,7 @@ public class TransactionGUI extends JFrame {
         if(columnIndex >= 0) {
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField9.getText(), columnIndex));
         }
+        */
     }//GEN-LAST:event_searchTxtField9KeyReleased
       
     // Variables declaration - do not modify//GEN-BEGIN:variables

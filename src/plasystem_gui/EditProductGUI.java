@@ -3,80 +3,79 @@ package plasystem_gui;
 import plasystem_functions.ErrorValueHandling;
 import plasystem_functions.ProductDataManager;
 import plasystem_functions.ProductData;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
 
 /**
  * GUI for editing existing data in the application.
  */
 public class EditProductGUI extends JFrame {
-    // Attributes for handling data
-    private JTable TableData;
-    private String path;
-    private Integer selectedRow;
-    private int quantity;
-    private int restockValue;
-    LinkedList<ProductData> list;
-    ErrorValueHandling isDataValid = new ErrorValueHandling();
+    private MainProgramGUI parent;
+    private ProductDataManager dataHandling;
+    private ProductData product;
+    private int selectedRow;
+    private ErrorValueHandling isDataValid = new ErrorValueHandling();
+    
     
     /**
-     * Constructor with parameters to initialize EditDataGUI with existing data.
-     *
-     * @param selectedRow The index of the selected row.
-     * @param path        The file path.
-     * @param list        The LinkedList containing ProductData.
-     * @param TableData   The JTable containing data.
-     * @param productID   The ID of the product.
-     * @param quantity    The quantity of the product.
-     * @param price       The price of the product.
-     * @param name        The name of the product.
-     * @param size       The size of the product.
-     * @param brand    The brand(s) the product is available on.
-     * @param type   The type of the product.
-     * @param restockValue
+     * Default constructor initializing the EditProductGUI.
      */
-    public EditProductGUI(int selectedRow, String path, LinkedList<ProductData> list, JTable TableData,String productID, String name, String brand, String size, String type, String price, String quantity, String restockValue) {
-        initComponents(); // Initialize components defined in the GUI
-        
-        setLocationRelativeTo(null); // Set the location of the window to the center of the screen
-        
-        // Assign provided parameters to class attributes
-        this.TableData = TableData;
-        this.path =path;
+     public EditProductGUI(){
+        initComponents(); // Initialize components defined in the form
+        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+     }
+     
+    /**
+     * Constructor to initialize EditProductGUI with existing product data.
+     *
+     * @param parent       The parent MainProgramGUI to refresh the table.
+     * @param dataHandling The ProductDataManager to handle database operations.
+     * @param product      The ProductData object to edit.
+     * @param selectedRow  The index of the selected row in the table.
+     */
+    public EditProductGUI(MainProgramGUI parent, ProductDataManager dataHandling, ProductData product, int selectedRow) {
+        this.parent = parent;
+        this.dataHandling = dataHandling;
+        this.product = product;
         this.selectedRow = selectedRow;
-        this.list =  list;
-        this.quantity = Integer.parseInt(quantity); // Parse quantity to an integer
-        this.restockValue = Integer.parseInt(restockValue);
-         
-        // Disable product ID box
+        initComponents();
+        setLocationRelativeTo(null);
+
+        // Disable product ID field
         productIDTxtField.setEnabled(false);
         
-        // Set initial values in text fields based on the data from the selected row
-        productIDTxtField.setText(productID);
-        quantityPicker.setValue(this.quantity);
-        priceTxtField.setText(price);
-        nameTxtField.setText(name);
-        sizeTxtField.setText(size);
-        brandTxtField.setText(brand);
-        typeTxtField.setText(type);
-        restockValuePicker.setValue(this.restockValue);
-        
-        // Ensure no negative value is selected in the quantity picker
+        // Populate fields with product data
+        productIDTxtField.setText(String.valueOf(product.getProductId()));
+        nameTxtField.setText(product.getProductName());
+        sizeTxtField.setText(product.getProductSize());
+        brandTxtField.setText(product.getProductBrand());
+        typeTxtField.setText(product.getProductType());
+        priceTxtField.setText(String.valueOf(product.getProductPrice()));
+        quantityPicker.setValue(product.getProductQuantity());
+        restockValuePicker.setValue(product.getProductRestockValue());
+
+        // Ensure no negative values in spinners
         quantityPicker.addChangeListener((ChangeEvent e) -> {
             int value = (int) quantityPicker.getValue();
             if (value < 0) {
-                quantityPicker.setValue(0); // Set the value to 0 if it's negative
+                quantityPicker.setValue(0);
             }
         });
-        
-        // Ensure no negative value is selected in the quantity picker
+
         restockValuePicker.addChangeListener((ChangeEvent e) -> {
             int value = (int) restockValuePicker.getValue();
             if (value < 0) {
-                restockValuePicker.setValue(0); // Set the value to 0 if it's negative
+                restockValuePicker.setValue(0);
+            }
+        });
+        
+        // Unregister from parent when window is closed
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                parent.removeChildGUI(EditProductGUI.this);
             }
         });
     }
@@ -100,7 +99,7 @@ public class EditProductGUI extends JFrame {
         brandTxtField = new javax.swing.JTextField();
         platformLabel = new javax.swing.JLabel();
         publisherLabel = new javax.swing.JLabel();
-        publisherLabel1 = new javax.swing.JLabel();
+        resotckLabel = new javax.swing.JLabel();
         quantityPicker = new javax.swing.JSpinner();
         cancelBtn = new javax.swing.JButton();
         saveBtn = new javax.swing.JButton();
@@ -144,8 +143,8 @@ public class EditProductGUI extends JFrame {
         publisherLabel.setForeground(new java.awt.Color(0, 0, 0));
         publisherLabel.setText("TYPE");
 
-        publisherLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        publisherLabel1.setText("RE-STOCK VALUE");
+        resotckLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        resotckLabel.setText("RE-STOCK VALUE");
 
         javax.swing.GroupLayout textFieldsPanelLayout = new javax.swing.GroupLayout(textFieldsPanel);
         textFieldsPanel.setLayout(textFieldsPanelLayout);
@@ -156,31 +155,37 @@ public class EditProductGUI extends JFrame {
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(sizeTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(nameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(textFieldsPanelLayout.createSequentialGroup()
                             .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(platformLabel)
-                                .addComponent(publisherLabel1))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, textFieldsPanelLayout.createSequentialGroup()
+                                    .addComponent(platformLabel)
+                                    .addGap(56, 56, 56))
+                                .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                                    .addComponent(quantityLabel)
+                                    .addGap(37, 37, 37)))
                             .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(brandTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(nameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(brandTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(genreLabel)
                     .addComponent(nameLabel))
                 .addGap(24, 24, 24)
                 .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(quantityLabel)
-                    .addComponent(prodIDLabel)
-                    .addComponent(publisherLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(productIDTxtField)
-                        .addComponent(priceTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                        .addComponent(typeTxtField))
-                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(prodIDLabel)
+                            .addComponent(publisherLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(productIDTxtField)
+                            .addComponent(priceTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(typeTxtField)))
+                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                        .addComponent(resotckLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         textFieldsPanelLayout.setVerticalGroup(
             textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,9 +215,9 @@ public class EditProductGUI extends JFrame {
                             .addComponent(priceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(quantityLabel)
                             .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(publisherLabel1)
+                            .addComponent(resotckLabel)
+                            .addComponent(quantityLabel)
                             .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
@@ -290,56 +295,65 @@ public class EditProductGUI extends JFrame {
      * @param evt The ActionEvent triggered by clicking the save button.
      */
     private void saveBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        // Create an instance of ProductDataManager class with the provided 'path'
-        ProductDataManager dataHandling = new ProductDataManager(path);
+        int confirm = JOptionPane.showConfirmDialog(null, 
+            "Do you wish to save changes for " + nameTxtField.getText() + "?", 
+            "Edit Product", 
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        String name = nameTxtField.getText().trim();
+        String size = sizeTxtField.getText().trim();
+        String brand = brandTxtField.getText().trim();
+        String type = typeTxtField.getText().trim();
+        String priceText = priceTxtField.getText().trim();
+        int quantity = (int) quantityPicker.getValue();
+        int restockValue = (int) restockValuePicker.getValue();
+
+        // Validate inputs
+        if (name.isEmpty() || size.isEmpty() || brand.isEmpty() || type.isEmpty() || priceText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double price;
+        if (!isDataValid.isDouble(priceText)) {
+            JOptionPane.showMessageDialog(null, "Invalid price format.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
-        // Show a confirmation dialog for saving changes for the item in the 'nameTxtField'
-        int confirm = JOptionPane.showConfirmDialog(null, "Do you wish to save changes for " + nameTxtField.getText() + " ?", "Edit Data", JOptionPane.YES_NO_OPTION);
+        price = Double.parseDouble(priceText);
+        if (price < 0) {
+            JOptionPane.showMessageDialog(null, "Price cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (quantity < 0) {
+            JOptionPane.showMessageDialog(null, "Quantity cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (restockValue < 0) {
+            JOptionPane.showMessageDialog(null, "Restock value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            if (confirm == JOptionPane.YES_OPTION) {
-                boolean isValid = true; // A flag to track the validity of the input data
+        boolean success = dataHandling.updateProduct(
+            product.getProductId(),
+            name,
+            brand,
+            size,
+            type,
+            price,
+            quantity,
+            restockValue
+        );
 
-                // Validate and parse the price text field
-                double editedPrice = 0.0;
-                String priceText = priceTxtField.getText();
-                if (!isDataValid.isDouble(priceText)) {
-                    isValid = false;
-                    JOptionPane.showMessageDialog(null, "Invalid Price Input. Please enter a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    editedPrice = Double.parseDouble(priceText);
-
-                    if (editedPrice < 0) {
-                        isValid = false;
-                        JOptionPane.showMessageDialog(null, "Invalid Price Input. Please enter a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-
-                if (isValid) {
-                    // Get edited quantity, name, genre, console, and publisher from respective fields
-                    int editedQuantity = (int) quantityPicker.getValue();
-                    int editedRestockValue = (int) restockValuePicker.getValue();
-                    String editedName = nameTxtField.getText();
-                    String editedSize = sizeTxtField.getText();
-                    String editedBrand = brandTxtField.getText();
-                    String editedType = typeTxtField.getText();
-
-                // Update the data in the list and table using ProductDataManager's editSelectedData method
-                dataHandling.editSelectedData(list,
-                        TableData,
-                        selectedRow, 
-                        editedQuantity,
-                        editedPrice,
-                        editedName,
-                        editedSize, 
-                        editedBrand, 
-                        editedType,
-                        editedRestockValue
-                );
-
-                    // Close the current edit frame
-                    this.dispose();
-                }
-            }
+        if (success) {
+            parent.refreshTable();
+            JOptionPane.showMessageDialog(null, "Product updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_saveBtnActionPerformed
     
     /**
@@ -364,9 +378,9 @@ public class EditProductGUI extends JFrame {
     private javax.swing.JLabel prodIDLabel;
     private javax.swing.JTextField productIDTxtField;
     private javax.swing.JLabel publisherLabel;
-    private javax.swing.JLabel publisherLabel1;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
+    private javax.swing.JLabel resotckLabel;
     private javax.swing.JSpinner restockValuePicker;
     private javax.swing.JButton saveBtn;
     private javax.swing.JTextField sizeTxtField;

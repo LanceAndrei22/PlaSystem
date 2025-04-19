@@ -1,110 +1,110 @@
 package plasystem_functions;
 
 /**
- * Represents information about a game item.
+ * Represents a product in the PlaSystem database.
  */
 public class ProductData {
-    // Attributes representing game information
-    protected int productQuantity;
-    protected double productPrice;
-    protected String productID;
-    protected String productName;
-    protected String productSize;
-    protected String productBrand;
-    protected String productType;
-    protected int productRestockValue;
-    
+    // Attributes matching the Product table schema
+    private int productId; // PROD_ID (INTEGER PRIMARY KEY AUTOINCREMENT)
+    private String productName; // PROD_NAME (TEXT NOT NULL)
+    private String productBrand; // PROD_BRAND (TEXT NOT NULL)
+    private String productSize; // PROD_SIZE (TEXT NOT NULL)
+    private String productType; // PROD_TYPE (TEXT NOT NULL)
+    private double productPrice; // PROD_PRICE (REAL NOT NULL, CHECK >= 0)
+    private int productQuantity; // PROD_QUANTITY (INTEGER NOT NULL, CHECK >= 0)
+    private int productRestockValue; // PROD_RESTOCK_VALUE (INTEGER NOT NULL, CHECK >= 0)
+
     /**
-     * Constructor to initialize GameData with provided values.
+     * Default constructor.
+     */
+    public ProductData() {
+    }
+
+    /**
+     * Constructor to initialize ProductData with provided values.
      *
-     * @param prodID          The unique ID of the product.
-     * @param prodQuantity    The Quantity of the product available in stock.
-     * @param prodPrice       The Price of the product.
-     * @param prodName        The Name of the product.
-     * @param prodSize        The Size of the product.
-     * @param prodBrand       The Brand the product.
-     * @param prodType        The Type of the product.
-     * @param prodRestockValue The Restock Value of the product.
+     * @param productId          The unique ID of the product (auto-incremented by database).
+     * @param productName        The name of the product.
+     * @param productBrand       The brand of the product.
+     * @param productSize        The size of the product.
+     * @param productType        The type of the product.
+     * @param productPrice       The price of the product.
+     * @param productQuantity    The quantity of the product in stock.
+     * @param productRestockValue The restock value of the product.
      */
-    public ProductData(String prodID, int prodQuantity, double prodPrice, String prodName, String prodSize, String prodBrand, String prodType, int prodRestockValue){
-        this.productID = prodID;
-        this.productQuantity = prodQuantity;
-        this.productPrice = prodPrice;
-        this.productName = prodName;
-        this.productSize = prodSize;
-        this.productBrand = prodBrand;
-        this.productType = prodType;
-        this.productRestockValue = prodRestockValue;
-    }
-    
-    /**
-     * Default constructor for GameData.
-     */
-    public ProductData(){
-    }
-    
-    // Getter and Setter methods for each attribute
-    
-    // Setters and getters for Product ID
-    public void setProductID(String productID){
-        this.productID = productID;
-    }
-    public String getProductID(){
-        return productID;
-    }
-    
-    // Setters and getters for Quantity
-    public void setProductQuantity(int productQuantity){
-        this.productQuantity=productQuantity;
-    }
-    public int getProductQuantity(){
-        return productQuantity;
-    }
-    
-    // Setters and getters for Price
-    public void setProductPrice(double productPrice){
-        this.productPrice = productPrice;
-    }
-    public double getProductPrice(){
-        return productPrice;
-    }
-    
-    // Setters and getters for Name
-    public void setProductName(String productName){
+    public ProductData(int productId, String productName, String productBrand, String productSize,
+                       String productType, double productPrice, int productQuantity, int productRestockValue) {
+        this.productId = productId;
         this.productName = productName;
-    }
-    public String getProductName(){
-        return productName;
-    }
-    
-    // Setters and getters for Size
-    public void setProductSize(String productSize){
-        this.productSize = productSize;
-    }
-    public String getProductSize(){
-        return productSize;
-    }
-    
-    // Setters and getters for Brand
-    public void setProductBrand(String productBrand){
         this.productBrand = productBrand;
-    }
-    public String getProductBrand(){
-        return productBrand;
-    }
-    
-    // Setters and getters for Type
-    public void setProductType(String productType){
+        this.productSize = productSize;
         this.productType = productType;
-    }
-    public String getProductType(){
-        return productType;
-    }    
-    
-    public void setProductRestockValue(int productRestockValue){
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
         this.productRestockValue = productRestockValue;
     }
-    public int getProductRestockValue(){
+
+    // Getter and Setter methods
+
+    public int getProductId() {
+        return productId;
+    }
+
+    // No setter for productId as it is managed by the database
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductBrand() {
+        return productBrand;
+    }
+
+    public void setProductBrand(String productBrand) {
+        this.productBrand = productBrand;
+    }
+
+    public String getProductSize() {
+        return productSize;
+    }
+
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    public int getProductQuantity() {
+        return productQuantity;
+    }
+
+    public void setProductQuantity(int productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
+    public int getProductRestockValue() {
         return productRestockValue;
-    }    
+    }
+
+    public void setProductRestockValue(int productRestockValue) {
+        this.productRestockValue = productRestockValue;
+    }
 }

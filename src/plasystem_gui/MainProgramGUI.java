@@ -1,32 +1,28 @@
 package plasystem_gui;
 
 import plasystem_functions.ProductDataManager;
-import plasystem_functions.DatabaseFileChooser;
 import plasystem_functions.ProductRowSelector;
 import plasystem_functions.ProductData;
 import plasystem_functions.TableAlignmentRenderer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 
 /**
- * MainProgramGUI class represents the main window of the program displaying game data.
- * Initializes and populates the main table with game data upon program start.
+ * MainProgramGUI class represents the main window of the program displaying product data.
  */
 public class MainProgramGUI extends JFrame {
-    /**
-     * The file path retrieved from the database file chooser to access game data.
-     * It will be set once and used throughout the program.
-     */
-    String filePath = DatabaseFileChooser.getFilePath();
-    
     // Instance of ProductDataManager to manage data operations
-    ProductDataManager dataHandling = new ProductDataManager(filePath);
+    private ProductDataManager dataHandling = new ProductDataManager();
     
-    // List of ProductData retrieved from the file
-    LinkedList<ProductData> productList = dataHandling.getList();
+    // List of ProductData retrieved from the database
+    private List<ProductData> productList = dataHandling.getList();
+    
+    // List to track open child GUIs
+    private List<JFrame> childGUIs = new ArrayList<>();
     
     /**
      * Constructor initializing the Main Program GUI.
@@ -36,31 +32,38 @@ public class MainProgramGUI extends JFrame {
         initComponents(); // Initialize components of the GUI
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
         
-        /** 
-         *  If the Main Program is opened, data will be automatically added to the table
-         */
-        if (productList != null && !productList.isEmpty()) {
-            DefaultTableModel model = (DefaultTableModel) plasystemTbl.getModel();
-            model.setRowCount(0);
-
-            for (ProductData element : productList) {
-                Object[] rowData = {
-                    element.getProductID(),
-                    element.getProductName(),
-                    element.getProductBrand(),
-                    element.getProductSize(),
-                    element.getProductType(),
-                    element.getProductPrice(),
-                    element.getProductQuantity(),
-                    element.getProductRestockValue() // Ensure Restock Value is added
-                };
-                model.addRow(rowData);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Database is empty");
-        }
+        // Populate the table with product data from the database
+        dataHandling.updateTable(plasystemTbl);
         
-        new TableAlignmentRenderer(plasystemTbl, 5);
+        // Apply dynamic column formatting and sizing
+        new TableAlignmentRenderer(plasystemTbl, productList, 1200); // 1200 is the table width
+        
+        if (productList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Database is empty", "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    // Method to add a child GUI to the tracking list
+    public void addChildGUI(JFrame child) {
+        childGUIs.add(child);
+    }
+
+    // Method to remove a child GUI from the tracking list
+    public void removeChildGUI(JFrame child) {
+        childGUIs.remove(child);
+    }
+    
+    // Method to refresh the table after updates
+    public void refreshTable() {
+        dataHandling.updateTable(plasystemTbl);
+        
+        // Apply dynamic column formatting and sizing
+        new TableAlignmentRenderer(plasystemTbl, productList, 1200); // 1200 is the table width
+        
+        // Reapply the current filter if any
+        if (searchTxtField.getText().trim().length() > 0) {
+            searchTxtFieldKeyReleased(null);
+        }
     }
 
     /**
@@ -235,11 +238,11 @@ public class MainProgramGUI extends JFrame {
 
             },
             new String [] {
-                "Product ID", "Name", "Brand", "Size", "Type", "Price", "Quantity", "Restock Value"
+                "ID", "Name", "Brand", "Size", "Type", "Price", "Quantity", "Restock Value"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false
@@ -256,7 +259,7 @@ public class MainProgramGUI extends JFrame {
         plasystemTbl.getTableHeader().setReorderingAllowed(false);
         plasystemTblScrollPane.setViewportView(plasystemTbl);
         if (plasystemTbl.getColumnModel().getColumnCount() > 0) {
-            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(25);
+            plasystemTbl.getColumnModel().getColumn(0).setPreferredWidth(15);
             plasystemTbl.getColumnModel().getColumn(4).setPreferredWidth(20);
             plasystemTbl.getColumnModel().getColumn(5).setPreferredWidth(25);
             plasystemTbl.getColumnModel().getColumn(6).setPreferredWidth(20);
@@ -386,10 +389,11 @@ public class MainProgramGUI extends JFrame {
      * @param evt Action event generated by the button click
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        JFrame addProductPanel = new AddProductGUI(productList, plasystemTbl, filePath);
+        JFrame addProductPanel = new AddProductGUI(this, dataHandling);
         addProductPanel.setVisible(true);
         addProductPanel.pack();
         addProductPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildGUI(addProductPanel); // Track child GUI
     }//GEN-LAST:event_addBtnActionPerformed
     
     /**
@@ -398,38 +402,19 @@ public class MainProgramGUI extends JFrame {
      * @param evt Action event generated by the button click
      */
     private void editBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        // Get the index of the selected row in the main table
         int editRow = plasystemTbl.getSelectedRow();
-        editRow = plasystemTbl.convertRowIndexToModel(editRow);
-        
-        // Check if a row is selected (row index starts from 0, -1 means no selection)
         if (editRow != -1) {
-            // Create an instance of ProductRowSelector to extract data from the selected row
             ProductRowSelector rowSelector = new ProductRowSelector(plasystemTbl);
-        
-            EditProductGUI editProductPanel = new EditProductGUI(
-             editRow, 
-             filePath, 
-             productList, 
-             plasystemTbl,
-            // Retrieve data using ProductRowSelector getters
-            rowSelector.getTblProductID(),
-            rowSelector.getTblName(),
-            rowSelector.getTblBrand(),
-            rowSelector.getTblSize(),
-            rowSelector.getTblType(),
-            rowSelector.getTblPrice(),
-            rowSelector.getQuantity(),
-            rowSelector.getRestockValue() // Update the selected row index
-            );
+            ProductData product = rowSelector.getProductData();
 
-            // Set properties for the editProductPanel frame
+            EditProductGUI editProductPanel = new EditProductGUI(this, dataHandling, product, editRow);
             editProductPanel.setVisible(true);
             editProductPanel.pack();
             editProductPanel.setLocationRelativeTo(null);
             editProductPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Please select a row to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+            addChildGUI(editProductPanel); // Track child GUI
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a row to edit.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_editBtnActionPerformed
     
@@ -439,10 +424,23 @@ public class MainProgramGUI extends JFrame {
      * @param evt Action event generated by the button click
      */
     private void deleteBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        // Check if a row is selected in the main table
-        if(plasystemTbl.getSelectedRow() != -1){
-            // Delete data corresponding to the selected row
-            dataHandling.deleteData(plasystemTbl, productList, plasystemTbl.getSelectedRow());
+        int selectedRow = plasystemTbl.getSelectedRow();
+        if (selectedRow != -1) {
+            ProductRowSelector rowSelector = new ProductRowSelector(plasystemTbl);
+            int productId = rowSelector.getProductData().getProductId();
+            String productName = rowSelector.getProductData().getProductName();
+
+            int confirm = JOptionPane.showConfirmDialog(null, 
+                "Do you really want to delete the product '" + productName + "'?",
+                "Delete", 
+                JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean success = dataHandling.deleteProduct(productId);
+                if (success) {
+                    dataHandling.updateTable(plasystemTbl);
+                    JOptionPane.showMessageDialog(null, "Product deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -475,24 +473,35 @@ public class MainProgramGUI extends JFrame {
     }//GEN-LAST:event_restockBtnActionPerformed
 
     private void lowstockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowstockBtnActionPerformed
-        JFrame lowstockPanel = new LowStockGUI(productList, filePath);
+        JFrame lowstockPanel = new LowStockGUI(this, dataHandling);
         lowstockPanel.setVisible(true);
         lowstockPanel.pack();
         lowstockPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildGUI(lowstockPanel); // Track child GUI
     }//GEN-LAST:event_lowstockBtnActionPerformed
 
     private void userAccountsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userAccountsBtnActionPerformed
-        JFrame userAccountsPanel = new UserAccountsGUI();
+        JFrame userAccountsPanel = new UserAccountsGUI(this);
         userAccountsPanel.setVisible(true);
         userAccountsPanel.pack();
         userAccountsPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildGUI(userAccountsPanel); // Track child GUI
     }//GEN-LAST:event_userAccountsBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
-        JFrame launchPanel = new LaunchPanelGUI(); // Create an instance of the main program GUI
-        launchPanel.setVisible(true); // Set the main program frame visible
+        // Open LaunchPanelGUI
+        JFrame launchPanel = new LaunchPanelGUI();
+        launchPanel.setVisible(true);
         launchPanel.pack();
-        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
+
+        // Close all child GUIs
+        for (JFrame child : new ArrayList<>(childGUIs)) {
+            child.dispose();
+        }
+        childGUIs.clear();
+
+        // Dispose of MainProgramGUI
+        this.dispose();
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     private void transactHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactHistoryBtnActionPerformed
@@ -500,6 +509,7 @@ public class MainProgramGUI extends JFrame {
         transactionHistoryPanel.setVisible(true);
         transactionHistoryPanel.pack();
         transactionHistoryPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildGUI(transactionHistoryPanel); // Track child GUI
     }//GEN-LAST:event_transactHistoryBtnActionPerformed
 
     private void restockHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockHistoryBtnActionPerformed
@@ -507,6 +517,7 @@ public class MainProgramGUI extends JFrame {
         restockHistoryPanel.setVisible(true);
         restockHistoryPanel.pack();
         restockHistoryPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildGUI(restockHistoryPanel); // Track child GUI
     }//GEN-LAST:event_restockHistoryBtnActionPerformed
 
     private void printInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printInventoryBtnActionPerformed

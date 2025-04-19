@@ -6,34 +6,35 @@ package plasystem_functions;
 public class ErrorValueHandling {
     
     /**
-     * Checks if the input string can be parsed into a double.
+     * Checks if the input string represents a valid non-negative number, either an integer
+     * (e.g., "0", "123") or a double floating-point number with at most two decimal places
+     * (e.g., "12.34", "12.3", "0.00", "0.0"). Numbers with three or more decimal places
+     * (e.g., "12.345", "0.000"), invalid formats (e.g., "letters", "12.34.56"), and negative
+     * numbers (e.g., "-12.34") are rejected.
      *
      * @param input The string to be checked.
-     * @return {@code true} if the input can be parsed into a double, {@code false} otherwise.
+     * @return {@code true} if the input is a valid non-negative number with at most two
+     *         decimal places, {@code false} otherwise.
      */
     public boolean isDouble(String input) {
-        try {
-            // Tries to parse the input string into a double
-            double value = Double.parseDouble(input);
-            return true; // Input is a valid double
-        } catch (NumberFormatException e) {
-            return false; // Input is not a valid double
+        if (input == null || input.trim().isEmpty()) {
+            return false;
         }
-    }
-    
-    /**
-     * Checks if the input string can be parsed into an integer.
-     *
-     * @param input The string to be checked.
-     * @return {@code true} if the input can be parsed into an integer, {@code false} otherwise.
-     */
-    public boolean isInteger(String input) {
+        
+        // Regex for non-negative numbers: integer or decimal with 0-2 digits after decimal
+        String doubleRegex = "^\\d+(\\.\\d{0,2})?$";
+        
+        // Check if input matches the regex
+        if (!input.matches(doubleRegex)) {
+            return false;
+        }
+        
         try {
-            // Tries to parse the input string into an integer
-            int value = Integer.parseInt(input);
-            return true; // Input is a valid integer
+            // Parse to ensure it's a valid double and non-negative
+            double value = Double.parseDouble(input);
+            return value >= 0; // Enforce PROD_PRICE >= 0
         } catch (NumberFormatException e) {
-            return false; // Input is not a valid integer
+            return false; // Shouldn't occur due to regex, but included for robustness
         }
     }
 }

@@ -7,7 +7,7 @@ import javax.swing.table.*;
 import java.util.LinkedList;
 
 public class RestockProductGUI extends javax.swing.JFrame {
-
+/*
     private ProductDataManager dataHandler;
     private JTable mainTable;
     private String filePath;
@@ -79,6 +79,8 @@ public class RestockProductGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No items selected or invalid quantities!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    */
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -194,11 +196,11 @@ public class RestockProductGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window (the frame)
+        //dispose(); // Close the current window (the frame)
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void restockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockBtnActionPerformed
-        restockItems();
+        //restockItems();
     }//GEN-LAST:event_restockBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

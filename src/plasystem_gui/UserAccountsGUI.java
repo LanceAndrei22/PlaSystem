@@ -2,27 +2,61 @@ package plasystem_gui;
 
 import plasystem_functions.UserAccount;
 import plasystem_functions.UserAccountManager;
-
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
 import java.util.List;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class UserAccountsGUI extends javax.swing.JFrame {
     
+    private MainProgramGUI parent;
     private TableRowSorter<DefaultTableModel> sorter; // Store the sorter for reuse
+    private List<JFrame> childWindows = new ArrayList<>(); // Track open child GUIs
 
-    public UserAccountsGUI() {
+    public UserAccountsGUI(MainProgramGUI parent) {
         initComponents();
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
+        this.parent = parent;
         loadUserAccounts();
         
         // Initialize the TableRowSorter
-        DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         sorter = new TableRowSorter<>(model);
-        UserAccountsTable.setRowSorter(sorter);
+        userAccountsTable.setRowSorter(sorter);
+        
+        // Unregister from parent when window is closed
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                parent.removeChildGUI(UserAccountsGUI.this);
+            }
+        });
+    }
+    
+    // Method to add a child window to the tracking list
+    public void addChildWindow(JFrame child) {
+        childWindows.add(child);
+    }
+    
+    // Method to remove a child window from the tracking list
+    public void removeChildWindow(JFrame child) {
+        childWindows.remove(child);
+    }
+    
+    // Override dispose to close all child windows
+    @Override
+    public void dispose() {
+        // Close all child windows
+        for (JFrame child : new ArrayList<>(childWindows)) {
+            child.dispose();
+        }
+        childWindows.clear(); // Clear the list
+        super.dispose(); // Call parent dispose
     }
     
     // Method to load user accounts into the JTable
@@ -32,7 +66,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         userAccountManager.loadUserAccounts();  // Load user accounts from DB
 
         List<UserAccount> userList = userAccountManager.getUserAccounts();  // Get the list of user accounts
-        DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         model.setRowCount(0); // Clear existing rows
 
         // Add each user to the table
@@ -64,7 +98,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         userAccScrollPane = new javax.swing.JScrollPane();
-        UserAccountsTable = new javax.swing.JTable();
+        userAccountsTable = new javax.swing.JTable();
         Design = new javax.swing.JLabel();
         editUserActBtn = new javax.swing.JButton();
         addUserActBtn = new javax.swing.JButton();
@@ -76,8 +110,8 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        UserAccountsTable.setAutoCreateRowSorter(true);
-        UserAccountsTable.setModel(new javax.swing.table.DefaultTableModel(
+        userAccountsTable.setAutoCreateRowSorter(true);
+        userAccountsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -103,8 +137,8 @@ public class UserAccountsGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        UserAccountsTable.getTableHeader().setReorderingAllowed(false);
-        userAccScrollPane.setViewportView(UserAccountsTable);
+        userAccountsTable.getTableHeader().setReorderingAllowed(false);
+        userAccScrollPane.setViewportView(userAccountsTable);
 
         Design.setBackground(new java.awt.Color(255, 204, 102));
         Design.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -216,10 +250,11 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         addUserAccountPanel.setVisible(true);
         addUserAccountPanel.pack();
         addUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildWindow(addUserAccountPanel); // Track the child window
     }//GEN-LAST:event_addUserActBtnActionPerformed
 
     private void deleteUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserActBtnActionPerformed
-        int selectedRow = UserAccountsTable.getSelectedRow();
+        int selectedRow = userAccountsTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, 
                 "Please select a user to delete.",
@@ -229,10 +264,10 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         }
 
         // Convert view row index to model row index to handle sorting
-        int modelRow = UserAccountsTable.convertRowIndexToModel(selectedRow);
+        int modelRow = userAccountsTable.convertRowIndexToModel(selectedRow);
 
         // Get the username from the selected row (column 0)
-        String username = (String) UserAccountsTable.getModel().getValueAt(modelRow, 0);
+        String username = (String) userAccountsTable.getModel().getValueAt(modelRow, 0);
 
         // Confirm deletion
         int confirm = JOptionPane.showConfirmDialog(this, 
@@ -255,7 +290,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteUserActBtnActionPerformed
 
     private void editUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editUserActBtnActionPerformed
-        int selectedRow = UserAccountsTable.getSelectedRow();
+        int selectedRow = userAccountsTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, 
                 "Please select a user to edit.",
@@ -265,24 +300,25 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         }
 
         // Convert view row index to model row index to handle sorting
-        int modelRow = UserAccountsTable.convertRowIndexToModel(selectedRow);
+        int modelRow = userAccountsTable.convertRowIndexToModel(selectedRow);
 
         // Get user details from the selected row
-        String username = (String) UserAccountsTable.getModel().getValueAt(modelRow, 0);
-        String password = (String) UserAccountsTable.getModel().getValueAt(modelRow, 1);
-        String role = (String) UserAccountsTable.getModel().getValueAt(modelRow, 2);
+        String username = (String) userAccountsTable.getModel().getValueAt(modelRow, 0);
+        String password = (String) userAccountsTable.getModel().getValueAt(modelRow, 1);
+        String role = (String) userAccountsTable.getModel().getValueAt(modelRow, 2);
 
         // Launch EditUserAccountGUI with the selected user's details
         EditUserAccountGUI editUserAccountPanel = new EditUserAccountGUI(this, username, password, role);
         editUserAccountPanel.setVisible(true);
         editUserAccountPanel.pack();
         editUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addChildWindow(editUserAccountPanel); // Track the child window
     }//GEN-LAST:event_editUserActBtnActionPerformed
 
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
         String searchText = searchTxtField.getText().trim();
         String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
-        DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         
         // Find the column index
         int columnIndex = model.findColumn(columnNameToSearch);
@@ -305,7 +341,6 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
-    private javax.swing.JTable UserAccountsTable;
     private javax.swing.JButton addUserActBtn;
     private javax.swing.JButton deleteUserActBtn;
     private javax.swing.JButton editUserActBtn;
@@ -313,5 +348,6 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;
     private javax.swing.JScrollPane userAccScrollPane;
+    private javax.swing.JTable userAccountsTable;
     // End of variables declaration//GEN-END:variables
 }

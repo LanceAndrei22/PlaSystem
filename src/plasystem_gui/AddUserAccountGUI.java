@@ -2,6 +2,7 @@ package plasystem_gui;
 
 import plasystem_functions.UserAccountManager;
 import javax.swing.*;
+import java.awt.event.*;
 
 public class AddUserAccountGUI extends javax.swing.JFrame {
     
@@ -16,6 +17,17 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
         this.parentGUI = parentGUI;
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+        
+        // Register with parent
+        parentGUI.addChildWindow(this);
+
+        // Unregister when window is closed
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                parentGUI.removeChildWindow(AddUserAccountGUI.this);
+            }
+        });
     }
 
     /**
@@ -71,8 +83,8 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(roleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(roleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
+                .addComponent(roleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
         textFieldsPanelLayout.setVerticalGroup(
             textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

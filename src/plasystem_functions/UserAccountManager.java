@@ -20,6 +20,7 @@ public class UserAccountManager {
     
     // Method to fetch and load user accounts from the database
     public void loadUserAccounts() {
+        userAccounts.clear();
         try (Connection conn = DBConnection.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(SELECT_ALL_USERS_QUERY)) {
