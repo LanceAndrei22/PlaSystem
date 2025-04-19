@@ -103,9 +103,9 @@
                                   <Component id="publisherLabel1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="restockValueTxtField" max="32767" attributes="0"/>
-                                  <Component id="brandTxtField" pref="173" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="brandTxtField" min="-2" pref="173" max="-2" attributes="0"/>
+                                  <Component id="restockValuePicker" min="-2" pref="79" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="nameTxtField" alignment="1" min="-2" pref="173" max="-2" attributes="0"/>
@@ -121,11 +121,13 @@
                       <Component id="publisherLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="productIDTxtField" max="32767" attributes="0"/>
-                      <Component id="priceTxtField" alignment="0" pref="150" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="productIDTxtField" max="32767" attributes="0"/>
+                          <Component id="priceTxtField" alignment="0" pref="150" max="32767" attributes="0"/>
+                          <Component id="typeTxtField" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                       <Component id="quantityPicker" min="-2" pref="79" max="-2" attributes="0"/>
-                      <Component id="typeTxtField" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="9" max="32767" attributes="0"/>
               </Group>
@@ -165,9 +167,9 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="quantityPicker" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="restockValueTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="restockValuePicker" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="publisherLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="quantityPicker" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -243,7 +245,7 @@
             <Property name="text" type="java.lang.String" value="QUANTITY"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="quantityPicker">
+        <Component class="javax.swing.JSpinner" name="restockValuePicker">
         </Component>
         <Component class="javax.swing.JTextField" name="typeTxtField">
         </Component>
@@ -271,11 +273,6 @@
             <Property name="text" type="java.lang.String" value="TYPE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="restockValueTxtField">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="restockValueTxtFieldActionPerformed"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JLabel" name="publisherLabel1">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -283,6 +280,8 @@
             </Property>
             <Property name="text" type="java.lang.String" value="RE-STOCK VALUE"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JSpinner" name="quantityPicker">
         </Component>
       </SubComponents>
     </Container>

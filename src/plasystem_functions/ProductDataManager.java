@@ -306,7 +306,7 @@ public class ProductDataManager extends ProductData {
 
                 // Update the table view with the new quantity
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
-                model.setValueAt(newQuantity, index, 1);
+                model.setValueAt(newQuantity, index, 6);
 
                 // Update the quantity in the list
                 ProductData editedGameData = list.get(index);

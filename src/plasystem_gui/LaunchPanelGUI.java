@@ -35,6 +35,8 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
     private void launchMainProgram() {
         JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
         mainProgram.setVisible(true); // Set the main program frame visible
+        mainProgram.pack();
+        mainProgram.setLocationRelativeTo(null);
         this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
     }
     

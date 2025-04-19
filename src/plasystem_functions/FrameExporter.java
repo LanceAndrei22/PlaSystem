@@ -20,7 +20,7 @@ public class FrameExporter {
      */
     public static void exportFrameAsImage(JFrame frameToExport, String imageName) {
         // Define the directory path to save the image
-        String directory = "src/plasystem_receipt";
+        String directory = "receipts";
         File directoryFile = new File(directory);
 
         // Check if directory doesn't exist, create it

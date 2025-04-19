@@ -2,7 +2,6 @@ package plasystem_gui;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import plasystem_functions.TableRowSelector;
 
 public class RestockHistoryGUI extends javax.swing.JFrame {
 
@@ -131,7 +130,6 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DetailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetailsBtnActionPerformed
-        
         JFrame panel = new RHDetailsGUI();
         panel.setVisible(true);
         panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

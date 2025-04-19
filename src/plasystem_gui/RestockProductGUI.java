@@ -6,19 +6,19 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.util.LinkedList;
 
-public class RestockGUI extends javax.swing.JFrame {
+public class RestockProductGUI extends javax.swing.JFrame {
 
     private ProductDataManager dataHandler;
     private JTable mainTable;
     private String filePath;
     private LinkedList<ProductData> productList;
     
-    public RestockGUI(){
+    public RestockProductGUI(){
         initComponents();
         setLocationRelativeTo(null);
     }
     
-    public RestockGUI(LinkedList<ProductData> productList1, JTable plasystemTbl, String filePath) {
+    public RestockProductGUI(LinkedList<ProductData> productList1, JTable plasystemTbl, String filePath) {
         this.filePath = filePath;
         this.dataHandler = new ProductDataManager(filePath);
         this.mainTable = plasystemTbl;

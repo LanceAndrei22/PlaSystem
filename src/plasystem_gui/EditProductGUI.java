@@ -12,7 +12,7 @@ import java.awt.event.*;
 /**
  * GUI for editing existing data in the application.
  */
-public class EditDataGUI extends JFrame {
+public class EditProductGUI extends JFrame {
     // Attributes for handling data
     private JTable TableData;
     private String path;
@@ -38,7 +38,7 @@ public class EditDataGUI extends JFrame {
      * @param type   The type of the product.
      * @param restockValue
      */
-    public EditDataGUI(int selectedRow, String path, LinkedList<ProductData> list, JTable TableData,String productID, String name, String brand, String size, String type, String price, String quantity, String restockValue) {
+    public EditProductGUI(int selectedRow, String path, LinkedList<ProductData> list, JTable TableData,String productID, String name, String brand, String size, String type, String price, String quantity, String restockValue) {
         initComponents(); // Initialize components defined in the GUI
         
         setLocationRelativeTo(null); // Set the location of the window to the center of the screen
@@ -62,15 +62,23 @@ public class EditDataGUI extends JFrame {
         sizeTxtField.setText(size);
         brandTxtField.setText(brand);
         typeTxtField.setText(type);
-        restockValueTxtField.setText(restockValue);
+        restockValuePicker.setValue(this.restockValue);
         
-        // Ensure quantity value is non-negative
+        // Ensure no negative value is selected in the quantity picker
         quantityPicker.addChangeListener((ChangeEvent e) -> {
             int value = (int) quantityPicker.getValue();
             if (value < 0) {
                 quantityPicker.setValue(0); // Set the value to 0 if it's negative
             }
-        }); 
+        });
+        
+        // Ensure no negative value is selected in the quantity picker
+        restockValuePicker.addChangeListener((ChangeEvent e) -> {
+            int value = (int) restockValuePicker.getValue();
+            if (value < 0) {
+                restockValuePicker.setValue(0); // Set the value to 0 if it's negative
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
@@ -87,13 +95,13 @@ public class EditDataGUI extends JFrame {
         priceLabel = new javax.swing.JLabel();
         priceTxtField = new javax.swing.JTextField();
         quantityLabel = new javax.swing.JLabel();
-        quantityPicker = new javax.swing.JSpinner();
+        restockValuePicker = new javax.swing.JSpinner();
         typeTxtField = new javax.swing.JTextField();
         brandTxtField = new javax.swing.JTextField();
         platformLabel = new javax.swing.JLabel();
         publisherLabel = new javax.swing.JLabel();
-        restockValueTxtField = new javax.swing.JTextField();
         publisherLabel1 = new javax.swing.JLabel();
+        quantityPicker = new javax.swing.JSpinner();
         cancelBtn = new javax.swing.JButton();
         saveBtn = new javax.swing.JButton();
         titleTabel = new javax.swing.JLabel();
@@ -136,12 +144,6 @@ public class EditDataGUI extends JFrame {
         publisherLabel.setForeground(new java.awt.Color(0, 0, 0));
         publisherLabel.setText("TYPE");
 
-        restockValueTxtField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                restockValueTxtFieldActionPerformed(evt);
-            }
-        });
-
         publisherLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         publisherLabel1.setText("RE-STOCK VALUE");
 
@@ -159,9 +161,9 @@ public class EditDataGUI extends JFrame {
                                 .addComponent(platformLabel)
                                 .addComponent(publisherLabel1))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(restockValueTxtField)
-                                .addComponent(brandTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)))
+                            .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(brandTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(nameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(genreLabel)
                     .addComponent(nameLabel))
@@ -172,11 +174,12 @@ public class EditDataGUI extends JFrame {
                     .addComponent(prodIDLabel)
                     .addComponent(publisherLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(productIDTxtField)
-                    .addComponent(priceTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(typeTxtField))
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(productIDTxtField)
+                        .addComponent(priceTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                        .addComponent(typeTxtField))
+                    .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
         textFieldsPanelLayout.setVerticalGroup(
@@ -208,9 +211,9 @@ public class EditDataGUI extends JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(quantityLabel)
-                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(restockValueTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(publisherLabel1))))
+                            .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(publisherLabel1)
+                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -314,7 +317,7 @@ public class EditDataGUI extends JFrame {
                 if (isValid) {
                     // Get edited quantity, name, genre, console, and publisher from respective fields
                     int editedQuantity = (int) quantityPicker.getValue();
-                    int editedRestockValue = Integer.parseInt(restockValueTxtField.getText());
+                    int editedRestockValue = (int) restockValuePicker.getValue();
                     String editedName = nameTxtField.getText();
                     String editedSize = sizeTxtField.getText();
                     String editedBrand = brandTxtField.getText();
@@ -347,10 +350,6 @@ public class EditDataGUI extends JFrame {
     private void cancelBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         dispose(); // Close the current window (the frame)
     }//GEN-LAST:event_cancelBtnActionPerformed
-
-    private void restockValueTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockValueTxtFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_restockValueTxtFieldActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
@@ -368,7 +367,7 @@ public class EditDataGUI extends JFrame {
     private javax.swing.JLabel publisherLabel1;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
-    private javax.swing.JTextField restockValueTxtField;
+    private javax.swing.JSpinner restockValuePicker;
     private javax.swing.JButton saveBtn;
     private javax.swing.JTextField sizeTxtField;
     private javax.swing.JPanel textFieldsPanel;

@@ -212,9 +212,10 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActBtnActionPerformed
-        JFrame panel = new AddUserAccountGUI(this);
-        panel.setVisible(true);
-        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JFrame addUserAccountPanel = new AddUserAccountGUI(this);
+        addUserAccountPanel.setVisible(true);
+        addUserAccountPanel.pack();
+        addUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_addUserActBtnActionPerformed
 
     private void deleteUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserActBtnActionPerformed
@@ -272,9 +273,10 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         String role = (String) UserAccountsTable.getModel().getValueAt(modelRow, 2);
 
         // Launch EditUserAccountGUI with the selected user's details
-        EditUserAccountGUI panel = new EditUserAccountGUI(this, username, password, role);
-        panel.setVisible(true);
-        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        EditUserAccountGUI editUserAccountPanel = new EditUserAccountGUI(this, username, password, role);
+        editUserAccountPanel.setVisible(true);
+        editUserAccountPanel.pack();
+        editUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_editUserActBtnActionPerformed
 
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
@@ -300,7 +302,6 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;

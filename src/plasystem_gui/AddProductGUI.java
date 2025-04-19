@@ -13,7 +13,7 @@ import java.awt.event.*;
 /**
  * A GUI window allowing users to add new data to the application.
  */
-public class AddDataGUI extends JFrame {
+public class AddProductGUI extends JFrame {
     // Attributes for handling data
     LinkedList<ProductData> productList;
     private String filePath;
@@ -25,7 +25,7 @@ public class AddDataGUI extends JFrame {
     /**
      * Default constructor initializing the AddDataGUI.
      */
-     public AddDataGUI(){
+     public AddProductGUI(){
         initComponents(); // Initialize components defined in the form
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
      }
@@ -37,7 +37,7 @@ public class AddDataGUI extends JFrame {
      * @param tableData  The JTable to display and modify data.
      * @param filePath   The path to the file storing the game data.
      */
-    public AddDataGUI(LinkedList<ProductData> productList, JTable tableData, String filePath) {
+    public AddProductGUI(LinkedList<ProductData> productList, JTable tableData, String filePath) {
         initComponents(); // Initialize components defined in the form
         
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
@@ -57,6 +57,14 @@ public class AddDataGUI extends JFrame {
             int value = (int) quantityPicker.getValue();
             if (value < 0) {
                 quantityPicker.setValue(0); // Set the value to 0 if it's negative
+            }
+        });
+        
+        // Ensure no negative value is selected in the quantity picker
+        restockValuePicker.addChangeListener((ChangeEvent e) -> {
+            int value = (int) restockValuePicker.getValue();
+            if (value < 0) {
+                restockValuePicker.setValue(0); // Set the value to 0 if it's negative
             }
         });
     }
@@ -85,8 +93,8 @@ public class AddDataGUI extends JFrame {
         nameTxtField = new javax.swing.JTextField();
         productIDLabel = new javax.swing.JLabel();
         quantityPicker = new javax.swing.JSpinner();
-        restockValueTxtField = new javax.swing.JTextField();
         publisherLabel1 = new javax.swing.JLabel();
+        restockValuePicker = new javax.swing.JSpinner();
         cancelBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
         titleLabel = new javax.swing.JLabel();
@@ -120,12 +128,6 @@ public class AddDataGUI extends JFrame {
         productIDLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         productIDLabel.setText("PRODUCT ID");
 
-        restockValueTxtField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                restockValueTxtFieldActionPerformed(evt);
-            }
-        });
-
         publisherLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         publisherLabel1.setText("RE-STOCK VALUE");
 
@@ -157,12 +159,16 @@ public class AddDataGUI extends JFrame {
                     .addComponent(productIDLabel)
                     .addComponent(publisherLabel)
                     .addComponent(publisherLabel1))
-                .addGap(19, 19, 19)
-                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(typeTxtField)
-                    .addComponent(productIDTxtField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(priceTxtField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(restockValueTxtField))
+                .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(typeTxtField)
+                            .addComponent(productIDTxtField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                            .addComponent(priceTxtField, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(textFieldsPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         textFieldsPanelLayout.setVerticalGroup(
@@ -197,8 +203,8 @@ public class AddDataGUI extends JFrame {
                         .addComponent(quantityLabel)
                         .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(textFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(restockValueTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(publisherLabel1)))
+                        .addComponent(publisherLabel1)
+                        .addComponent(restockValuePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -290,13 +296,12 @@ public class AddDataGUI extends JFrame {
             String tempSize = sizeTxtField.getText();
             String tempBrand = brandTxtField.getText();
             String tempType = typeTxtField.getText();
-            String tempRestockValue =restockValueTxtField.getText();
+            int restockValue = (int) restockValuePicker.getValue();
 
-            if (tempName.isEmpty() || tempSize.isEmpty() || tempBrand.isEmpty() || tempType.isEmpty() || tempPrice.isEmpty() || tempRestockValue.isEmpty()) {
+            if (tempName.isEmpty() || tempSize.isEmpty() || tempBrand.isEmpty() || tempType.isEmpty() || tempPrice.isEmpty()){
                 JOptionPane.showMessageDialog(null, "Error: No Inputs Detected", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 double validPrice = 0;
-                int validRestockValue = 0;
                 boolean isValid = true;
 
                 // Check if price is a valid double and not negative
@@ -310,19 +315,13 @@ public class AddDataGUI extends JFrame {
                     isValid = false;
                     JOptionPane.showMessageDialog(null, "Invalid Price Input. Please enter a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                // Check if restock value is a valid integer and not negative
-                if (isDataValid.isInteger(tempRestockValue)) {
-                    validRestockValue = Integer.parseInt(tempRestockValue);
-                    if (validRestockValue <= 0) {
-                        isValid = false;
-                        JOptionPane.showMessageDialog(null, "Invalid Restock Value.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } else {
-                    isValid = false;
-                    JOptionPane.showMessageDialog(null, "Invalid Restock Value.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
                 // Check if Quantity is valid aka not 0 or negative
                 if (quantityValue <= 0) {
+                    isValid = false;
+                    JOptionPane.showMessageDialog(null, "Invalid Quantity Input. Must have at least 1.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                // Check if RestockValue is valid aka not 0 or negative
+                if (restockValue <= 0) {
                     isValid = false;
                     JOptionPane.showMessageDialog(null, "Invalid Quantity Input. Must have at least 1.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -338,7 +337,7 @@ public class AddDataGUI extends JFrame {
                                            tempSize, 
                                            tempBrand, 
                                            tempType,
-                                           validRestockValue
+                                           restockValue
                     );
                     
                     // Reset text fields and generate a new product ID
@@ -350,7 +349,7 @@ public class AddDataGUI extends JFrame {
                     newProductID = prodId.generateProductID();
                     productIDTxtField.setText(newProductID);
                     quantityPicker.setValue(0);
-                    restockValueTxtField.setText("");
+                    restockValuePicker.setValue(0);
                 }
             }
         }
@@ -364,10 +363,6 @@ public class AddDataGUI extends JFrame {
     private void cancelBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         dispose(); // Close the current window (the frame)
     }//GEN-LAST:event_cancelBtnActionPerformed
-
-    private void restockValueTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockValueTxtFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_restockValueTxtFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
@@ -386,7 +381,7 @@ public class AddDataGUI extends JFrame {
     private javax.swing.JLabel publisherLabel1;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
-    private javax.swing.JTextField restockValueTxtField;
+    private javax.swing.JSpinner restockValuePicker;
     private javax.swing.JTextField sizeTxtField;
     private javax.swing.JPanel textFieldsPanel;
     private javax.swing.JLabel titleLabel;

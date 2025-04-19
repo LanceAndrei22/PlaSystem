@@ -7,7 +7,7 @@ import plasystem_functions.TransactionHandling;
 import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.FrameExporter;
 import plasystem_functions.ProductData;
-import plasystem_functions.TableRowSelector;
+import plasystem_functions.ProductRowSelector;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -66,7 +66,7 @@ public class TransactionGUI extends JFrame {
         cartTable.setEnabled(false);
         printReceiptBtn.setEnabled(false);
         
-        // Populate the product table (plasystemTbl) with the list of products
+        // Populate the product table with the list of products
         populateProductTable();
         
         // Add a change listener to ensure quantityPicker accepts only non-negative values
@@ -77,10 +77,10 @@ public class TransactionGUI extends JFrame {
             }
         });
         
-        // Add a selection listener so that when a row is selected, we update the prodIDTxtField using TableRowSelector
-        transSelectionTbl.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && transSelectionTbl.getSelectedRow() != -1) {
-                TableRowSelector selector = new TableRowSelector(transSelectionTbl);
+        // Add a selection listener so that when a row is selected, we update the prodIDTxtField using ProductRowSelector
+        productSelectionTbl.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && productSelectionTbl.getSelectedRow() != -1) {
+                ProductRowSelector selector = new ProductRowSelector(productSelectionTbl);
                 prodIDTxtField.setText(selector.getTblProductID());
                 // You could also update other fields (e.g., name, price) if needed.
             }
@@ -93,7 +93,7 @@ public class TransactionGUI extends JFrame {
     private void populateProductTable() {
        // Reload the latest list from the file
        list = dataHandling.getList();
-       DefaultTableModel model = (DefaultTableModel) transSelectionTbl.getModel();
+       DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
        model.setRowCount(0);  // Clear any existing rows
        for (ProductData product : list) {
            Object[] rowData = {
@@ -108,7 +108,7 @@ public class TransactionGUI extends JFrame {
            };
            model.addRow(rowData);
         
-           new TableAlignmentRenderer(transSelectionTbl, 5);
+           new TableAlignmentRenderer(productSelectionTbl, 5);
            new TableAlignmentRenderer(cartTable, 2);
        }
    }
@@ -143,8 +143,8 @@ public class TransactionGUI extends JFrame {
         clearBtn = new javax.swing.JButton();
         cartScrollPane = new javax.swing.JScrollPane();
         cartTable = new javax.swing.JTable();
-        transSelectionTblScrollPane = new javax.swing.JScrollPane();
-        transSelectionTbl = new javax.swing.JTable();
+        productSelectionScrollPane = new javax.swing.JScrollPane();
+        productSelectionTbl = new javax.swing.JTable();
         searchTxtField9 = new javax.swing.JTextField();
         searchPrmtrBox9 = new javax.swing.JComboBox<>();
         titleLabel = new javax.swing.JLabel();
@@ -235,8 +235,8 @@ public class TransactionGUI extends JFrame {
             cartTable.getColumnModel().getColumn(2).setPreferredWidth(25);
         }
 
-        transSelectionTbl.setAutoCreateRowSorter(true);
-        transSelectionTbl.setModel(new javax.swing.table.DefaultTableModel(
+        productSelectionTbl.setAutoCreateRowSorter(true);
+        productSelectionTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -259,8 +259,8 @@ public class TransactionGUI extends JFrame {
                 return canEdit [columnIndex];
             }
         });
-        transSelectionTbl.getTableHeader().setReorderingAllowed(false);
-        transSelectionTblScrollPane.setViewportView(transSelectionTbl);
+        productSelectionTbl.getTableHeader().setReorderingAllowed(false);
+        productSelectionScrollPane.setViewportView(productSelectionTbl);
 
         searchTxtField9.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -283,7 +283,7 @@ public class TransactionGUI extends JFrame {
                         .addComponent(searchPrmtrBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 488, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(transSelectionTblScrollPane)
+                        .addComponent(productSelectionScrollPane)
                         .addGroup(transactPanelLayout.createSequentialGroup()
                             .addGap(12, 12, 12)
                             .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -334,7 +334,7 @@ public class TransactionGUI extends JFrame {
                     .addComponent(searchTxtField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchPrmtrBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(transSelectionTblScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(productSelectionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dateLabel)
@@ -687,9 +687,9 @@ public class TransactionGUI extends JFrame {
     }//GEN-LAST:event_verifyBtnActionPerformed
 
     private void searchTxtField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtField9KeyReleased
-        DefaultTableModel model = (DefaultTableModel) transSelectionTbl.getModel();
+        DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        transSelectionTbl.setRowSorter(sorter);
+        productSelectionTbl.setRowSorter(sorter);
         
         // Get the selected search parameter (which should match one of the table's column names)
         String columnName = searchPrmtrBox9.getSelectedItem().toString();
@@ -717,6 +717,8 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JTextField prodIDTxtField;
     private javax.swing.JLabel prodNameLabel;
     private javax.swing.JTextField prodNameTxtField;
+    private javax.swing.JScrollPane productSelectionScrollPane;
+    private javax.swing.JTable productSelectionTbl;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
     private javax.swing.JComboBox<String> searchPrmtrBox9;
@@ -725,8 +727,6 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel totalAmountLabel;
     private javax.swing.JTextField totalAmountTxtField;
-    private javax.swing.JTable transSelectionTbl;
-    private javax.swing.JScrollPane transSelectionTblScrollPane;
     private javax.swing.JPanel transactPanel;
     private javax.swing.JButton verifyBtn;
     // End of variables declaration//GEN-END:variables

@@ -6,7 +6,7 @@ import javax.swing.table.*;
 /**
  * A utility class to retrieve data from the selected row of a JTable.
  */
-public class TableRowSelector {
+public class ProductRowSelector {
     private String tblProductID = "";
     private String tblQuantity = "";
     private String tblPrice = "";
@@ -22,7 +22,7 @@ public class TableRowSelector {
      *
      * @param jTable The JTable from which data needs to be extracted.
      */
-    public TableRowSelector(JTable jTable) {
+    public ProductRowSelector(JTable jTable) {
         viewRow = jTable.getSelectedRow(); // Get the index of the selected row in the view
 
         // Check if a row is selected (row index starts from 0, -1 means no selection)
