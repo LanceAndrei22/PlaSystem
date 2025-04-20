@@ -3,7 +3,7 @@ package plasystem_gui;
 import plasystem_functions.ErrorValueHandling;
 import plasystem_functions.ProductDataManager;
 import plasystem_functions.RandomIDGenerator;
-import plasystem_functions.TransactionManager;
+import plasystem_functions.TransactionDataManager;
 import plasystem_functions.TableAlignmentRenderer;
 import plasystem_functions.FrameExporter;
 import plasystem_functions.ProductData;
@@ -22,10 +22,10 @@ import javax.swing.table.*;
 public class TransactionGUI extends JFrame {
     // Attributes for handling data
     private LinkedList<ProductData> list;
-    TransactionManager handling = new TransactionManager();
+    TransactionDataManager handling = new TransactionDataManager();
     ErrorValueHandling isDataValid = new ErrorValueHandling();
     RandomIDGenerator receiptID = new RandomIDGenerator();
-    private LinkedList<TransactionManager> transactionList = new LinkedList<>();
+    private LinkedList<TransactionDataManager> transactionList = new LinkedList<>();
     private int quantityChecker;
     private String path;
     private JTable tableData;
@@ -463,7 +463,7 @@ public class TransactionGUI extends JFrame {
         
         // Format and set content to be displayed on the receipt
         StringBuilder content = new StringBuilder();
-        for (TransactionManager item : transactionList) {
+        for (TransactionDataManager item : transactionList) {
             // Get the item name and ensure it's limited to 14 characters and without leading/trailing spaces
             String itemName = item.getName().trim().replace(" ", "");
             itemName = itemName.length() > 14 ? itemName.substring(0, 14) : itemName;
@@ -620,8 +620,8 @@ public class TransactionGUI extends JFrame {
         if((int) quantityPicker.getValue() == 0){
             JOptionPane.showMessageDialog(null, "Input Quantity!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
-            // Creating TransactionManager object with provided details
-            TransactionManager data = new TransactionManager(
+            // Creating TransactionDataManager object with provided details
+            TransactionDataManager data = new TransactionDataManager(
                 prodIDTxtField.getText(),
                 prodNameTxtField.getText(),
                 (int) quantityPicker.getValue(),

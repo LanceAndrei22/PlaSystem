@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * A class for handling transactions.
  */
-public class TransactionManager {
+public class TransactionDataManager {
     // Fields to store transaction information
     private String productName;
     private int quantity;
@@ -15,7 +15,7 @@ public class TransactionManager {
     /**
      * Empty constructor for TransactionHandling.
      */
-    public TransactionManager() {
+    public TransactionDataManager() {
         // Constructor left empty intentionally
     }
     
@@ -27,7 +27,7 @@ public class TransactionManager {
      * @param quantity  The quantity of the product involved in the transaction.
      * @param price     The price of the product.
      */
-    public TransactionManager(String productID, String gameName, int quantity, double price){
+    public TransactionDataManager(String productID, String gameName, int quantity, double price){
         this.productName = gameName;
         this.quantity = quantity;
         this.price = price;
@@ -37,15 +37,15 @@ public class TransactionManager {
     /**
      * Calculates the total value of a list of transactions.
      *
-     * @param list The list of TransactionManager objects.
+     * @param list The list of TransactionDataManager objects.
      * @return The total value of the transactions.
      */
-    public double getTotal(LinkedList<TransactionManager> list){
+    public double getTotal(LinkedList<TransactionDataManager> list){
         double sum = 0;
         double temp = 0.0;
         
         // Iterate through the list of transactions and calculate total price
-        for(TransactionManager element : list){
+        for(TransactionDataManager element : list){
             temp = (element.getPrice() * element.getQuantity());
             sum += temp;
         }
