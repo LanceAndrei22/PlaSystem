@@ -77,7 +77,7 @@ public class ReceiptInvoiceGUI extends JFrame {
      * @param receiptID The receipt ID to be displayed.
      */
     public void setReceiptID(String receiptID){
-        receiptIDTxtField.setText(receiptID); // Display the receipt ID in the text field
+        receiptIDTxtField.setText("#" + receiptID); // Display the receipt ID in the text field
     }
     
     @SuppressWarnings("unchecked")
@@ -256,7 +256,7 @@ public class ReceiptInvoiceGUI extends JFrame {
                                     .addGroup(receiptPanelLayout.createSequentialGroup()
                                         .addComponent(dateLabel)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(currentDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(currentDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(dividerLabel))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(receiptPanelLayout.createSequentialGroup()

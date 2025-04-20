@@ -55,7 +55,12 @@ public class DBConnection {
         try {
             // Attempt to establish a connection
             Connection conn = DriverManager.getConnection(DB_URL);
-
+            
+            // Enable foreign key constraints
+            try (Statement pragmaStmt = conn.createStatement()) {
+                pragmaStmt.execute("PRAGMA foreign_keys = ON;");
+            }
+            
             // If the database file was just created or doesn't have the schema, initialize it
             if (initializeDatabase) {
                 try (Statement stmt = conn.createStatement()) {

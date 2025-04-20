@@ -8,7 +8,10 @@ import java.util.List;
  */
 public class RestockData {
     private int restockId;
-    private String restockDate;
+    private String restockDateYear;
+    private String restockDateMonth;
+    private String restockDateDay;
+    private String restockDateTime;
     private List<RestockItemData> restockItems;
     
     /**
@@ -18,9 +21,12 @@ public class RestockData {
     
     }
 
-    public RestockData(int restockId, String restockDate, List<RestockItemData> restockItems) {
+    public RestockData(int restockId, String restockDateYear, String restockDateMonth, String restockDateDay, String restockDateTime, List<RestockItemData> restockItems) {
         this.restockId = restockId;
-        this.restockDate = restockDate;
+        this.restockDateYear = restockDateYear;
+        this.restockDateMonth = restockDateMonth;
+        this.restockDateDay = restockDateDay;
+        this.restockDateTime = restockDateTime;
         this.restockItems = restockItems;
     }
 
@@ -29,14 +35,38 @@ public class RestockData {
         return restockId;
     }
 
-    public String getRestockDate() {
-        return restockDate;
+    public String getRestockDateYear() {
+        return restockDateYear;
     }
 
-    public void setRestockDate(String restockDate) {
-        this.restockDate = restockDate;
+    public void setRestockDateYear(String restockDate) {
+        this.restockDateYear = restockDate;
+    }
+    
+    public String getRestockDateMonth() {
+        return restockDateMonth;
     }
 
+    public void setRestockDateMonth(String restockDate) {
+        this.restockDateMonth = restockDate;
+    }
+    
+    public String getRestockDateYearDay() {
+        return restockDateDay;
+    }
+
+    public void setRestockDateDay(String restockDate) {
+        this.restockDateDay = restockDate;
+    }
+    
+    public String getRestockDateTime() {
+        return restockDateTime;
+    }
+    
+    public void setRestockDateTime(String restockDate) {
+        this.restockDateTime = restockDate;
+    }
+    
     public List<RestockItemData> getRestockItems() {
         return restockItems;
     }

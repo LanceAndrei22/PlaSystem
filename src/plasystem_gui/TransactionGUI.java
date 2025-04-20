@@ -1,37 +1,33 @@
 package plasystem_gui;
 
-import plasystem_functions.ErrorValueHandling;
-import plasystem_functions.ProductDataManager;
-import plasystem_functions.RandomIDGenerator;
-import plasystem_functions.TransactionDataManager;
-import plasystem_functions.TableAlignmentRenderer;
-import plasystem_functions.FrameExporter;
-import plasystem_functions.ProductData;
-import plasystem_functions.ProductRowSelector;
-import java.util.*;
+import plasystem_functions.*;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import javax.swing.table.*;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Represents a GUI for handling transactions.
  */
 public class TransactionGUI extends JFrame {
     // Attributes for handling data
-    private LinkedList<ProductData> list;
-    TransactionDataManager handling = new TransactionDataManager();
-    ErrorValueHandling isDataValid = new ErrorValueHandling();
-    RandomIDGenerator receiptID = new RandomIDGenerator();
-    private LinkedList<TransactionDataManager> transactionList = new LinkedList<>();
-    private int quantityChecker;
-    private String path;
-    private JTable tableData;
-    private Double customerMoney;
-    private Double totalPurchase;
-    private ProductDataManager dataHandling;
+    private List<ProductData> productList;
+    private TransactionDataManager transactionManager;
+    private ErrorValueHandling isDataValid;
+    private JTable mainTable;
+    private List<TransactionItemData> transactionItems;
+    private double totalPurchase;
+    private ProductDataManager productDataManager;
+    private Timer refreshTimer;
+    private boolean isTransactionSubmitted;
     
     /**
      * Default constructor for the EditDataGUI.
@@ -44,78 +40,241 @@ public class TransactionGUI extends JFrame {
     /**
      * Creates a new instance of TransactionGUI with specific parameters.
      *
-     * @param list      The list of ProductData for transaction handling.
-     * @param path      The path for file handling.
-     * @param tableData The JTable for displaying transaction data.
-     */    
-    public TransactionGUI(LinkedList<ProductData> list,String path, JTable tableData){
-        /*
-        initComponents(); // Initialize GUI components
-        setLocationRelativeTo(null); // Set the frame's location to the center of the screen
-        this.list = list; // Set the ProductData list
-        this.path = path; // Set the file path
-        this.tableData = tableData; // Set the JTable for transaction data
-        this.dataHandling = new ProductDataManager(path); // Instantiate ProductDataManager with the file path
-        dateTxtField.setText(LocalDate.now().toString()); // Set the current date
+     * @param productList The list of ProductData for transaction handling.
+     * @param mainTable   The JTable for displaying main product data.
+     */
+    public TransactionGUI(List<ProductData> productList, JTable mainTable){
+        this.productList = productList;
+        this.mainTable = mainTable;
+        this.transactionManager = new TransactionDataManager();
+        this.isDataValid = new ErrorValueHandling();
+        this.transactionItems = new LinkedList<>();
+        this.productDataManager = new ProductDataManager();
+        initComponents();
+        setLocationRelativeTo(null);
+        initializeGUI();
+        startTableRefresh();
+    }
+    
+    private void initializeGUI() {
+        // Set date field with formatted current date
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        dateTxtField.setText(now.format(formatter));
+        dateTxtField.setEnabled(false);
         
-        // Disable certain buttons and textfields initially
         addBtn.setEnabled(false);
         totalAmountTxtField.setEnabled(false);
         prodNameTxtField.setEnabled(false);
-        itemPriceTxtField.setEnabled(false);
+        itemPriceTxtField.setEditable(false);
         dateTxtField.setEnabled(false);
         cartTable.setEnabled(false);
         printReceiptBtn.setEnabled(false);
-        
-        // Populate the product table with the list of products
-        populateProductTable();
-        
-        // Add a change listener to ensure quantityPicker accepts only non-negative values
-        quantityPicker.addChangeListener((ChangeEvent e) -> {
+        transactionItems.clear();
+        ((DefaultTableModel) cartTable.getModel()).setRowCount(0);
+        totalPurchase = 0.0;
+        totalAmountTxtField.setText("");
+
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, 0, 1);
+        quantityPicker.setModel(spinnerModel);
+        quantityPicker.setEnabled(false);
+        quantityPicker.addChangeListener(e -> {
             int value = (int) quantityPicker.getValue();
             if (value < 0) {
-                quantityPicker.setValue(0); // Set the value to 0 if it's negative
+                quantityPicker.setValue(0);
             }
         });
-        
-        // Add a selection listener so that when a row is selected, we update the prodIDTxtField using ProductRowSelector
+
         productSelectionTbl.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && productSelectionTbl.getSelectedRow() != -1) {
                 ProductRowSelector selector = new ProductRowSelector(productSelectionTbl);
-                prodIDTxtField.setText(selector.getTblProductID());
-                // You could also update other fields (e.g., name, price) if needed.
+                ProductData selectedProduct = selector.getProductData();
+                if (selector.getRow() != -1) {
+                    prodIDTxtField.setText(String.valueOf(selectedProduct.getProductId()));
+                    // Clear other fields until verified
+                    prodNameTxtField.setText("");
+                    itemPriceTxtField.setText("");
+                    ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(0);
+                    quantityPicker.setValue(0);
+                    quantityPicker.setEnabled(false);
+                    addBtn.setEnabled(false);
+                } else {
+                    prodIDTxtField.setText("");
+                    prodNameTxtField.setText("");
+                    itemPriceTxtField.setText("");
+                    ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(0);
+                    quantityPicker.setValue(0);
+                    quantityPicker.setEnabled(false);
+                    addBtn.setEnabled(false);
+                }
             }
         });
-        */
+
+        populateProductTable();
+    }
+    
+    /**
+     * Starts a timer to periodically refresh the product table with the latest data.
+     */
+    private void startTableRefresh() {
+        refreshTimer = new Timer(true); // Daemon thread
+        refreshTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater(() -> {
+                    // Set date field with formatted current date
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    dateTxtField.setText(now.format(formatter));
+                    
+                    productDataManager.loadProducts(); // Force reload from database
+                    productList = productDataManager.getList();
+                    populateProductTable();
+                });
+            }
+        }, 0, 1000); // Refresh every 1 second
+    }
+    
+    /**
+     * Stops the table refresh timer when the GUI is closed.
+     */
+    @Override
+    public void dispose() {
+        if (refreshTimer != null) {
+            refreshTimer.cancel();
+        }
+        // Clear transactionItems and cart table on disposal
+        transactionItems.clear();
+        DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
+        model.setRowCount(0);
+        totalPurchase = 0.00;
+        if (totalAmountTxtField != null) {
+            totalAmountTxtField.setText("");
+        }
+        super.dispose();
     }
     
      /**
      * Populates the product table (plasystemTbl) with all products from the list.
      */
     private void populateProductTable() {
-       /*
-        // Reload the latest list from the file
-       list = dataHandling.getList();
-       DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
-       model.setRowCount(0);  // Clear any existing rows
-       for (ProductData product : list) {
-           Object[] rowData = {
-               product.getProductID(),
-               product.getProductName(),
-               product.getProductBrand(),
-               product.getProductSize(),
-               product.getProductType(),
-               product.getProductPrice(),
-               product.getProductQuantity(),
-               product.getProductRestockValue()
-           };
-           model.addRow(rowData);
+    DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
+        model.setRowCount(0);
+        for (ProductData product : productList) {
+            model.addRow(new Object[] {
+                product.getProductId(),
+                product.getProductName(),
+                product.getProductBrand(),
+                product.getProductSize(),
+                product.getProductType(),
+                product.getProductPrice(),
+                product.getProductQuantity(),
+                product.getProductRestockValue()
+            });
+        }
         
-           new TableAlignmentRenderer(productSelectionTbl, 5);
-           new TableAlignmentRenderer(cartTable, 2);
-       }
-       */
+        // Apply TableAlignmentRenderer for productSelectionTbl with total width of 752 pixels
+        new TableAlignmentRenderer(productSelectionTbl, productList, 752);
+        // Apply custom renderer for cartTable
+        applyCartTableRenderer();
+        
+        // Reapply the current filter if any
+        if (searchTxtField.getText().trim().length() > 0) {
+            searchTxtFieldKeyReleased(null);
+        }
    }
+    
+    /**
+     * Applies custom rendering to cartTable for proper alignment and formatting.
+     * - Name: Left-aligned
+     * - Quantity: Right-aligned
+     * - Price: Right-aligned, formatted to two decimal places
+     */
+    private void applyCartTableRenderer() {
+        TableColumnModel columnModel = cartTable.getColumnModel();
+
+        // Renderer for Name (left-aligned)
+        DefaultTableCellRenderer nameRenderer = new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                setText(value != null ? value.toString() : "");
+                setHorizontalAlignment(JLabel.LEFT);
+            }
+        };
+
+        // Renderer for Quantity (right-aligned)
+        DefaultTableCellRenderer quantityRenderer = new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                setText(value != null ? value.toString() : "");
+                setHorizontalAlignment(JLabel.RIGHT);
+            }
+        };
+
+        // Renderer for Price (right-aligned, two decimal places)
+        DefaultTableCellRenderer priceRenderer = new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                try {
+                    double price = Double.parseDouble(value.toString());
+                    setText(String.format("%.2f", price));
+                } catch (NumberFormatException e) {
+                    setText(value != null ? value.toString() : "");
+                }
+                setHorizontalAlignment(JLabel.RIGHT);
+            }
+        };
+
+        // Apply renderers to cartTable columns
+        if (columnModel.getColumnCount() >= 3) {
+            columnModel.getColumn(0).setCellRenderer(nameRenderer); // Name
+            columnModel.getColumn(1).setCellRenderer(quantityRenderer); // Quantity
+            columnModel.getColumn(2).setCellRenderer(priceRenderer); // Price
+        }
+
+        // Adjust column widths based on content
+        FontMetrics metrics = cartTable.getFontMetrics(cartTable.getFont());
+        int[] columnWidths = new int[3];
+        columnWidths[0] = metrics.stringWidth("Sample Product Name") + 10; // Name
+        columnWidths[1] = metrics.stringWidth("9999") + 10; // Quantity
+        columnWidths[2] = metrics.stringWidth("9999.99") + 10; // Price
+
+        // Apply widths
+        for (int i = 0; i < Math.min(columnModel.getColumnCount(), 3); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setPreferredWidth(columnWidths[i]);
+            column.setMinWidth(columnWidths[i]);
+        }
+    }
+    
+    private void clearCartAndFields() {
+        transactionItems.clear();
+        DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
+        model.setRowCount(0);
+        totalPurchase = 0.0;
+        totalAmountTxtField.setText("");
+        prodIDTxtField.setEnabled(true);
+        prodIDTxtField.setText("");
+        prodNameTxtField.setText("");
+        itemPriceTxtField.setText("");
+        ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(0);
+        quantityPicker.setValue(0);
+        quantityPicker.setEnabled(false);
+        addBtn.setEnabled(false);
+        productSelectionTbl.clearSelection();
+    }
+
+    private void resetGUI() {
+        clearCartAndFields();
+        paymentAmountTxtField.setText("");
+        submitBtn.setEnabled(true);
+        paymentAmountTxtField.setEnabled(true);
+        verifyBtn.setEnabled(true);
+        clearBtn.setEnabled(true);
+        printReceiptBtn.setEnabled(false);
+        cancelBtn.setText("CANCEL");
+        isTransactionSubmitted = false;
+    }
 
 
     /**
@@ -149,8 +308,8 @@ public class TransactionGUI extends JFrame {
         cartTable = new javax.swing.JTable();
         productSelectionScrollPane = new javax.swing.JScrollPane();
         productSelectionTbl = new javax.swing.JTable();
-        searchTxtField9 = new javax.swing.JTextField();
-        searchPrmtrBox9 = new javax.swing.JComboBox<>();
+        searchTxtField = new javax.swing.JTextField();
+        searchPrmtrBox = new javax.swing.JComboBox<>();
         titleLabel = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         printReceiptBtn = new javax.swing.JButton();
@@ -245,11 +404,11 @@ public class TransactionGUI extends JFrame {
 
             },
             new String [] {
-                "Product ID", "Name", "Brand", "Size", "Type", "Price", "Quantity", "Restock Value"
+                "ID", "Name", "Brand", "Size", "Type", "Price", "Quantity", "Restock Value"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false
@@ -266,13 +425,13 @@ public class TransactionGUI extends JFrame {
         productSelectionTbl.getTableHeader().setReorderingAllowed(false);
         productSelectionScrollPane.setViewportView(productSelectionTbl);
 
-        searchTxtField9.addKeyListener(new java.awt.event.KeyAdapter() {
+        searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                searchTxtField9KeyReleased(evt);
+                searchTxtFieldKeyReleased(evt);
             }
         });
 
-        searchPrmtrBox9.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name", "Size", "Brand", "Type", "Price", "Quantity" }));
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name", "Size", "Brand", "Type", "Price", "Quantity" }));
 
         javax.swing.GroupLayout transactPanelLayout = new javax.swing.GroupLayout(transactPanel);
         transactPanel.setLayout(transactPanelLayout);
@@ -282,61 +441,62 @@ public class TransactionGUI extends JFrame {
                 .addGap(71, 71, 71)
                 .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(transactPanelLayout.createSequentialGroup()
-                        .addComponent(searchTxtField9, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchPrmtrBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 488, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(productSelectionScrollPane)
-                        .addGroup(transactPanelLayout.createSequentialGroup()
-                            .addGap(12, 12, 12)
-                            .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(530, 530, 530))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, transactPanelLayout.createSequentialGroup()
+                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(productSelectionScrollPane)
+                            .addGroup(transactPanelLayout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(transactPanelLayout.createSequentialGroup()
+                                            .addComponent(paymentAmountLabel)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(paymentAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, transactPanelLayout.createSequentialGroup()
+                                            .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(12, 12, 12)
+                                            .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(transactPanelLayout.createSequentialGroup()
+                                            .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(prodNameLabel)
+                                                .addComponent(itemPriceLabel)
+                                                .addComponent(quantityLabel))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(itemPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(prodNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                     .addGroup(transactPanelLayout.createSequentialGroup()
-                                        .addComponent(paymentAmountLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(paymentAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, transactPanelLayout.createSequentialGroup()
-                                        .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(prodIDLabel)
+                                        .addGap(61, 61, 61)
+                                        .addComponent(prodIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                                .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(transactPanelLayout.createSequentialGroup()
-                                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(prodNameLabel)
-                                            .addComponent(itemPriceLabel)
-                                            .addComponent(quantityLabel))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(itemPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(prodNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(quantityPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGroup(transactPanelLayout.createSequentialGroup()
-                                    .addComponent(prodIDLabel)
-                                    .addGap(61, 61, 61)
-                                    .addComponent(prodIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                            .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(transactPanelLayout.createSequentialGroup()
-                                    .addGap(73, 73, 73)
-                                    .addComponent(totalAmountLabel)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(transactPanelLayout.createSequentialGroup()
-                                    .addComponent(dateLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(cartScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(42, 42, 42))
+                                        .addGap(73, 73, 73)
+                                        .addComponent(totalAmountLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(totalAmountTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(transactPanelLayout.createSequentialGroup()
+                                        .addComponent(dateLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(dateTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cartScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(42, 42, 42))))
         );
         transactPanelLayout.setVerticalGroup(
             transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(transactPanelLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(transactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchTxtField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchPrmtrBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(productSelectionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -458,60 +618,48 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void printReceiptBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_printReceiptBtnActionPerformed
-        // Instantiate ReceiptInvoiceGUI
         ReceiptInvoiceGUI receipt = new ReceiptInvoiceGUI();
-        
-        // Format and set content to be displayed on the receipt
         StringBuilder content = new StringBuilder();
-        for (TransactionDataManager item : transactionList) {
-            // Get the item name and ensure it's limited to 14 characters and without leading/trailing spaces
-            String itemName = item.getName().trim().replace(" ", "");
+        for (TransactionItemData item : transactionItems) {
+            String itemName = item.getTI_productName().trim().replace(" ", "");
             itemName = itemName.length() > 14 ? itemName.substring(0, 14) : itemName;
-
-            // Format each item: name (limited to 14 characters, without spaces), quantity, and price
             String formattedItem = String.format("%-35s\t     %-10s\t                  %-10s\n",
-                                                 itemName, item.getQuantity(),
-                                                 String.format("₱%.2f", item.getPrice() * item.getQuantity()));
+                itemName, item.getTI_buyQuantity(),
+                String.format("₱%.2f", item.getTI_totalPrice()));
             content.append(formattedItem);
         }
-        // Set the receipt list content
         receipt.setReceiptList(content.toString());
-        
-        // Get the cash amount from the input field
-        double cashAmount = Double.parseDouble(paymentAmountTxtField.getText());
-        
-        // Set the cash amount in the receipt
-        receipt.setCashAmount(cashAmount);
-        
-        // Calculate VATable Sales
-        double vatableSales = totalPurchase / 1.12;
-        // Set VATable Sales in the receipt
-        receipt.setVATableSalesLabel(vatableSales);
-        
-        // Pass the VAT amount to ReceiptGUI
-        receipt.setVATAmount(vatableSales); 
 
-        // Calculate the change
-        double change = cashAmount - (vatableSales + vatableSales * 0.12);
-        // Display the change in the receipt
+        double cashAmount = Double.parseDouble(paymentAmountTxtField.getText());
+        receipt.setCashAmount(cashAmount);
+
+        double vatableSales = totalPurchase / 1.12;
+        // Round vatableSales to two decimal places
+        vatableSales = new BigDecimal(vatableSales).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        receipt.setVATableSalesLabel(vatableSales);
+        receipt.setVATAmount(vatableSales);
+
+        // Round change to two decimal places
+        double change = new BigDecimal(cashAmount - (vatableSales + vatableSales * 0.12))
+            .setScale(2, RoundingMode.HALF_UP).doubleValue();
         receipt.setChangeAmount(change);
-        
-        // Get the date of the transaction
-        String dateOfTransaction = dateTxtField.getText();
-        // Set the date of the transaction in the receipt
-        receipt.setDateOfTransaction(dateOfTransaction);
-        
-        // Generate and Set Receipt ID
-        String generatedReceiptID = receiptID.generateReceiptID();
-        receipt.setReceiptID(generatedReceiptID);
-       
-        // Display the receipt
+
+        // Use formatted date for receipt
+        TransactionData lastTransaction = transactionManager.getTransactionList().get(
+            transactionManager.getTransactionList().size() - 1);
+        receipt.setDateOfTransaction(lastTransaction.getFormattedDate());
+
+        int transId = lastTransaction.getTransactionId();
+        receipt.setReceiptID(String.valueOf(transId));
+
         receipt.setVisible(true);
         receipt.setLocationRelativeTo(null);
         receipt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        // Export the frame as an image using FrameExporter
-        FrameExporter.exportFrameAsImage(receipt, generatedReceiptID);
+
+        FrameExporter.exportFrameAsImage(receipt, "#" + String.valueOf(transId));
+
+        // Reset GUI after printing receipt
+        resetGUI();
     }//GEN-LAST:event_printReceiptBtnActionPerformed
     
     /**
@@ -520,7 +668,7 @@ public class TransactionGUI extends JFrame {
      * @param evt The ActionEvent captured from the GUI.
      */
     private void cancelBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window (the frame)
+        dispose(); // Close the current window
     }//GEN-LAST:event_cancelBtnActionPerformed
     
     /**
@@ -530,46 +678,91 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void submitBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
-        /*
-        // Check if the transaction list is empty
-        if(transactionList.isEmpty()){
+        if (transactionItems.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Transaction is Empty!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Check if payment amount is provided
+
         if (!paymentAmountTxtField.getText().trim().isEmpty()) {
             String customerMoneyStr = paymentAmountTxtField.getText().trim();
             String totalPurchaseStr = totalAmountTxtField.getText().trim();
-            
-            // Validate customer money and total purchase inputs
+
             if (isDataValid.isDouble(customerMoneyStr) && isDataValid.isDouble(totalPurchaseStr)) {
-                customerMoney = Double.parseDouble(customerMoneyStr);
+                double customerMoney = Double.parseDouble(customerMoneyStr);
                 totalPurchase = Double.parseDouble(totalPurchaseStr);
-                
-                // Check if customer's payment is sufficient
+
                 if (customerMoney >= totalPurchase) {
-                    // Confirm transaction submission
                     int confirm = JOptionPane.showConfirmDialog(null, "Do you wish to submit transaction?", "Submit", JOptionPane.YES_NO_OPTION);
-                    
                     if (confirm == JOptionPane.YES_OPTION) {
-                        // Decrease the quantity of purchased items in the data
-                        ProductDataManager dataHandling = new ProductDataManager(path);
-                        dataHandling.decreaseQuantity(list, transactionList, tableData);
-                        
-                        // Update the product table dynamically using the helper method
-                        populateProductTable();
-                        
-                        // Disable further actions and enable printing the receipt
-                        addBtn.setEnabled(false);
-                        submitBtn.setEnabled(false);
-                        paymentAmountTxtField.setEnabled(false);
-                        verifyBtn.setEnabled(false);
-                        clearBtn.setEnabled(false);
-                        prodIDTxtField.setEnabled(false);
-                        quantityPicker.setEnabled(false);
-                        printReceiptBtn.setEnabled(true);
-                        cancelBtn.setText("EXIT");
+                        // Split date into components
+                        String dateStr = dateTxtField.getText();
+                        try {
+                            LocalDateTime dateTime = LocalDateTime.parse(dateStr, 
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                            String year = String.valueOf(dateTime.getYear());
+                            String month = String.format("%02d", dateTime.getMonthValue());
+                            String day = String.format("%02d", dateTime.getDayOfMonth());
+                            String time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                            
+                            // Round totalPurchase and changeAmount to two decimal places
+                            double roundedTotal = new BigDecimal(totalPurchase).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                            double roundedChange = new BigDecimal(customerMoney - totalPurchase).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                            
+                            int transId = transactionManager.addTransaction(
+                                year,
+                                month,
+                                day,
+                                time,
+                                roundedTotal,
+                                customerMoney,
+                                roundedChange,
+                                transactionItems
+                            );
+
+                            if (transId != -1) {
+                                for (TransactionItemData item : transactionItems) {
+                                    for (ProductData product : productList) {
+                                        if (product.getProductId() == item.getTI_productId()) {
+                                            int newQuantity = product.getProductQuantity() - item.getTI_buyQuantity();
+                                            productDataManager.updateProduct(
+                                                product.getProductId(),
+                                                product.getProductName(),
+                                                product.getProductBrand(),
+                                                product.getProductSize(),
+                                                product.getProductType(),
+                                                product.getProductPrice(),
+                                                newQuantity,
+                                                product.getProductRestockValue()
+                                            );
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                productDataManager.updateTable(mainTable);
+                                populateProductTable();
+
+                                // Disable controls to prevent further modifications
+                                addBtn.setEnabled(false);
+                                verifyBtn.setEnabled(false);
+                                quantityPicker.setEnabled(false);
+                                prodIDTxtField.setEnabled(false);
+                                submitBtn.setEnabled(false);
+                                printReceiptBtn.setEnabled(true);
+                                clearBtn.setEnabled(true);
+                                isTransactionSubmitted = true;
+
+                                JOptionPane.showMessageDialog(null,
+                                    String.format("<html>Transaction submitted successfully! <b>Change: ₱%.2f</b>. You can now print the receipt.</html>", roundedChange),
+                                    "Success",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } catch (DateTimeException e) {
+                            JOptionPane.showMessageDialog(null,
+                                "Invalid date format. Expected: YYYY-MM-DD HH:MM:SS",
+                                "Input Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Input sufficient payment amount!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -580,7 +773,6 @@ public class TransactionGUI extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "There is no input. Input payment amount!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        */
     }//GEN-LAST:event_submitBtnActionPerformed
     
     /**
@@ -590,22 +782,11 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */  
     private void clearBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
-        /*
-        // Clear the transaction list and reset the transaction table
-        transactionList.clear();
-        DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
-        model.setRowCount(0); // Clear all rows in the table
-        
-        // Reset input fields and text areas
-        totalAmountTxtField.setText("");
-        prodIDTxtField.setText("");
-        itemPriceTxtField.setText("");
-        prodNameTxtField.setText("");
-        quantityPicker.setValue(0);
-        
-        // Disable the "Add" button after clearing
-        addBtn.setEnabled(false);
-        */
+        if (isTransactionSubmitted) {
+            resetGUI();
+        } else {
+            clearCartAndFields();
+        }
     }//GEN-LAST:event_clearBtnActionPerformed
     
     /**
@@ -615,52 +796,76 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        /*
-        // Checking if quantity is provided
-        if((int) quantityPicker.getValue() == 0){
+        int quantity = (int) quantityPicker.getValue();
+        if (quantity <= 0) {
             JOptionPane.showMessageDialog(null, "Input Quantity!", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
-            // Creating TransactionDataManager object with provided details
-            TransactionDataManager data = new TransactionDataManager(
-                prodIDTxtField.getText(),
-                prodNameTxtField.getText(),
-                (int) quantityPicker.getValue(),
-                Double.parseDouble(itemPriceTxtField.getText())
-            );
-
-            // Adding data to the transaction list
-            transactionList.add(data);
-            
-            // Updating the preview area in the table
-            DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
-
-            // Fetching details from input fields
-            String prodName = prodNameTxtField.getText();
-            int quantity = (Integer) quantityPicker.getValue();
-            double itemPrice = Double.parseDouble(itemPriceTxtField.getText());
-
-            // Calculating total for this item
-            double customTotal = itemPrice * quantity;
-
-            // Creating a new row with item details
-            Object[] row = new Object[] {prodName, quantity, customTotal};
-
-            // Adding the row to the table model
-            model.addRow(row);
-
-            // Showing the total amount in the designated field
-            totalAmountTxtField.setText(String.valueOf(handling.getTotal(transactionList)));
-
-            // Resetting input fields
-            prodIDTxtField.setText("");
-            itemPriceTxtField.setText("");
-            prodNameTxtField.setText("");
-            quantityPicker.setValue(0);
-
-            // Disabling the "Add" button
-            addBtn.setEnabled(false);
+            return;
         }
-        */
+
+        int prodId;
+        try {
+            prodId = Integer.parseInt(prodIDTxtField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid Product ID!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        ProductData selectedProduct = null;
+        for (ProductData product : productList) {
+            if (product.getProductId() == prodId) {
+                selectedProduct = product;
+                break;
+            }
+        }
+        
+        if (selectedProduct == null) {
+            JOptionPane.showMessageDialog(null, "Product not found or no longer exists!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (quantity > selectedProduct.getProductQuantity()) {
+            JOptionPane.showMessageDialog(null,
+                String.format("Requested quantity (%d) exceeds available stock (%d)!", quantity, selectedProduct.getProductQuantity()),
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Round total price to two decimal places
+        double totalPrice = new BigDecimal(selectedProduct.getProductPrice() * quantity)
+            .setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+        TransactionItemData item = new TransactionItemData(
+            0, // Item ID is auto-incremented
+            0, // Transaction ID will be set upon insertion
+            selectedProduct.getProductId(),
+            selectedProduct.getProductName(),
+            selectedProduct.getProductBrand(),
+            selectedProduct.getProductSize(),
+            selectedProduct.getProductType(),
+            quantity,
+            selectedProduct.getProductPrice(),
+            selectedProduct.getProductPrice() * quantity
+        );
+        transactionItems.add(item);
+
+        DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
+        model.addRow(new Object[] {
+            selectedProduct.getProductName(),
+            quantity,
+            selectedProduct.getProductPrice() * quantity
+        });
+
+        totalPurchase = transactionManager.getTotal(transactionItems);
+        totalAmountTxtField.setText(String.format("%.2f", totalPurchase));
+
+        prodIDTxtField.setText("");
+        prodNameTxtField.setText("");
+        itemPriceTxtField.setText("");
+        ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(0);
+        quantityPicker.setValue(0);
+        quantityPicker.setEnabled(false);
+        addBtn.setEnabled(false);
+        productSelectionTbl.clearSelection();
     }//GEN-LAST:event_addBtnActionPerformed
     
     /**
@@ -670,48 +875,66 @@ public class TransactionGUI extends JFrame {
      * @param evt Action event triggered by the button click
      */
     private void verifyBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_verifyBtnActionPerformed
-        /*
-        // Fetching the product ID from the input field
-        String prodIDCheck = prodIDTxtField.getText();
-        boolean check = false;
-        
-        // Looping through the list to find the matching product
-        for(ProductData element: list){
-            if(element.getProductID().equals(prodIDCheck) ){
-                // If product exists, display its details
-                check = true;
-                itemPriceTxtField.setText(Double.toString(element.getProductPrice()));
-                prodNameTxtField.setText(element.getProductName());
-                quantityChecker = element.getProductQuantity();
-                addBtn.setEnabled(true); // Enable the "Add" button for valid product
+        String prodIDCheck = prodIDTxtField.getText().trim();
+        if (!isDataValid.isInteger(prodIDCheck)) {
+            JOptionPane.showMessageDialog(null, "Invalid Product ID!", "Error", JOptionPane.ERROR_MESSAGE);
+            prodIDTxtField.setText("");
+            prodNameTxtField.setText("");
+            itemPriceTxtField.setText("");
+            ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(0);
+            quantityPicker.setValue(0);
+            quantityPicker.setEnabled(false);
+            addBtn.setEnabled(false);
+            productSelectionTbl.clearSelection();
+            return;
+        }
+
+        int prodId = Integer.parseInt(prodIDCheck);
+        ProductData selectedProduct = null;
+        for (ProductData product : productList) {
+            if (product.getProductId() == prodId) {
+                selectedProduct = product;
                 break;
             }
         }
 
-        // Set the maximum number of items they can buy based on available quantity
-        ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(quantityChecker);
-
-        // If the product doesn't exist, display an error message
-        if(!check){
-            JOptionPane.showMessageDialog(null, "Product not found!", "Error", JOptionPane.ERROR_MESSAGE);
+        if (selectedProduct != null) {
+            JOptionPane.showMessageDialog(null,
+                "Product verified and exists in the database!",
+                "Verification Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            prodNameTxtField.setText(selectedProduct.getProductName());
+            itemPriceTxtField.setText(String.format("%.2f", selectedProduct.getProductPrice()));
+            ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(selectedProduct.getProductQuantity());
+            quantityPicker.setValue(0);
+            quantityPicker.setEnabled(true);
+            addBtn.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                "Product not found or no longer exists!",
+                "Verification Error",
+                JOptionPane.ERROR_MESSAGE);
+            prodIDTxtField.setText("");
+            prodNameTxtField.setText("");
+            itemPriceTxtField.setText("");
+            ((SpinnerNumberModel) quantityPicker.getModel()).setMaximum(0);
+            quantityPicker.setValue(0);
+            quantityPicker.setEnabled(false);
+            addBtn.setEnabled(false);
+            productSelectionTbl.clearSelection();
         }
-        */
     }//GEN-LAST:event_verifyBtnActionPerformed
 
-    private void searchTxtField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtField9KeyReleased
-        /*
+    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
         DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
         productSelectionTbl.setRowSorter(sorter);
-        
-        // Get the selected search parameter (which should match one of the table's column names)
-        String columnName = searchPrmtrBox9.getSelectedItem().toString();
+        String columnName = searchPrmtrBox.getSelectedItem().toString();
         int columnIndex = model.findColumn(columnName);
-        if(columnIndex >= 0) {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField9.getText(), columnIndex));
+        if (columnIndex >= 0) {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex));
         }
-        */
-    }//GEN-LAST:event_searchTxtField9KeyReleased
+    }//GEN-LAST:event_searchTxtFieldKeyReleased
       
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
@@ -735,8 +958,8 @@ public class TransactionGUI extends JFrame {
     private javax.swing.JTable productSelectionTbl;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JSpinner quantityPicker;
-    private javax.swing.JComboBox<String> searchPrmtrBox9;
-    private javax.swing.JTextField searchTxtField9;
+    private javax.swing.JComboBox<String> searchPrmtrBox;
+    private javax.swing.JTextField searchTxtField;
     private javax.swing.JButton submitBtn;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel totalAmountLabel;

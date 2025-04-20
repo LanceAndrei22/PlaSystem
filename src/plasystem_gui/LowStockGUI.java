@@ -50,11 +50,13 @@ public class LowStockGUI extends javax.swing.JFrame{
         });
     }
     
-    // Start a timer to refresh the table every 5 seconds
+    // Start a timer to refresh the table every 1 second
     private void startRefreshTimer() {
         refreshTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dataHandler.loadProducts(); // Force reload from database
+                productList = dataHandler.getList();
                 refreshLowStockTable();
             }
         });
@@ -78,12 +80,10 @@ public class LowStockGUI extends javax.swing.JFrame{
     }
     
     private void refreshLowStockTable() {
-        // Refresh productList from ProductDataManager
-        this.productList = dataHandler.getList();
         DefaultTableModel model = (DefaultTableModel) lowstockTable.getModel();
         model.setRowCount(0); // Clear table
         for (ProductData product : this.productList) {
-            if (product.getProductQuantity() < product.getProductRestockValue()) {
+            if (product.getProductQuantity() <= product.getProductRestockValue()) {
                 model.addRow(new Object[]{
                     product.getProductId(),
                     product.getProductName(),
