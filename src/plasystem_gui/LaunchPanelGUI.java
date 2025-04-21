@@ -1,20 +1,20 @@
 package plasystem_gui;
 
-import plasystem_functions.UserAccountManager;
+import plasystem_functions.UserAccountDataManager;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class LaunchPanelGUI extends javax.swing.JFrame {
     
-    private UserAccountManager loginAccount;
+    private UserAccountDataManager loginAccount;
     
     public LaunchPanelGUI() {
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
         
-        // Initialize the UserAccountManager and load user accounts
-        loginAccount = new UserAccountManager();
+        // Initialize the UserAccountDataManager and load user accounts
+        loginAccount = new UserAccountDataManager();
         
         // Add KeyListeners for Enter key action
         addEnterKeyListener(UsernameTextField);

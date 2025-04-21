@@ -3,7 +3,7 @@ package plasystem_gui;
 import plasystem_functions.ProductDataManager;
 import plasystem_functions.ProductRowSelector;
 import plasystem_functions.ProductData;
-import plasystem_functions.TableAlignmentRenderer;
+import plasystem_functions.ProductTableRenderer;
 import java.util.function.Supplier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +27,7 @@ public class MainProgramGUI extends JFrame {
     // List to track open child GUIs
     private List<JFrame> childGUIs = new ArrayList<>();
     
+    // Map to track instances of active GUIs
     private Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
     
     /**
@@ -41,7 +42,7 @@ public class MainProgramGUI extends JFrame {
         dataHandling.updateTable(plasystemTbl);
         
         // Apply dynamic column formatting and sizing
-        new TableAlignmentRenderer(plasystemTbl, productList, 1200); // 1200 is the table width
+        new ProductTableRenderer(plasystemTbl, productList, 1200); // 1200 is the table width
         
         if (productList.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Database is empty", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -98,7 +99,7 @@ public class MainProgramGUI extends JFrame {
         dataHandling.updateTable(plasystemTbl);
         
         // Apply dynamic column formatting and sizing
-        new TableAlignmentRenderer(plasystemTbl, productList, 1200); // 1200 is the table width
+        new ProductTableRenderer(plasystemTbl, productList, 1200); // 1200 is the table width
         
         // Reapply the current filter if any
         if (searchTxtField.getText().trim().length() > 0) {

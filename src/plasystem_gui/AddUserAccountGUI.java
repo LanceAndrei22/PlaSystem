@@ -1,6 +1,6 @@
 package plasystem_gui;
 
-import plasystem_functions.UserAccountManager;
+import plasystem_functions.UserAccountDataManager;
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -191,7 +191,7 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
             JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            UserAccountManager manager = new UserAccountManager();
+            UserAccountDataManager manager = new UserAccountDataManager();
             boolean success = manager.addUserAccount(username, password, role);
             if (success) {
                 JOptionPane.showMessageDialog(this, 

@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.util.List;
-import plasystem_gui.MainProgramGUI;
 import plasystem_functions.ProductData;
 
 /**
@@ -14,7 +13,7 @@ import plasystem_functions.ProductData;
  * - Price, Quantity, Restock Value: Right-aligned
  * - Price: Formatted to two decimal places
  */
-public class TableAlignmentRenderer {
+public class ProductTableRenderer {
 
     private static final int PADDING = 10; // Padding for visual appeal
     private static final int[] LEFT_ALIGNED_COLUMNS = {0, 1, 2, 3, 4}; // Product ID, Name, Brand, Size, Type
@@ -28,7 +27,7 @@ public class TableAlignmentRenderer {
      * @param productList The list of ProductData to determine maximum content lengths.
      * @param totalTableWidth The total width available for the table (in pixels).
      */
-    public TableAlignmentRenderer(JTable alignTable, List<ProductData> productList, int totalTableWidth) {
+    public ProductTableRenderer(JTable alignTable, List<ProductData> productList, int totalTableWidth) {
         // Renderer for Price column (2 decimal places, right-aligned)
         DefaultTableCellRenderer priceRenderer = new DefaultTableCellRenderer() {
             @Override

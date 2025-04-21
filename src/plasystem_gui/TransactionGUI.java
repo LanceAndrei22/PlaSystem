@@ -155,7 +155,7 @@ public class TransactionGUI extends JFrame {
     }
     
      /**
-     * Populates the product table (plasystemTbl) with all products from the list.
+     * Populates the product table (productSelectionTbl) with all products from the list.
      */
     private void populateProductTable() {
     DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
@@ -173,79 +173,16 @@ public class TransactionGUI extends JFrame {
             });
         }
         
-        // Apply TableAlignmentRenderer for productSelectionTbl with total width of 752 pixels
-        new TableAlignmentRenderer(productSelectionTbl, productList, 752);
+        // Apply ProductTableRenderer for productSelectionTbl with total width of 752 pixels
+        new ProductTableRenderer(productSelectionTbl, productList, 752);
         // Apply custom renderer for cartTable
-        applyCartTableRenderer();
+        CartTableRenderer.applyCartTableRendering(cartTable);
         
         // Reapply the current filter if any
         if (searchTxtField.getText().trim().length() > 0) {
             searchTxtFieldKeyReleased(null);
         }
    }
-    
-    /**
-     * Applies custom rendering to cartTable for proper alignment and formatting.
-     * - Name: Left-aligned
-     * - Quantity: Right-aligned
-     * - Price: Right-aligned, formatted to two decimal places
-     */
-    private void applyCartTableRenderer() {
-        TableColumnModel columnModel = cartTable.getColumnModel();
-
-        // Renderer for Name (left-aligned)
-        DefaultTableCellRenderer nameRenderer = new DefaultTableCellRenderer() {
-            @Override
-            protected void setValue(Object value) {
-                setText(value != null ? value.toString() : "");
-                setHorizontalAlignment(JLabel.LEFT);
-            }
-        };
-
-        // Renderer for Quantity (right-aligned)
-        DefaultTableCellRenderer quantityRenderer = new DefaultTableCellRenderer() {
-            @Override
-            protected void setValue(Object value) {
-                setText(value != null ? value.toString() : "");
-                setHorizontalAlignment(JLabel.RIGHT);
-            }
-        };
-
-        // Renderer for Price (right-aligned, two decimal places)
-        DefaultTableCellRenderer priceRenderer = new DefaultTableCellRenderer() {
-            @Override
-            protected void setValue(Object value) {
-                try {
-                    double price = Double.parseDouble(value.toString());
-                    setText(String.format("%.2f", price));
-                } catch (NumberFormatException e) {
-                    setText(value != null ? value.toString() : "");
-                }
-                setHorizontalAlignment(JLabel.RIGHT);
-            }
-        };
-
-        // Apply renderers to cartTable columns
-        if (columnModel.getColumnCount() >= 3) {
-            columnModel.getColumn(0).setCellRenderer(nameRenderer); // Name
-            columnModel.getColumn(1).setCellRenderer(quantityRenderer); // Quantity
-            columnModel.getColumn(2).setCellRenderer(priceRenderer); // Price
-        }
-
-        // Adjust column widths based on content
-        FontMetrics metrics = cartTable.getFontMetrics(cartTable.getFont());
-        int[] columnWidths = new int[3];
-        columnWidths[0] = metrics.stringWidth("Sample Product Name") + 10; // Name
-        columnWidths[1] = metrics.stringWidth("9999") + 10; // Quantity
-        columnWidths[2] = metrics.stringWidth("9999.99") + 10; // Price
-
-        // Apply widths
-        for (int i = 0; i < Math.min(columnModel.getColumnCount(), 3); i++) {
-            TableColumn column = columnModel.getColumn(i);
-            column.setPreferredWidth(columnWidths[i]);
-            column.setMinWidth(columnWidths[i]);
-        }
-    }
     
     private void clearCartAndFields() {
         transactionItems.clear();
@@ -633,14 +570,13 @@ public class TransactionGUI extends JFrame {
         double cashAmount = Double.parseDouble(paymentAmountTxtField.getText());
         receipt.setCashAmount(cashAmount);
 
-        double vatableSales = totalPurchase / 1.12;
-        // Round vatableSales to two decimal places
-        vatableSales = new BigDecimal(vatableSales).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        receipt.setVATableSalesLabel(vatableSales);
-        receipt.setVATAmount(vatableSales);
+        // Round totalPurchase to two decimal places
+        double roundedTotalPurchase = new BigDecimal(totalPurchase)
+            .setScale(2, RoundingMode.HALF_UP).doubleValue();
+        receipt.setTotalAmount(roundedTotalPurchase);
 
         // Round change to two decimal places
-        double change = new BigDecimal(cashAmount - (vatableSales + vatableSales * 0.12))
+        double change = new BigDecimal(cashAmount - totalPurchase)
             .setScale(2, RoundingMode.HALF_UP).doubleValue();
         receipt.setChangeAmount(change);
 
@@ -829,10 +765,6 @@ public class TransactionGUI extends JFrame {
                 "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Round total price to two decimal places
-        double totalPrice = new BigDecimal(selectedProduct.getProductPrice() * quantity)
-            .setScale(2, RoundingMode.HALF_UP).doubleValue();
 
         TransactionItemData item = new TransactionItemData(
             0, // Item ID is auto-incremented

@@ -116,7 +116,7 @@ public class RestockProductGUI extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Select", "Product ID", "Name", "Current Quantity", "Restock Value", "Incoming Qty"
+                "Select", "ID", "Name", "Current Quantity", "Restock Value", "Incoming Qty"
             }
         ) {
             Class[] types = new Class [] {

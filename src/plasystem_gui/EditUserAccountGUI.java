@@ -1,6 +1,6 @@
 package plasystem_gui;
 
-import plasystem_functions.UserAccountManager;
+import plasystem_functions.UserAccountDataManager;
 import javax.swing.JOptionPane;
 import java.awt.event.*;
 
@@ -190,7 +190,7 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
             JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            UserAccountManager manager = new UserAccountManager();
+            UserAccountDataManager manager = new UserAccountDataManager();
             boolean success = manager.updateUserAccount(originalUsername, username, password, role);
             if (success) {
                 JOptionPane.showMessageDialog(this, 

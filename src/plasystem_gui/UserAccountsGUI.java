@@ -1,7 +1,7 @@
 package plasystem_gui;
 
-import plasystem_functions.UserAccount;
-import plasystem_functions.UserAccountManager;
+import plasystem_functions.UserAccountData;
+import plasystem_functions.UserAccountDataManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
@@ -62,15 +62,15 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     // Method to load user accounts into the JTable
     private void loadUserAccounts() {
         // Fetch all user accounts from the database
-        UserAccountManager userAccountManager = new UserAccountManager();
+        UserAccountDataManager userAccountManager = new UserAccountDataManager();
         userAccountManager.loadUserAccounts();  // Load user accounts from DB
 
-        List<UserAccount> userList = userAccountManager.getUserAccounts();  // Get the list of user accounts
+        List<UserAccountData> userList = userAccountManager.getUserAccounts();  // Get the list of user accounts
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         model.setRowCount(0); // Clear existing rows
 
         // Add each user to the table
-        for (UserAccount user : userList) {
+        for (UserAccountData user : userList) {
             model.addRow(new Object[] {
                 user.getUsername(),
                 user.getUserPassword(),
@@ -277,7 +277,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             JOptionPane.WARNING_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            UserAccountManager manager = new UserAccountManager();
+            UserAccountDataManager manager = new UserAccountDataManager();
             boolean success = manager.deleteUserAccount(username);
             if (success) {
                 JOptionPane.showMessageDialog(this, 

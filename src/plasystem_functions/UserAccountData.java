@@ -3,7 +3,7 @@ package plasystem_functions;
 /**
  * Represents information about a user account.
  */
-public class UserAccount {
+public class UserAccountData {
     // Attributes representing user account information
     protected int userId;
     protected String username;
@@ -18,7 +18,7 @@ public class UserAccount {
      * @param userPassword  The password of the user.
      * @param userRole      The role of the user (e.g., admin, cashier).
      */
-    public UserAccount(int userId, String username, String userPassword, String userRole) {
+    public UserAccountData(int userId, String username, String userPassword, String userRole) {
         this.userId = userId;
         this.username = username;
         this.userPassword = userPassword;
@@ -28,7 +28,7 @@ public class UserAccount {
     /**
      * Default constructor for UserAccount.
      */
-    public UserAccount() {
+    public UserAccountData() {
     }
 
     // Getter and Setter methods for each attribute

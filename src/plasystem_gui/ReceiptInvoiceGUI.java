@@ -1,7 +1,6 @@
 package plasystem_gui;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class ReceiptInvoiceGUI extends JFrame {
     
@@ -31,28 +30,14 @@ public class ReceiptInvoiceGUI extends JFrame {
     }
 
     /**
-     * Sets the Vat-able sales label in the GUI.
+     * Sets the total amount in the GUI.
      *
-     * @param vatableSales The Vat-able sales amount to be displayed.
+     * @param totalAmount The total amount to be displayed.
      */
-    public void setVATableSalesLabel(double vatableSales) {
-        taxLabel.setText(" " + String.format("₱%.2f", vatableSales)); // Display vatable sales in the tax label
-        subTotalLabel.setText(" " + String.format("₱%.2f", vatableSales)); // Display vatable sales in the subtotal label
-    }
-    
-    /**
-     * Sets the VAT amount and total amount in the GUI.
-     *
-     * @param vatableSales The Vat-able sales amount for calculating VAT and total amount.
-     */
-    public void setVATAmount(double vatableSales) {
-        double vat = vatableSales * 0.12; // Calculate VAT (12% of vatable sales)
-        double totalAmount = vatableSales + vat; // Calculate total amount (vatable sales + VAT)
-        
-        vatAmountLabel.setText(" " +String.format("₱%.2f", vat)); // Display VAT amount in the label
+    public void setTotalAmount(double totalAmount) {
         totalLabel.setText(String.format("₱%.2f", totalAmount)); // Display total amount in the label
     }
-    
+
     /**
      * Sets the change amount in the GUI.
      *
@@ -77,7 +62,7 @@ public class ReceiptInvoiceGUI extends JFrame {
      * @param receiptID The receipt ID to be displayed.
      */
     public void setReceiptID(String receiptID){
-        receiptIDTxtField.setText("#" + receiptID); // Display the receipt ID in the text field
+        receiptIDTxtField.setText(receiptID); // Display the receipt ID in the text field
     }
     
     @SuppressWarnings("unchecked")
@@ -93,16 +78,10 @@ public class ReceiptInvoiceGUI extends JFrame {
         priceLabel = new javax.swing.JLabel();
         receiptScrollPane = new javax.swing.JScrollPane();
         receiptTxtArea = new javax.swing.JTextArea();
-        totalSaleLabel = new javax.swing.JLabel();
-        vatableLabel = new javax.swing.JLabel();
-        vatLabel = new javax.swing.JLabel();
         totalAmountLabel = new javax.swing.JLabel();
         dividerLabel = new javax.swing.JLabel();
         cashLabel = new javax.swing.JLabel();
         changeLabel = new javax.swing.JLabel();
-        subTotalLabel = new javax.swing.JLabel();
-        taxLabel = new javax.swing.JLabel();
-        vatAmountLabel = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
         cashAmountLabel = new javax.swing.JLabel();
         changeAmountLabel = new javax.swing.JLabel();
@@ -151,15 +130,6 @@ public class ReceiptInvoiceGUI extends JFrame {
         receiptTxtArea.setEnabled(false);
         receiptScrollPane.setViewportView(receiptTxtArea);
 
-        totalSaleLabel.setForeground(new java.awt.Color(51, 51, 51));
-        totalSaleLabel.setText("Total Sale");
-
-        vatableLabel.setForeground(new java.awt.Color(51, 51, 51));
-        vatableLabel.setText("VATable (v) :");
-
-        vatLabel.setForeground(new java.awt.Color(51, 51, 51));
-        vatLabel.setText("VAT :");
-
         totalAmountLabel.setForeground(new java.awt.Color(51, 51, 51));
         totalAmountLabel.setText("Total Amount :");
 
@@ -171,15 +141,6 @@ public class ReceiptInvoiceGUI extends JFrame {
 
         changeLabel.setForeground(new java.awt.Color(51, 51, 51));
         changeLabel.setText("Change :");
-
-        subTotalLabel.setForeground(new java.awt.Color(51, 51, 51));
-        subTotalLabel.setText("subtotal");
-
-        taxLabel.setForeground(new java.awt.Color(51, 51, 51));
-        taxLabel.setText("tax");
-
-        vatAmountLabel.setForeground(new java.awt.Color(51, 51, 51));
-        vatAmountLabel.setText("vat");
 
         totalLabel.setForeground(new java.awt.Color(51, 51, 51));
         totalLabel.setText("total");
@@ -219,28 +180,12 @@ public class ReceiptInvoiceGUI extends JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(receiptPanelLayout.createSequentialGroup()
-                        .addComponent(vatableLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(taxLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(receiptPanelLayout.createSequentialGroup()
                         .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(receiptPanelLayout.createSequentialGroup()
                                 .addComponent(receiptIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(receiptScrollPane))
                         .addGap(24, 24, 24))
-                    .addGroup(receiptPanelLayout.createSequentialGroup()
-                        .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(receiptPanelLayout.createSequentialGroup()
-                                .addComponent(vatLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(vatAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(receiptPanelLayout.createSequentialGroup()
-                                .addComponent(totalSaleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(subTotalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
                     .addGroup(receiptPanelLayout.createSequentialGroup()
                         .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(receiptPanelLayout.createSequentialGroup()
@@ -292,19 +237,7 @@ public class ReceiptInvoiceGUI extends JFrame {
                     .addComponent(priceLabel)
                     .addComponent(itemLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(receiptScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(vatableLabel)
-                    .addComponent(taxLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(totalSaleLabel)
-                    .addComponent(subTotalLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(vatLabel)
-                    .addComponent(vatAmountLabel))
+                .addComponent(receiptScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dividerLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -367,13 +300,7 @@ public class ReceiptInvoiceGUI extends JFrame {
     private javax.swing.JScrollPane receiptScrollPane;
     private javax.swing.JTextArea receiptTxtArea;
     private javax.swing.JLabel salesInvoiceLabel;
-    private javax.swing.JLabel subTotalLabel;
-    private javax.swing.JLabel taxLabel;
     private javax.swing.JLabel totalAmountLabel;
     private javax.swing.JLabel totalLabel;
-    private javax.swing.JLabel totalSaleLabel;
-    private javax.swing.JLabel vatAmountLabel;
-    private javax.swing.JLabel vatLabel;
-    private javax.swing.JLabel vatableLabel;
     // End of variables declaration//GEN-END:variables
 }

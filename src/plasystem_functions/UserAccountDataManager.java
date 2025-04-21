@@ -5,16 +5,16 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.*;
 
-public class UserAccountManager {
+public class UserAccountDataManager {
     private static final String SELECT_ALL_USERS_QUERY = "SELECT * FROM UserAccount";
     private static final String INSERT_USER_QUERY = "INSERT INTO UserAccount (USER_NAME, USER_PASSWORD, USER_ROLE) VALUES (?, ?, ?)";
     private static final String DELETE_USER_QUERY = "DELETE FROM UserAccount WHERE USER_NAME = ?";
     private static final String UPDATE_USER_QUERY = "UPDATE UserAccount SET USER_NAME = ?, USER_PASSWORD = ?, USER_ROLE = ? WHERE USER_NAME = ?";
     
     // Using LinkedList instead of ArrayList
-    private List<UserAccount> userAccounts;
+    private List<UserAccountData> userAccounts;
     
-    public UserAccountManager() {
+    public UserAccountDataManager() {
         this.userAccounts = new LinkedList<>(); // Initialize as LinkedList
     }
     
@@ -31,7 +31,7 @@ public class UserAccountManager {
                 String userPassword = rs.getString("USER_PASSWORD");
                 String userRole = rs.getString("USER_ROLE");
                 
-                UserAccount userAccount = new UserAccount(userId, userName, userPassword, userRole);
+                UserAccountData userAccount = new UserAccountData(userId, userName, userPassword, userRole);
                 userAccounts.add(userAccount); // Add to LinkedList
             }
         } catch (SQLException error) {
@@ -271,7 +271,7 @@ public class UserAccountManager {
     }
 
     // Method to get all user accounts
-    public List<UserAccount> getUserAccounts() {
+    public List<UserAccountData> getUserAccounts() {
         return userAccounts;
     }
 
