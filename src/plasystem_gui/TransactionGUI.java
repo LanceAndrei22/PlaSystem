@@ -18,19 +18,19 @@ import java.math.RoundingMode;
  * Represents a GUI for handling transactions.
  */
 public class TransactionGUI extends JFrame {
-    // Attributes for handling data
-    private List<ProductData> productList;
+    
+// Attributes for handling data
+    private ProductDataManager productDataManager;
     private TransactionDataManager transactionManager;
     private ErrorValueHandling isDataValid;
-    private JTable mainTable;
+    private MainProgramGUI parentGUI;
     private List<TransactionItemData> transactionItems;
     private double totalPurchase;
-    private ProductDataManager productDataManager;
     private Timer refreshTimer;
     private boolean isTransactionSubmitted;
     
     /**
-     * Default constructor for the EditDataGUI.
+     * Default constructor for the TransactionGUI.
      */
     public TransactionGUI(){
         initComponents(); // Initialize GUI components
@@ -40,16 +40,15 @@ public class TransactionGUI extends JFrame {
     /**
      * Creates a new instance of TransactionGUI with specific parameters.
      *
-     * @param productList The list of ProductData for transaction handling.
-     * @param mainTable   The JTable for displaying main product data.
+     * @param parentGUI The parent MainProgramGUI to update its table.
+     * @param productDataManager The manager for product data operations.
      */
-    public TransactionGUI(List<ProductData> productList, JTable mainTable){
-        this.productList = productList;
-        this.mainTable = mainTable;
+    public TransactionGUI(MainProgramGUI parentGUI, ProductDataManager productDataManager){
+        this.parentGUI = parentGUI;
+        this.productDataManager = productDataManager;
         this.transactionManager = new TransactionDataManager();
         this.isDataValid = new ErrorValueHandling();
         this.transactionItems = new LinkedList<>();
-        this.productDataManager = new ProductDataManager();
         initComponents();
         setLocationRelativeTo(null);
         initializeGUI();
@@ -126,9 +125,6 @@ public class TransactionGUI extends JFrame {
                     LocalDateTime now = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     dateTxtField.setText(now.format(formatter));
-                    
-                    productDataManager.loadProducts(); // Force reload from database
-                    productList = productDataManager.getList();
                     populateProductTable();
                 });
             }
@@ -158,8 +154,9 @@ public class TransactionGUI extends JFrame {
      * Populates the product table (productSelectionTbl) with all products from the list.
      */
     private void populateProductTable() {
-    DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
+        DefaultTableModel model = (DefaultTableModel) productSelectionTbl.getModel();
         model.setRowCount(0);
+        List<ProductData> productList = productDataManager.getList();
         for (ProductData product : productList) {
             model.addRow(new Object[] {
                 product.getProductId(),
@@ -174,7 +171,7 @@ public class TransactionGUI extends JFrame {
         }
         
         // Apply ProductTableRenderer for productSelectionTbl with total width of 752 pixels
-        new ProductTableRenderer(productSelectionTbl, productList, 752);
+        new ProductTableRenderer(productSelectionTbl, productDataManager.getList(), 752);
         // Apply custom renderer for cartTable
         CartTableRenderer.applyCartTableRendering(cartTable);
         
@@ -630,7 +627,6 @@ public class TransactionGUI extends JFrame {
                 if (customerMoney >= totalPurchase) {
                     int confirm = JOptionPane.showConfirmDialog(null, "Do you wish to submit transaction?", "Submit", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
-                        // Split date into components
                         String dateStr = dateTxtField.getText();
                         try {
                             LocalDateTime dateTime = LocalDateTime.parse(dateStr, 
@@ -640,7 +636,6 @@ public class TransactionGUI extends JFrame {
                             String day = String.format("%02d", dateTime.getDayOfMonth());
                             String time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                             
-                            // Round totalPurchase and changeAmount to two decimal places
                             double roundedTotal = new BigDecimal(totalPurchase).setScale(2, RoundingMode.HALF_UP).doubleValue();
                             double roundedChange = new BigDecimal(customerMoney - totalPurchase).setScale(2, RoundingMode.HALF_UP).doubleValue();
                             
@@ -657,28 +652,28 @@ public class TransactionGUI extends JFrame {
 
                             if (transId != -1) {
                                 for (TransactionItemData item : transactionItems) {
-                                    for (ProductData product : productList) {
-                                        if (product.getProductId() == item.getTI_productId()) {
-                                            int newQuantity = product.getProductQuantity() - item.getTI_buyQuantity();
-                                            productDataManager.updateProduct(
-                                                product.getProductId(),
-                                                product.getProductName(),
-                                                product.getProductBrand(),
-                                                product.getProductSize(),
-                                                product.getProductType(),
-                                                product.getProductPrice(),
-                                                newQuantity,
-                                                product.getProductRestockValue()
-                                            );
-                                            break;
-                                        }
+                                    ProductData product = productDataManager.getList().stream()
+                                        .filter(p -> p.getProductId() == item.getTI_productId())
+                                        .findFirst()
+                                        .orElse(null);
+                                    if (product != null) {
+                                        int newQuantity = product.getProductQuantity() - item.getTI_buyQuantity();
+                                        productDataManager.updateProduct(
+                                            product.getProductId(),
+                                            product.getProductName(),
+                                            product.getProductBrand(),
+                                            product.getProductSize(),
+                                            product.getProductType(),
+                                            product.getProductPrice(),
+                                            newQuantity,
+                                            product.getProductRestockValue()
+                                        );
                                     }
                                 }
 
-                                productDataManager.updateTable(mainTable);
+                                parentGUI.refreshTable();
                                 populateProductTable();
 
-                                // Disable controls to prevent further modifications
                                 addBtn.setEnabled(false);
                                 verifyBtn.setEnabled(false);
                                 quantityPicker.setEnabled(false);
@@ -746,13 +741,10 @@ public class TransactionGUI extends JFrame {
             return;
         }
 
-        ProductData selectedProduct = null;
-        for (ProductData product : productList) {
-            if (product.getProductId() == prodId) {
-                selectedProduct = product;
-                break;
-            }
-        }
+        ProductData selectedProduct = productDataManager.getList().stream()
+            .filter(p -> p.getProductId() == prodId)
+            .findFirst()
+            .orElse(null);
         
         if (selectedProduct == null) {
             JOptionPane.showMessageDialog(null, "Product not found or no longer exists!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -822,13 +814,10 @@ public class TransactionGUI extends JFrame {
         }
 
         int prodId = Integer.parseInt(prodIDCheck);
-        ProductData selectedProduct = null;
-        for (ProductData product : productList) {
-            if (product.getProductId() == prodId) {
-                selectedProduct = product;
-                break;
-            }
-        }
+        ProductData selectedProduct = productDataManager.getList().stream()
+            .filter(p -> p.getProductId() == prodId)
+            .findFirst()
+            .orElse(null);
 
         if (selectedProduct != null) {
             JOptionPane.showMessageDialog(null,

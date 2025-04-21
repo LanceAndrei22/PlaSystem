@@ -264,8 +264,8 @@ public class AddProductGUI extends JFrame {
         String brand = brandTxtField.getText().trim();
         String type = typeTxtField.getText().trim();
         String priceText = priceTxtField.getText().trim();
-        int quantity = (int) quantityPicker.getValue();
-        int restockValue = (int) restockValuePicker.getValue();
+        String quantityText = String.valueOf(quantityPicker.getValue());
+        String restockValueText = String.valueOf(restockValuePicker.getValue());
 
         // Validate inputs
         if (name.isEmpty() || size.isEmpty() || brand.isEmpty() || type.isEmpty() || priceText.isEmpty()) {
@@ -283,10 +283,22 @@ public class AddProductGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "Price cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        if (!isDataValid.isInteger(quantityText)) {
+            JOptionPane.showMessageDialog(null, "Invalid quantity format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int quantity = Integer.parseInt(quantityText);
         if (quantity < 0) {
             JOptionPane.showMessageDialog(null, "Quantity cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        if (!isDataValid.isInteger(restockValueText)) {
+            JOptionPane.showMessageDialog(null, "Invalid restock value format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int restockValue = Integer.parseInt(restockValueText);
         if (restockValue < 0) {
             JOptionPane.showMessageDialog(null, "Restock value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;

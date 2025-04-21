@@ -55,8 +55,6 @@ public class LowStockGUI extends javax.swing.JFrame{
         refreshTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dataHandler.loadProducts(); // Force reload from database
-                productList = dataHandler.getList();
                 refreshLowStockTable();
             }
         });
@@ -151,7 +149,7 @@ public class LowStockGUI extends javax.swing.JFrame{
             }
         });
 
-        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name", "Quantity", "Restock Value", "Quantity" }));
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name", "Quantity", "Restock Value" }));
 
         javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
         searchPanel.setLayout(searchPanelLayout);

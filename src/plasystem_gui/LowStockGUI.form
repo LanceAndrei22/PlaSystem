@@ -150,11 +150,10 @@
         <Component class="javax.swing.JComboBox" name="searchPrmtrBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
+              <StringArray count="3">
                 <StringItem index="0" value="Name"/>
                 <StringItem index="1" value="Quantity"/>
                 <StringItem index="2" value="Restock Value"/>
-                <StringItem index="3" value="Quantity"/>
               </StringArray>
             </Property>
           </Properties>
