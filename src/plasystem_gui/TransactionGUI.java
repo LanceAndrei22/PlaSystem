@@ -583,7 +583,7 @@ public class TransactionGUI extends JFrame {
         receipt.setDateOfTransaction(lastTransaction.getFormattedDate());
 
         int transId = lastTransaction.getTransactionId();
-        receipt.setReceiptID(String.valueOf(transId));
+        receipt.setReceiptID("#" + String.valueOf(transId));
 
         receipt.setVisible(true);
         receipt.setLocationRelativeTo(null);
