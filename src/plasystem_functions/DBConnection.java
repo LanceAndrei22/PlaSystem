@@ -38,7 +38,7 @@ public class DBConnection {
             "TI_PROD_TOTALPRICE REAL NOT NULL CHECK (TI_PROD_TOTALPRICE >= TI_PROD_UNITPRICE));";
 
     private static final String INSERT_DEFAULT_ADMIN =
-        "INSERT INTO UserAccount (USER_NAME, USER_PASSWORD, USER_ROLE) VALUES ('admin', 'admin', 'tjb123');";
+        "INSERT INTO UserAccount (USER_NAME, USER_PASSWORD, USER_ROLE) VALUES ('admin', 'tjb123', 'admin');";
 
     public static Connection getConnection() throws SQLException {
         File dbFolder = new File("database");
