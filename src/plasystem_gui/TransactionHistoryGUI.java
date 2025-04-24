@@ -1,17 +1,60 @@
 package plasystem_gui;
 
-import javax.swing.JFrame;
+import plasystem_functions.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.util.*;
 
 public class TransactionHistoryGUI extends javax.swing.JFrame {
-
+    private TransactionDataManager transactionDataManager;
+    private List<TransactionData> transactionList;
+    
     /**
-     * Creates new form TransactionHistoryGUI
+     * Default constructor initializing the TransactionHistoryGUI.
      */
     public TransactionHistoryGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
     }
+    
+    /**
+     * Constructor initializing the Transaction History GUI with a provided TransactionDataManager.
+     *
+     * @param transactionDataManager The TransactionDataManager instance to use for database operations.
+     */
+    public TransactionHistoryGUI(TransactionDataManager transactionDataManager) {
+        this.transactionDataManager = transactionDataManager;
+        this.transactionList = transactionDataManager.getTransactionList();
+        initComponents();
+        setLocationRelativeTo(null);
+        updateTable();
+        new TransactionTableRenderer(transHistorytbl, 667); // 667 is the table width
+    }
+    
+    /**
+     * Updates the transaction history table with data from the database.
+     */
+    private void updateTable() {
+        DefaultTableModel model = (DefaultTableModel) transHistorytbl.getModel();
+        model.setRowCount(0); // Clear existing rows
 
+        for (TransactionData transaction : transactionList) {
+            model.addRow(new Object[]{
+                transaction.getTransactionId(),
+                transaction.getFormattedDate().split(" ")[0], // Date (YYYY-MM-DD)
+                transaction.getTransDateTime(), // Time
+                transaction.getTotalAmount(),
+                transaction.getPaymentAmount(),
+                transaction.getChangeAmount()
+            });
+        }
+        
+        // Reapply search filter if active
+        if (!searchTxtField.getText().trim().isEmpty()) {
+            searchTxtFieldKeyReleased(null);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -21,35 +64,37 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        ExportBtn = new javax.swing.JButton();
-        DetailsBtn = new javax.swing.JButton();
+        transHistoryScrollPane = new javax.swing.JScrollPane();
+        transHistorytbl = new javax.swing.JTable();
+        exportBtn = new javax.swing.JButton();
+        detailsBtn = new javax.swing.JButton();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
         Design1 = new javax.swing.JLabel();
-        DeleteBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
         setResizable(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        transHistorytbl.setAutoCreateRowSorter(true);
+        transHistorytbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Year", "Month", "Day", "Time", "Total Amount", "Payment Amount", "Change Given"
+                "ID", "Date", "Time", "Total Amount", "Payment Amount", "Change Given"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -60,33 +105,46 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        transHistoryScrollPane.setViewportView(transHistorytbl);
 
-        ExportBtn.setText("🖨️ Export");
+        exportBtn.setText("🖨️ Export");
 
-        DetailsBtn.setText("See Details");
-        DetailsBtn.setInheritsPopupMenu(true);
-        DetailsBtn.addActionListener(new java.awt.event.ActionListener() {
+        detailsBtn.setText("See Details");
+        detailsBtn.setInheritsPopupMenu(true);
+        detailsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DetailsBtnActionPerformed(evt);
+                detailsBtnActionPerformed(evt);
             }
         });
 
-        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Date", "Total Amount", "Payment Amount", "Change Given" }));
+        searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTxtFieldKeyReleased(evt);
+            }
+        });
+
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Year", "Month", "Day", "Total Amount", "Payment Amount", "Change Given" }));
 
         Design1.setBackground(new java.awt.Color(255, 102, 102));
         Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/transact_history_title.png"))); // NOI18N
         Design1.setOpaque(true);
 
-        DeleteBtn.setBackground(new java.awt.Color(255, 102, 102));
-        DeleteBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        DeleteBtn.setForeground(new java.awt.Color(255, 255, 255));
-        DeleteBtn.setText("Delete");
-        DeleteBtn.setInheritsPopupMenu(true);
-        DeleteBtn.addActionListener(new java.awt.event.ActionListener() {
+        deleteBtn.setBackground(new java.awt.Color(255, 102, 102));
+        deleteBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        deleteBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBtn.setText("Delete");
+        deleteBtn.setInheritsPopupMenu(true);
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteBtnActionPerformed(evt);
+                deleteBtnActionPerformed(evt);
+            }
+        });
+
+        refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
             }
         });
 
@@ -94,62 +152,184 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addComponent(ExportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                .addGap(456, 456, 456)
-                .addComponent(DetailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                .addGap(6, 6, 6))
             .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(transHistoryScrollPane)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchPrmtrBox, 0, 102, Short.MAX_VALUE)
-                .addGap(339, 339, 339)
-                .addComponent(DeleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(195, 195, 195)
+                        .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                        .addGap(469, 469, 469)
+                        .addComponent(detailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)))
+                .addGap(6, 6, 6))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, Short.MAX_VALUE)
+                .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchTxtField)
+                            .addComponent(searchPrmtrBox)))
+                    .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .addGap(3, 3, 3)
+                .addComponent(transHistoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchPrmtrBox)
-                    .addComponent(searchTxtField)
-                    .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ExportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DetailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(detailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                    .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    /**
+     * Handles the "See Details" button click, displaying transaction items for the selected transaction.
+     */
+    private void detailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsBtnActionPerformed
+        int selectedRow = transHistorytbl.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a transaction to view details.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    private void DetailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetailsBtnActionPerformed
-        JFrame panel = new THDetailsGUI();
-        panel.setVisible(true);
-        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_DetailsBtnActionPerformed
+        // Convert view index to model index to account for sorting/filtering
+        selectedRow = transHistorytbl.convertRowIndexToModel(selectedRow);
+        int transactionId = (int) transHistorytbl.getModel().getValueAt(selectedRow, 0);
+        TransactionData selectedTransaction = transactionList.stream()
+            .filter(t -> t.getTransactionId() == transactionId)
+            .findFirst()
+            .orElse(null);
 
-    private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeleteBtnActionPerformed
+        if (selectedTransaction != null) {
+            THDetailsGUI detailsPanel = new THDetailsGUI(selectedTransaction);
+            detailsPanel.setVisible(true);
+            detailsPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Transaction not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_detailsBtnActionPerformed
+    
+    /**
+     * Handles the "Delete" button click, removing the selected transaction using TransactionDataManager.
+     */
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int selectedRow = transHistorytbl.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a transaction to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Convert view index to model index
+        selectedRow = transHistorytbl.convertRowIndexToModel(selectedRow);
+        int transactionId = (int) transHistorytbl.getModel().getValueAt(selectedRow, 0);
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Do you really want to delete transaction ID " + transactionId + "?",
+            "Delete",
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean success = transactionDataManager.deleteTransaction(transactionId);
+            if (success) {
+                updateTable();
+                JOptionPane.showMessageDialog(this, "Transaction deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete transaction.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+    
+    /**
+     * Handles the "Refresh" button click, reloading the table with the latest transactions.
+     */
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        updateTable();
+    }//GEN-LAST:event_refreshBtnActionPerformed
+    
+    /**
+     * Handles search functionality, filtering the table based on the search text and parameter.
+     */
+    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        DefaultTableModel model = (DefaultTableModel) transHistorytbl.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        transHistorytbl.setRowSorter(sorter);
+
+        String searchText = searchTxtField.getText().trim();
+        String param = searchPrmtrBox.getSelectedItem().toString();
+        int columnIndex;
+
+        // Map parameter to column index
+        switch (param) {
+            case "ID":
+                columnIndex = 0;
+                break;
+            case "Year":
+            case "Month":
+            case "Day":
+                columnIndex = 1; // Date column
+                break;
+            case "Total Amount":
+                columnIndex = 3;
+                break;
+            case "Payment Amount":
+                columnIndex = 4;
+                break;
+            case "Change Given":
+                columnIndex = 5;
+                break;
+            default:
+                return;
+        }
+
+        if (searchText.isEmpty()) {
+            sorter.setRowFilter(null);
+            return;
+        }
+
+        // Handle month name to numeric conversion
+        String filterText = searchText;
+        if (param.equals("Month")) {
+            filterText = MonthConverter.monthNameToNumeric(searchText);
+        }
+
+        // Apply case-insensitive regex filter
+        try {
+            if (param.equals("Year") || param.equals("Month") || param.equals("Day")) {
+                // Filter on the Date column (YYYY-MM-DD)
+                String regex = param.equals("Year") ? "^" + filterText + "-.*" :
+                              param.equals("Month") ? "^\\d{4}-" + filterText + "-.*" :
+                              "^\\d{4}-\\d{2}-" + filterText + ".*";
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + regex, columnIndex));
+            } else {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, columnIndex));
+            }
+        } catch (Exception e) {
+            sorter.setRowFilter(null);
+        }
+    }//GEN-LAST:event_searchTxtFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton DeleteBtn;
     private javax.swing.JLabel Design1;
-    private javax.swing.JButton DetailsBtn;
-    private javax.swing.JButton ExportBtn;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JButton detailsBtn;
+    private javax.swing.JButton exportBtn;
+    private javax.swing.JButton refreshBtn;
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;
+    private javax.swing.JScrollPane transHistoryScrollPane;
+    private javax.swing.JTable transHistorytbl;
     // End of variables declaration//GEN-END:variables
 }

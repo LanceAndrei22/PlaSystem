@@ -1,13 +1,52 @@
 package plasystem_gui;
 
-public class THDetailsGUI extends javax.swing.JFrame {
+import plasystem_functions.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.text.DecimalFormat;
 
+public class THDetailsGUI extends javax.swing.JFrame {
+    private TransactionData transaction;
+    
     /**
-     * Creates new form THDetailsGUI
+     * Default constructor initializing the THDetailsGUI.
      */
     public THDetailsGUI() {
         initComponents();
         setLocationRelativeTo(null);
+    }
+    
+    /**
+     * Creates new form THDetailsGUI with transaction data.
+     *
+     * @param transaction The transaction whose items are to be displayed.
+     */
+    public THDetailsGUI(TransactionData transaction) {
+        this.transaction = transaction;
+        initComponents();
+        setLocationRelativeTo(null);
+        new PriceTableRenderer(thDetailstbl);
+        updateTable();
+    }
+    
+    /**
+     * Updates the table with transaction items.
+     */
+    private void updateTable() {
+        DefaultTableModel model = (DefaultTableModel) thDetailstbl.getModel();
+        model.setRowCount(0); // Clear existing rows
+
+        for (TransactionItemData item : transaction.getTransactionItems()) {
+            model.addRow(new Object[]{
+                item.getTI_productName(),
+                item.getTI_productBrand(),
+                item.getTI_productSize(),
+                item.getTI_productType(),
+                item.getTI_buyQuantity(),
+                item.getTI_unitPrice(),
+                item.getTI_totalPrice()
+            });
+        }
     }
 
     /**
@@ -19,29 +58,30 @@ public class THDetailsGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        thDetailsScrollPane = new javax.swing.JScrollPane();
+        thDetailstbl = new javax.swing.JTable();
         Design1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        thDetailstbl.setAutoCreateRowSorter(true);
+        thDetailstbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Name", "Brand", "Size", "Type", "Quantity", "Unit", "Price", "Total Price"
+                "Name", "Brand", "Size", "Type", "Quantity", "Unit Price", "Total Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -52,7 +92,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        thDetailsScrollPane.setViewportView(thDetailstbl);
 
         Design1.setBackground(new java.awt.Color(255, 102, 102));
         Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -64,7 +104,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
+                .addComponent(thDetailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE))
@@ -73,7 +113,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(73, 73, 73)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+                .addComponent(thDetailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, Short.MAX_VALUE)
@@ -82,10 +122,51 @@ public class THDetailsGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    /**
+     * Custom renderer to format and align price columns.
+     */
+    private static class PriceTableRenderer {
+        private final JTable table;
 
+        public PriceTableRenderer(JTable table) {
+            this.table = table;
+            applyPriceFormattingAndAlignment();
+        }
+
+        /**
+         * Applies decimal formatting and right alignment to price columns (Unit Price, Total Price).
+         */
+        private void applyPriceFormattingAndAlignment() {
+            DecimalFormatRenderer renderer = new DecimalFormatRenderer();
+            renderer.setHorizontalAlignment(SwingConstants.RIGHT);
+            TableColumnModel columnModel = table.getColumnModel();
+            // Apply to Unit Price (index 5) and Total Price (index 6)
+            columnModel.getColumn(5).setCellRenderer(renderer);
+            columnModel.getColumn(6).setCellRenderer(renderer);
+        }
+
+        /**
+         * Inner renderer to format double values to two decimal places.
+         */
+        private static class DecimalFormatRenderer extends DefaultTableCellRenderer {
+            private final DecimalFormat formatter = new DecimalFormat("#0.00");
+
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                                                                   boolean isSelected, boolean hasFocus,
+                                                                   int row, int column) {
+                if (value instanceof Number) {
+                    value = formatter.format(((Number) value).doubleValue());
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane thDetailsScrollPane;
+    private javax.swing.JTable thDetailstbl;
     // End of variables declaration//GEN-END:variables
 }

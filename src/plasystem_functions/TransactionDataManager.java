@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Manages transaction data in the PlaSystem database, providing methods to add and load transactions.
+ * Manages transaction data in the PlaSystem database, providing methods to add, load, and delete transactions.
  */
 public class TransactionDataManager {
     private static final String INSERT_TRANSACTION_QUERY =
@@ -22,6 +22,8 @@ public class TransactionDataManager {
         "SELECT * FROM Transactions";
     private static final String SELECT_TRANSACTION_ITEMS_QUERY =
         "SELECT * FROM TransactionItems WHERE TI_TRANS_ID = ?";
+    private static final String DELETE_TRANSACTION_QUERY =
+        "DELETE FROM Transactions WHERE TRANS_ID = ?";
 
     private List<TransactionData> transactionList;
 
@@ -270,6 +272,32 @@ public class TransactionDataManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Deletes a transaction from the database by its transaction ID.
+     *
+     * @param transactionId The ID of the transaction to delete.
+     * @return True if the transaction was deleted successfully, false otherwise.
+     */
+    public boolean deleteTransaction(int transactionId) {
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(DELETE_TRANSACTION_QUERY)) {
+            pstmt.setInt(1, transactionId);
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                loadTransactions(); // Refresh the transaction list
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                "Error deleting transaction: " + e.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 

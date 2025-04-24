@@ -552,7 +552,7 @@ public class MainProgramGUI extends JFrame {
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     private void transactHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactHistoryBtnActionPerformed
-        JFrame transactionHistoryPanel = new TransactionHistoryGUI();
+        JFrame transactionHistoryPanel = new TransactionHistoryGUI(transactionDataHandling);
         transactionHistoryPanel.setVisible(true);
         transactionHistoryPanel.pack();
         transactionHistoryPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

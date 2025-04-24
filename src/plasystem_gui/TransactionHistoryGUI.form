@@ -27,64 +27,72 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane1" pref="667" max="32767" attributes="0"/>
+          <Component id="Design1" max="32767" attributes="0"/>
+          <Component id="transHistoryScrollPane" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-              <Component id="ExportBtn" pref="99" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="456" max="-2" attributes="0"/>
-              <Component id="DetailsBtn" pref="99" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="searchTxtField" min="-2" pref="123" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="searchPrmtrBox" min="-2" pref="111" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="195" max="-2" attributes="0"/>
+                      <Component id="refreshBtn" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="deleteBtn" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="exportBtn" pref="87" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="469" max="-2" attributes="0"/>
+                      <Component id="detailsBtn" pref="99" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-          </Group>
-          <Component id="Design1" alignment="0" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="searchTxtField" pref="131" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="searchPrmtrBox" pref="102" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="339" max="-2" attributes="0"/>
-              <Component id="DeleteBtn" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Component id="Design1" pref="101" max="32767" attributes="0"/>
+              <Component id="Design1" pref="109" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="deleteBtn" alignment="3" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="searchTxtField" alignment="3" max="32767" attributes="0"/>
+                          <Component id="searchPrmtrBox" alignment="3" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="refreshBtn" alignment="0" pref="25" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+              <Component id="transHistoryScrollPane" min="-2" pref="361" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="searchPrmtrBox" alignment="3" max="32767" attributes="0"/>
-                  <Component id="searchTxtField" alignment="3" max="32767" attributes="0"/>
-                  <Component id="DeleteBtn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="detailsBtn" alignment="3" pref="26" max="32767" attributes="0"/>
+                  <Component id="exportBtn" alignment="3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="346" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="ExportBtn" max="32767" attributes="0"/>
-                  <Component id="DetailsBtn" min="-2" pref="33" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+    <Container class="javax.swing.JScrollPane" name="transHistoryScrollPane">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="transHistorytbl">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="8" rowCount="4">
+              <Table columnCount="6" rowCount="4">
                 <Column editable="false" title="ID" type="java.lang.Integer"/>
-                <Column editable="false" title="Year" type="java.lang.String"/>
-                <Column editable="false" title="Month" type="java.lang.String"/>
-                <Column editable="false" title="Day" type="java.lang.String"/>
+                <Column editable="false" title="Date" type="java.lang.String"/>
                 <Column editable="false" title="Time" type="java.lang.String"/>
                 <Column editable="false" title="Total Amount" type="java.lang.Double"/>
                 <Column editable="false" title="Payment Amount" type="java.lang.Double"/>
@@ -123,50 +131,48 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
               </TableColumnModel>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="transHistorytbl.setAutoCreateRowSorter(true);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="ExportBtn">
+    <Component class="javax.swing.JButton" name="exportBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="\ud83d\udda8&#xfe0f; Export" containsInvalidXMLChars="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="DetailsBtn">
+    <Component class="javax.swing.JButton" name="detailsBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="See Details"/>
         <Property name="inheritsPopupMenu" type="boolean" value="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DetailsBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="detailsBtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="searchTxtField">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="searchTxtFieldKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="searchPrmtrBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
+          <StringArray count="7">
             <StringItem index="0" value="ID"/>
-            <StringItem index="1" value="Date"/>
-            <StringItem index="2" value="Total Amount"/>
-            <StringItem index="3" value="Payment Amount"/>
-            <StringItem index="4" value="Change Given"/>
+            <StringItem index="1" value="Year"/>
+            <StringItem index="2" value="Month"/>
+            <StringItem index="3" value="Day"/>
+            <StringItem index="4" value="Total Amount"/>
+            <StringItem index="5" value="Payment Amount"/>
+            <StringItem index="6" value="Change Given"/>
           </StringArray>
         </Property>
       </Properties>
@@ -186,7 +192,7 @@
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="DeleteBtn">
+    <Component class="javax.swing.JButton" name="deleteBtn">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="66" green="66" red="ff" type="rgb"/>
@@ -201,7 +207,15 @@
         <Property name="inheritsPopupMenu" type="boolean" value="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DeleteBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteBtnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="refreshBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Refresh"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="refreshBtnActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
