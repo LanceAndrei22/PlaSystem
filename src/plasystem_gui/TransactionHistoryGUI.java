@@ -123,7 +123,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             }
         });
 
-        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Year", "Month", "Day", "Total Amount", "Payment Amount", "Change Given" }));
+        searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Year", "Month", "Day", "Date", "Total Amount", "Payment Amount", "Change Given" }));
 
         Design1.setBackground(new java.awt.Color(255, 102, 102));
         Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -176,14 +176,14 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, Short.MAX_VALUE)
                 .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(searchTxtField)
                             .addComponent(searchPrmtrBox)))
-                    .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                    .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deleteBtn))
                 .addGap(3, 3, 3)
                 .addComponent(transHistoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -276,6 +276,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             case "ID":
                 columnIndex = 0;
                 break;
+            case "Date":
             case "Year":
             case "Month":
             case "Day":
@@ -299,7 +300,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Handle month name to numeric conversion
+        // Handle month name to numeric conversion for Month parameter
         String filterText = searchText;
         if (param.equals("Month")) {
             filterText = MonthConverter.monthNameToNumeric(searchText);
@@ -307,13 +308,20 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
 
         // Apply case-insensitive regex filter
         try {
-            if (param.equals("Year") || param.equals("Month") || param.equals("Day")) {
-                // Filter on the Date column (YYYY-MM-DD)
-                String regex = param.equals("Year") ? "^" + filterText + "-.*" :
-                              param.equals("Month") ? "^\\d{4}-" + filterText + "-.*" :
-                              "^\\d{4}-\\d{2}-" + filterText + ".*";
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + regex, columnIndex));
+            if (param.equals("Date")) {
+                // Filter for full date (YYYY-MM-DD)
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex));
+            } else if (param.equals("Year")) {
+                // Filter for year
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)^" + filterText + "-.*", columnIndex));
+            } else if (param.equals("Month")) {
+                // Filter for month
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)^\\d{4}-" + filterText + "-.*", columnIndex));
+            } else if (param.equals("Day")) {
+                // Filter for day
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)^\\d{4}-\\d{2}-" + filterText + ".*", columnIndex));
             } else {
+                // Filter for other columns (ID, Total Amount, Payment Amount, Change Given)
                 sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, columnIndex));
             }
         } catch (Exception e) {
