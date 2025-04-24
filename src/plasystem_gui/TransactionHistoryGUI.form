@@ -138,7 +138,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="transHistorytbl.setAutoCreateRowSorter(true);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="transHistorytbl.setAutoCreateRowSorter(true);&#xa;transHistorytbl.getTableHeader().setReorderingAllowed(false);"/>
           </AuxValues>
         </Component>
       </SubComponents>

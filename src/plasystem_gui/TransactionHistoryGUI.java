@@ -79,6 +79,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         setResizable(false);
 
         transHistorytbl.setAutoCreateRowSorter(true);
+        transHistorytbl.getTableHeader().setReorderingAllowed(false);
         transHistorytbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -269,31 +270,6 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
 
         String searchText = searchTxtField.getText().trim();
         String param = searchPrmtrBox.getSelectedItem().toString();
-        int columnIndex;
-
-        // Map parameter to column index
-        switch (param) {
-            case "ID":
-                columnIndex = 0;
-                break;
-            case "Date":
-            case "Year":
-            case "Month":
-            case "Day":
-                columnIndex = 1; // Date column
-                break;
-            case "Total Amount":
-                columnIndex = 3;
-                break;
-            case "Payment Amount":
-                columnIndex = 4;
-                break;
-            case "Change Given":
-                columnIndex = 5;
-                break;
-            default:
-                return;
-        }
 
         if (searchText.isEmpty()) {
             sorter.setRowFilter(null);
@@ -301,29 +277,28 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         }
 
         // Handle month name to numeric conversion for Month parameter
-        String filterText = searchText;
-        if (param.equals("Month")) {
-            filterText = MonthConverter.monthNameToNumeric(searchText);
-        }
+        String filterText = param.equals("Month") ? MonthConverter.monthNameToNumeric(searchText) : searchText;
 
-        // Apply case-insensitive regex filter
+        // Map parameter to column index using switch expression
+        int columnIndex = switch (param) {
+            case "ID" -> 0;
+            case "Date", "Year", "Month", "Day" -> 1; // Date column
+            case "Total Amount" -> 3;
+            case "Payment Amount" -> 4;
+            case "Change Given" -> 5;
+            default -> throw new IllegalArgumentException("Invalid search parameter: " + param);
+        };
+
+        // Apply case-insensitive regex filter using switch expression
         try {
-            if (param.equals("Date")) {
-                // Filter for full date (YYYY-MM-DD)
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex));
-            } else if (param.equals("Year")) {
-                // Filter for year
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)^" + filterText + "-.*", columnIndex));
-            } else if (param.equals("Month")) {
-                // Filter for month
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)^\\d{4}-" + filterText + "-.*", columnIndex));
-            } else if (param.equals("Day")) {
-                // Filter for day
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)^\\d{4}-\\d{2}-" + filterText + ".*", columnIndex));
-            } else {
-                // Filter for other columns (ID, Total Amount, Payment Amount, Change Given)
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, columnIndex));
-            }
+            RowFilter<DefaultTableModel, Object> filter = switch (param) {
+                case "Date" -> RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex);
+                case "Year" -> RowFilter.regexFilter("(?i)^" + filterText + "-.*", columnIndex);
+                case "Month" -> RowFilter.regexFilter("(?i)^\\d{4}-" + filterText + "-.*", columnIndex);
+                case "Day" -> RowFilter.regexFilter("(?i)^\\d{4}-\\d{2}-" + filterText + ".*", columnIndex);
+                default -> RowFilter.regexFilter("(?i)" + filterText, columnIndex);
+            };
+            sorter.setRowFilter(filter);
         } catch (Exception e) {
             sorter.setRowFilter(null);
         }

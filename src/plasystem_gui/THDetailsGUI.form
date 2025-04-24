@@ -113,7 +113,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="thDetailstbl.setAutoCreateRowSorter(true);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="thDetailstbl.setAutoCreateRowSorter(true);&#xa;thDetailstbl.getTableHeader().setReorderingAllowed(false);"/>
           </AuxValues>
         </Component>
       </SubComponents>

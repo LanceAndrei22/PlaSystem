@@ -66,6 +66,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
         setResizable(false);
 
         thDetailstbl.setAutoCreateRowSorter(true);
+        thDetailstbl.getTableHeader().setReorderingAllowed(false);
         thDetailstbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
