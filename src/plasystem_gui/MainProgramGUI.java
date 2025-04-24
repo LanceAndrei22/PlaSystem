@@ -16,22 +16,22 @@ import java.awt.event.*;
  */
 public class MainProgramGUI extends JFrame {
     // Instance of ProductDataManager to manage data operations
-    private ProductDataManager productDataHandling = new ProductDataManager();
+    private final ProductDataManager productDataHandling = new ProductDataManager();
     
     // List of ProductData retrieved from the database
-    private List<ProductData> productList = productDataHandling.getList();
+    private final List<ProductData> productList = productDataHandling.getList();
     
     // Instance of RestockDataManager
-    private RestockDataManager restockDataHandling = new RestockDataManager(productDataHandling);
+    private final RestockDataManager restockDataHandling = new RestockDataManager(productDataHandling);
     
     // Instance of TransactionDataManager
-    private TransactionDataManager transactionDataHandling = new TransactionDataManager();
+    private final TransactionDataManager transactionDataHandling = new TransactionDataManager();
     
     // List to track open child GUIs
-    private List<JFrame> childGUIs = new ArrayList<>();
+    private final List<JFrame> childGUIs = new ArrayList<>();
     
     // Map to track instances of active GUIs
-    private Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
+    private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
     
     /**
      * Constructor initializing the Main Program GUI.

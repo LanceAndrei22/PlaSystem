@@ -42,6 +42,7 @@ public class TransactionGUI extends JFrame {
      *
      * @param parentGUI The parent MainProgramGUI to update its table.
      * @param productDataManager The manager for product data operations.
+     * @param transactionDataManager The manager for transaction data operations.
      */
     public TransactionGUI(MainProgramGUI parentGUI, ProductDataManager productDataManager, TransactionDataManager transactionDataManager){
         this.parentGUI = parentGUI;

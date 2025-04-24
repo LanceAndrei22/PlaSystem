@@ -15,8 +15,7 @@ public class EditProductGUI extends JFrame {
     private MainProgramGUI parent;
     private ProductDataManager dataHandling;
     private ProductData product;
-    private int selectedRow;
-    private ErrorValueHandling isDataValid = new ErrorValueHandling();
+    private final ErrorValueHandling isDataValid = new ErrorValueHandling();
     
     
     /**
@@ -39,7 +38,6 @@ public class EditProductGUI extends JFrame {
         this.parent = parent;
         this.dataHandling = dataHandling;
         this.product = product;
-        this.selectedRow = selectedRow;
         initComponents();
         setLocationRelativeTo(null);
 

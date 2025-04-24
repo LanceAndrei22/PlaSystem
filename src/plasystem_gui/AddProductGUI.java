@@ -13,7 +13,7 @@ import javax.swing.event.*;
 public class AddProductGUI extends JFrame {
     private MainProgramGUI parent;
     private ProductDataManager dataHandling;
-    private ErrorValueHandling isDataValid = new ErrorValueHandling();
+    private final ErrorValueHandling isDataValid = new ErrorValueHandling();
 
     /**
      * Default constructor initializing the AddDataGUI.
