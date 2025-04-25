@@ -29,7 +29,7 @@ public class RestockTableRenderer {
 
         // Adjust "Select" column (checkbox)
         TableColumn selectColumn = columnModel.getColumn(0);
-        selectColumn.setPreferredWidth(30); // Fixed small width for checkbox
+        selectColumn.setPreferredWidth(50); // Fixed small width for checkbox
         selectColumn.setMaxWidth(50);
         selectColumn.setMinWidth(20);
 

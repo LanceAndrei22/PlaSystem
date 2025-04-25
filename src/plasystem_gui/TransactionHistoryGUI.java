@@ -28,7 +28,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         updateTable();
-        new TransactionTableRenderer(transHistorytbl, 667); // 667 is the table width
+        new TransactionHistoryTableRenderer(transHistorytbl, 667); // 667 is the table width
     }
     
     /**
@@ -66,13 +66,13 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
 
         transHistoryScrollPane = new javax.swing.JScrollPane();
         transHistorytbl = new javax.swing.JTable();
-        exportBtn = new javax.swing.JButton();
         detailsBtn = new javax.swing.JButton();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
         Design1 = new javax.swing.JLabel();
         deleteBtn = new javax.swing.JButton();
         refreshBtn = new javax.swing.JButton();
+        exportBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
@@ -107,8 +107,6 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             }
         });
         transHistoryScrollPane.setViewportView(transHistorytbl);
-
-        exportBtn.setText("🖨️ Export");
 
         detailsBtn.setText("See Details");
         detailsBtn.setInheritsPopupMenu(true);
@@ -149,6 +147,14 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             }
         });
 
+        exportBtn.setText("🖨️ Export");
+        exportBtn.setInheritsPopupMenu(true);
+        exportBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,8 +173,8 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                        .addGap(469, 469, 469)
+                        .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                        .addGap(467, 467, 467)
                         .addComponent(detailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)))
                 .addGap(6, 6, 6))
         );
@@ -183,14 +189,17 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(searchTxtField)
                             .addComponent(searchPrmtrBox)))
-                    .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(deleteBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(refreshBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(3, 3, 3)
                 .addComponent(transHistoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(detailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-                    .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -303,6 +312,10 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             sorter.setRowFilter(null);
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
+
+    private void exportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_exportBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design1;

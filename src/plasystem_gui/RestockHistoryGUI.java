@@ -1,16 +1,59 @@
 package plasystem_gui;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import plasystem_functions.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.util.*;
+
 
 public class RestockHistoryGUI extends javax.swing.JFrame {
+    private RestockDataManager restockDataManager;
+    private List<RestockData> restockList;
 
     /**
-     * Creates new form RestockHistoryGUI
+     * Default constructor initializing the RestockHistoryGUI.
      */
     public RestockHistoryGUI() {
+        this.restockDataManager = new RestockDataManager(new ProductDataManager());
+        this.restockList = new LinkedList<>();
         initComponents();
         setLocationRelativeTo(null);
+    }
+
+    /**
+     * Constructor initializing the RestockHistoryGUI with a provided RestockDataManager.
+     *
+     * @param restockDataManager The RestockDataManager instance for database operations.
+     */
+    public RestockHistoryGUI(RestockDataManager restockDataManager) {
+        this.restockDataManager = restockDataManager;
+        this.restockList = restockDataManager.getRestockList();
+        initComponents();
+        setLocationRelativeTo(null);
+        updateTable();
+        // Apply table renderer for formatting (541 is the table width)
+        new RestockHistoryTableRenderer(restockHistorytbl, 541);
+    }
+    
+    /**
+     * Updates the restock history table with data from the database.
+     */
+    private void updateTable() {
+        DefaultTableModel model = (DefaultTableModel) restockHistorytbl.getModel();
+        model.setRowCount(0); // Clear existing rows
+
+        for (RestockData restock : restockList) {
+            model.addRow(new Object[]{
+                restock.getRestockId(),
+                restock.getRestockDateYear() + "-" + restock.getRestockDateMonth() + "-" + restock.getRestockDateDay(),
+                restock.getRestockDateTime()
+            });
+        }
+
+        // Reapply search filter if active
+        if (!searchTxtField.getText().trim().isEmpty()) {
+            searchTxtFieldKeyReleased(null);
+        }
     }
 
     /**
@@ -24,16 +67,20 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
 
         restockHistoryScrollPane = new javax.swing.JScrollPane();
         restockHistorytbl = new javax.swing.JTable();
-        detailsBtn = new javax.swing.JButton();
+        exportBtn = new javax.swing.JButton();
         TitleLabel = new javax.swing.JLabel();
         Design1 = new javax.swing.JLabel();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
         deleteBtn = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
+        detailsBtn1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        restockHistorytbl.setAutoCreateRowSorter(true);
+        restockHistorytbl.getTableHeader().setReorderingAllowed(false);
         restockHistorytbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -62,11 +109,11 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
         });
         restockHistoryScrollPane.setViewportView(restockHistorytbl);
 
-        detailsBtn.setText("See Details");
-        detailsBtn.setInheritsPopupMenu(true);
-        detailsBtn.addActionListener(new java.awt.event.ActionListener() {
+        exportBtn.setText("🖨️ Export");
+        exportBtn.setInheritsPopupMenu(true);
+        exportBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                detailsBtnActionPerformed(evt);
+                exportBtnActionPerformed(evt);
             }
         });
 
@@ -75,6 +122,12 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
         Design1.setBackground(new java.awt.Color(153, 204, 0));
         Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Design1.setOpaque(true);
+
+        searchTxtField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTxtFieldKeyReleased(evt);
+            }
+        });
 
         searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Year", "Month", "Day", "Date" }));
 
@@ -89,27 +142,45 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
             }
         });
 
+        refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
+
+        detailsBtn1.setText("See Details");
+        detailsBtn1.setInheritsPopupMenu(true);
+        detailsBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detailsBtn1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(restockHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(437, 437, 437)
-                        .addComponent(detailsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(searchTxtField, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(221, 221, 221)
-                        .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(76, 76, 76)
                 .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(searchTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchPrmtrBox, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(143, 143, 143)
+                        .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(exportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(detailsBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE))
         );
@@ -121,36 +192,130 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchTxtField)
                     .addComponent(searchPrmtrBox)
-                    .addComponent(deleteBtn))
+                    .addComponent(deleteBtn)
+                    .addComponent(refreshBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(restockHistoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(restockHistoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(detailsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exportBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(detailsBtn1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 346, Short.MAX_VALUE)))
+                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 453, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void detailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsBtnActionPerformed
-        JFrame panel = new RHDetailsGUI();
-        panel.setVisible(true);
-        panel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_detailsBtnActionPerformed
-
-    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+    
+    /**
+     * Handles the "Export" button click (placeholder for future implementation).
+     */
+    private void exportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportBtnActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_exportBtnActionPerformed
+    
+    /**
+     * Handles the "Delete" button click, removing the selected restock using RestockDataManager.
+     */
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int selectedRow = restockHistorytbl.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a restock to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Convert view index to model index
+        selectedRow = restockHistorytbl.convertRowIndexToModel(selectedRow);
+        int restockId = (int) restockHistorytbl.getModel().getValueAt(selectedRow, 0);
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Do you really want to delete restock ID " + restockId + "?",
+            "Delete",
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean success = restockDataManager.deleteRestock(restockId);
+            if (success) {
+                restockList = restockDataManager.getRestockList(); // Refresh list
+                updateTable();
+                JOptionPane.showMessageDialog(this, "Restock deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete restock.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+         updateTable();
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void detailsBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsBtn1ActionPerformed
+        int selectedRow = restockHistorytbl.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a restock to view details.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        selectedRow = restockHistorytbl.convertRowIndexToModel(selectedRow);
+        int restockId = (int) restockHistorytbl.getModel().getValueAt(selectedRow, 0);
+        RestockData selectedRestock = restockList.stream()
+            .filter(r -> r.getRestockId() == restockId)
+            .findFirst()
+            .orElse(null);
+
+        if (selectedRestock != null) {
+            RHDetailsGUI detailsPanel = new RHDetailsGUI(selectedRestock);
+            detailsPanel.setVisible(true);
+            detailsPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Restock not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_detailsBtn1ActionPerformed
+
+    private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        DefaultTableModel model = (DefaultTableModel) restockHistorytbl.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        restockHistorytbl.setRowSorter(sorter);
+
+        String searchText = searchTxtField.getText().trim();
+        String param = searchPrmtrBox.getSelectedItem().toString();
+
+        if (searchText.isEmpty()) {
+            sorter.setRowFilter(null);
+            return;
+        }
+
+        String filterText = param.equals("Month") ? MonthConverter.monthNameToNumeric(searchText) : searchText;
+
+        int columnIndex = switch (param) {
+            case "ID" -> 0;
+            case "Date", "Year", "Month", "Day" -> 1;
+            default -> throw new IllegalArgumentException("Invalid search parameter: " + param);
+        };
+
+        try {
+            RowFilter<DefaultTableModel, Object> filter = switch (param) {
+                case "Date" -> RowFilter.regexFilter("(?i)" + searchText, columnIndex);
+                case "Year" -> RowFilter.regexFilter("(?i)^" + filterText + "-.*", columnIndex);
+                case "Month" -> RowFilter.regexFilter("(?i)^\\d{4}-" + filterText + "-.*", columnIndex);
+                case "Day" -> RowFilter.regexFilter("(?i)^\\d{4}-\\d{2}-" + filterText + ".*", columnIndex);
+                default -> RowFilter.regexFilter("(?i)" + filterText, columnIndex);
+            };
+            sorter.setRowFilter(filter);
+        } catch (Exception e) {
+            sorter.setRowFilter(null);
+        }
+    }//GEN-LAST:event_searchTxtFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design1;
     private javax.swing.JLabel TitleLabel;
     private javax.swing.JButton deleteBtn;
-    private javax.swing.JButton detailsBtn;
+    private javax.swing.JButton detailsBtn1;
+    private javax.swing.JButton exportBtn;
+    private javax.swing.JButton refreshBtn;
     private javax.swing.JScrollPane restockHistoryScrollPane;
     private javax.swing.JTable restockHistorytbl;
     private javax.swing.JComboBox<String> searchPrmtrBox;

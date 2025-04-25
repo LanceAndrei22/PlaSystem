@@ -25,7 +25,7 @@ public class MainProgramGUI extends JFrame {
     private final RestockDataManager restockDataHandling = new RestockDataManager(productDataHandling);
     
     // Instance of TransactionDataManager
-    private final TransactionDataManager transactionDataHandling = new TransactionDataManager();
+    private final TransactionDataManager transactionDataHandling = new TransactionDataManager(productDataHandling);
     
     // List to track open child GUIs
     private final List<JFrame> childGUIs = new ArrayList<>();
@@ -560,7 +560,7 @@ public class MainProgramGUI extends JFrame {
     }//GEN-LAST:event_transactHistoryBtnActionPerformed
 
     private void restockHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockHistoryBtnActionPerformed
-        JFrame restockHistoryPanel = new RestockHistoryGUI();
+        JFrame restockHistoryPanel = new RestockHistoryGUI(restockDataHandling);
         restockHistoryPanel.setVisible(true);
         restockHistoryPanel.pack();
         restockHistoryPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

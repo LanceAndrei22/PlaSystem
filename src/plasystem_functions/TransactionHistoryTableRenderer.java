@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.text.DecimalFormat;
 
-public class TransactionTableRenderer {
+public class TransactionHistoryTableRenderer {
     private final JTable table;
     private final int tableWidth;
 
@@ -14,7 +14,7 @@ public class TransactionTableRenderer {
      * @param table      The JTable to render.
      * @param tableWidth The preferred width of the table.
      */
-    public TransactionTableRenderer(JTable table, int tableWidth) {
+    public TransactionHistoryTableRenderer(JTable table, int tableWidth) {
         this.table = table;
         this.tableWidth = tableWidth;
         applyColumnWidths();
@@ -31,7 +31,7 @@ public class TransactionTableRenderer {
         int[] widths = new int[columnCount];
 
         // Set ID column to minimal width
-        widths[0] = 30; // ID column
+        widths[0] = 40; // ID column
         int remainingWidth = tableWidth - widths[0];
         int equalWidth = remainingWidth / (columnCount - 1);
 

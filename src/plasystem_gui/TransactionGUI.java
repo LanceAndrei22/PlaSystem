@@ -636,10 +636,10 @@ public class TransactionGUI extends JFrame {
                             String month = String.format("%02d", dateTime.getMonthValue());
                             String day = String.format("%02d", dateTime.getDayOfMonth());
                             String time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                            
+
                             double roundedTotal = new BigDecimal(totalPurchase).setScale(2, RoundingMode.HALF_UP).doubleValue();
                             double roundedChange = new BigDecimal(customerMoney - totalPurchase).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                            
+
                             int transId = transactionManager.addTransaction(
                                 year,
                                 month,
@@ -652,26 +652,6 @@ public class TransactionGUI extends JFrame {
                             );
 
                             if (transId != -1) {
-                                for (TransactionItemData item : transactionItems) {
-                                    ProductData product = productDataManager.getList().stream()
-                                        .filter(p -> p.getProductId() == item.getTI_productId())
-                                        .findFirst()
-                                        .orElse(null);
-                                    if (product != null) {
-                                        int newQuantity = product.getProductQuantity() - item.getTI_buyQuantity();
-                                        productDataManager.updateProduct(
-                                            product.getProductId(),
-                                            product.getProductName(),
-                                            product.getProductBrand(),
-                                            product.getProductSize(),
-                                            product.getProductType(),
-                                            product.getProductPrice(),
-                                            newQuantity,
-                                            product.getProductRestockValue()
-                                        );
-                                    }
-                                }
-
                                 parentGUI.refreshTable();
                                 populateProductTable();
 

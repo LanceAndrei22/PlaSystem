@@ -51,7 +51,7 @@ public class RestockData {
         this.restockDateMonth = restockDate;
     }
     
-    public String getRestockDateYearDay() {
+    public String getRestockDateDay() {
         return restockDateDay;
     }
 

@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Manages transaction data in the PlaSystem database, providing methods to add, load, and delete transactions.
+ * Manages transaction data in the PlaSystem database, providing methods to add, load, and delete transactions,
+ * including updating product quantities.
  */
 public class TransactionDataManager {
     private static final String INSERT_TRANSACTION_QUERY =
@@ -24,13 +25,19 @@ public class TransactionDataManager {
         "SELECT * FROM TransactionItems WHERE TI_TRANS_ID = ?";
     private static final String DELETE_TRANSACTION_QUERY =
         "DELETE FROM Transactions WHERE TRANS_ID = ?";
+    private static final String UPDATE_PRODUCT_QUANTITY_QUERY =
+        "UPDATE Product SET PROD_QUANTITY = PROD_QUANTITY - ? WHERE PROD_ID = ?";
 
+    private final ProductDataManager productDataManager;
     private List<TransactionData> transactionList;
 
     /**
-     * Constructor initializes the transaction list.
+     * Constructor initializes the transaction list and ProductDataManager dependency.
+     *
+     * @param productDataManager The manager for product data operations.
      */
-    public TransactionDataManager() {
+    public TransactionDataManager(ProductDataManager productDataManager) {
+        this.productDataManager = productDataManager;
         this.transactionList = new LinkedList<>();
         loadTransactions();
     }
@@ -105,7 +112,7 @@ public class TransactionDataManager {
     }
 
     /**
-     * Adds a new transaction to the database along with its items.
+     * Adds a new transaction to the database along with its items and updates product quantities.
      *
      * @param transDateYear   The year of the transaction date.
      * @param transDateMonth  The month of the transaction date.
@@ -187,12 +194,12 @@ public class TransactionDataManager {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
+            // Insert transaction
             pstmt = conn.prepareStatement(INSERT_TRANSACTION_QUERY, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, transDateYear.trim());
             pstmt.setString(2, transDateMonth.trim());
             pstmt.setString(3, transDateDay.trim());
             pstmt.setString(4, transDateTime.trim());
-            // Round totalAmount and changeAmount to two decimal places
             pstmt.setDouble(5, new BigDecimal(totalAmount).setScale(2, RoundingMode.HALF_UP).doubleValue());
             pstmt.setDouble(6, paymentAmount);
             pstmt.setDouble(7, new BigDecimal(changeAmount).setScale(2, RoundingMode.HALF_UP).doubleValue());
@@ -208,6 +215,7 @@ public class TransactionDataManager {
                 return -1;
             }
 
+            // Insert transaction items
             pstmt = conn.prepareStatement(INSERT_TRANSACTION_ITEM_QUERY);
             for (TransactionItemData item : transactionItems) {
                 if (!validateTransactionItem(item)) {
@@ -222,7 +230,6 @@ public class TransactionDataManager {
                 pstmt.setString(6, item.getTI_productType().trim());
                 pstmt.setInt(7, item.getTI_buyQuantity());
                 pstmt.setDouble(8, item.getTI_unitPrice());
-                // Round TI_PROD_TOTALPRICE to two decimal places
                 pstmt.setDouble(9, new BigDecimal(item.getTI_totalPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue());
                 pstmt.addBatch();
             }
@@ -234,8 +241,25 @@ public class TransactionDataManager {
                 }
             }
 
+            // Update product quantities
+            pstmt = conn.prepareStatement(UPDATE_PRODUCT_QUANTITY_QUERY);
+            for (TransactionItemData item : transactionItems) {
+                pstmt.setInt(1, item.getTI_buyQuantity());
+                pstmt.setInt(2, item.getTI_productId());
+                rowsAffected = pstmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    conn.rollback();
+                    JOptionPane.showMessageDialog(null,
+                        "Failed to update product quantity for product ID: " + item.getTI_productId(),
+                        "Database Error",
+                        JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+            }
+
             conn.commit();
             loadTransactions();
+            productDataManager.loadProducts(); // Refresh product list
             return transactionId;
         } catch (SQLException e) {
             try {
@@ -283,7 +307,7 @@ public class TransactionDataManager {
      */
     public boolean deleteTransaction(int transactionId) {
         try (Connection conn = DBConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(DELETE_TRANSACTION_QUERY)) {
+             PreparedStatement pstmt = conn.prepareStatement(DELETE_TRANSACTION_QUERY)) {
             pstmt.setInt(1, transactionId);
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -366,6 +390,7 @@ public class TransactionDataManager {
      * @return The list of TransactionData objects.
      */
     public List<TransactionData> getTransactionList() {
+        loadTransactions(); // Refresh the list before returning
         return transactionList;
     }
 

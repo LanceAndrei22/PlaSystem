@@ -42,8 +42,8 @@
                       <Component id="deleteBtn" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="exportBtn" pref="87" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="469" max="-2" attributes="0"/>
+                      <Component id="exportBtn" pref="89" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="467" max="-2" attributes="0"/>
                       <Component id="detailsBtn" pref="99" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -64,15 +64,20 @@
                           <Component id="searchPrmtrBox" alignment="3" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="refreshBtn" alignment="0" max="32767" attributes="0"/>
-                  <Component id="deleteBtn" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="refreshBtn" alignment="0" max="32767" attributes="0"/>
+                          <Component id="deleteBtn" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
               <Component id="transHistoryScrollPane" min="-2" pref="361" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="detailsBtn" alignment="3" pref="26" max="32767" attributes="0"/>
-                  <Component id="exportBtn" alignment="3" max="32767" attributes="0"/>
+                  <Component id="exportBtn" alignment="3" pref="26" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -143,11 +148,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="exportBtn">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="\ud83d\udda8&#xfe0f; Export" containsInvalidXMLChars="true"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="detailsBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="See Details"/>
@@ -217,6 +217,15 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="refreshBtnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="exportBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="\ud83d\udda8&#xfe0f; Export" containsInvalidXMLChars="true"/>
+        <Property name="inheritsPopupMenu" type="boolean" value="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportBtnActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -1,13 +1,96 @@
 package plasystem_gui;
 
+import plasystem_functions.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.text.DecimalFormat;
+
 public class RHDetailsGUI extends javax.swing.JFrame {
+    private final RestockData restock;
 
     /**
-     * Creates new form RHDetailsGUI
+     * Default constructor initializing the RHDetailsGUI.
      */
     public RHDetailsGUI() {
+        this.restock = null;
         initComponents();
         setLocationRelativeTo(null);
+    }
+
+    /**
+     * Creates new form RHDetailsGUI with restock data.
+     *
+     * @param restock The restock whose items are to be displayed.
+     */
+    public RHDetailsGUI(RestockData restock) {
+        this.restock = restock;
+        initComponents();
+        setLocationRelativeTo(null);
+        new PriceTableRenderer(rhDetailsTbl);
+        updateTable();
+    }
+    
+    /**
+     * Updates the table with restock items.
+     */
+    private void updateTable() {
+        if (restock == null || restock.getRestockItems() == null) {
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) rhDetailsTbl.getModel();
+        model.setRowCount(0); // Clear existing rows
+
+        for (RestockItemData item : restock.getRestockItems()) {
+            model.addRow(new Object[]{
+                item.getRI_productName(),
+                item.getRI_productBrand(),
+                item.getRI_productSize(),
+                item.getRI_productType(),
+                item.getRI_productPrice(),
+                item.getRI_restockedQuantity()
+            });
+        }
+    }
+    
+    /**
+     * Custom renderer to format and align price columns.
+     */
+    private static class PriceTableRenderer {
+        private final JTable table;
+
+        public PriceTableRenderer(JTable table) {
+            this.table = table;
+            applyPriceFormattingAndAlignment();
+        }
+
+        /**
+         * Applies decimal formatting and right alignment to the price column.
+         */
+        private void applyPriceFormattingAndAlignment() {
+            DecimalFormatRenderer renderer = new DecimalFormatRenderer();
+            renderer.setHorizontalAlignment(SwingConstants.RIGHT);
+            TableColumnModel columnModel = table.getColumnModel();
+            // Apply to Price (index 4)
+            columnModel.getColumn(4).setCellRenderer(renderer);
+        }
+
+        /**
+         * Inner renderer to format double values to two decimal places.
+         */
+        private static class DecimalFormatRenderer extends DefaultTableCellRenderer {
+            private final DecimalFormat formatter = new DecimalFormat("#0.00");
+
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                                                                   boolean isSelected, boolean hasFocus,
+                                                                   int row, int column) {
+                if (value instanceof Number) {
+                    value = formatter.format(((Number) value).doubleValue());
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        }
     }
 
     /**
@@ -26,6 +109,8 @@ public class RHDetailsGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        rhDetailsTbl.setAutoCreateRowSorter(true);
+        rhDetailsTbl.getTableHeader().setReorderingAllowed(false);
         rhDetailsTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},

@@ -3,13 +3,12 @@ package plasystem_functions;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import javax.swing.JOptionPane;
-import java.util.List;
-import java.util.Map;
 
 /**
- * Manages restocking operations in the PlaSystem database, including creating restock events
- * and updating product quantities, with comprehensive error checking based on schema constraints.
+ * Manages restocking operations in the PlaSystem database, including creating, retrieving,
+ * and deleting restock events, with comprehensive error checking based on schema constraints.
  */
 public class RestockDataManager {
     private static final String INSERT_RESTOCK_QUERY = 
@@ -21,16 +20,80 @@ public class RestockDataManager {
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_PRODUCT_QUANTITY_QUERY = 
         "UPDATE Product SET PROD_QUANTITY = PROD_QUANTITY + ? WHERE PROD_ID = ?";
+    private static final String DELETE_RESTOCK_QUERY = 
+        "DELETE FROM Restock WHERE RESTOCK_ID = ?";
+    private static final String SELECT_RESTOCK_QUERY = 
+        "SELECT * FROM Restock";
+    private static final String SELECT_RESTOCK_ITEMS_QUERY = 
+        "SELECT * FROM RestockItems WHERE RI_RESTOCK_ID = ?";
 
-    private ProductDataManager productDataManager;
+    private final ProductDataManager productDataManager;
+    private final LinkedList<RestockData> restockList;
 
     /**
-     * Constructor initializes the ProductDataManager dependency.
+     * Constructor initializes the ProductDataManager dependency and loads restock data.
      *
      * @param productDataManager The manager for product data operations.
      */
     public RestockDataManager(ProductDataManager productDataManager) {
         this.productDataManager = productDataManager;
+        this.restockList = new LinkedList<>();
+        loadRestocks();
+    }
+
+    /**
+     * Retrieves a copy of the list of restock events.
+     *
+     * @return A list of RestockData objects.
+     */
+    public List<RestockData> getRestockList() {
+        return restockList;
+    }
+
+    /**
+     * Loads all restock events and their items from the database into restockList.
+     */
+    private void loadRestocks() {
+        restockList.clear();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement restockStmt = conn.prepareStatement(SELECT_RESTOCK_QUERY);
+             ResultSet restockRs = restockStmt.executeQuery()) {
+
+            while (restockRs.next()) {
+                int restockId = restockRs.getInt("RESTOCK_ID");
+                String year = restockRs.getString("RESTOCK_DATE_YEAR");
+                String month = restockRs.getString("RESTOCK_DATE_MONTH");
+                String day = restockRs.getString("RESTOCK_DATE_DAY");
+                String time = restockRs.getString("RESTOCK_DATE_TIME");
+
+                // Fetch associated restock items
+                List<RestockItemData> items = new ArrayList<>();
+                try (PreparedStatement itemStmt = conn.prepareStatement(SELECT_RESTOCK_ITEMS_QUERY)) {
+                    itemStmt.setInt(1, restockId);
+                    try (ResultSet itemRs = itemStmt.executeQuery()) {
+                        while (itemRs.next()) {
+                            RestockItemData item = new RestockItemData(
+                                itemRs.getInt("RI_ITEM_ID"),
+                                itemRs.getInt("RI_RESTOCK_ID"),
+                                itemRs.getInt("RI_PROD_ID"),
+                                itemRs.getString("RI_PROD_NAME"),
+                                itemRs.getString("RI_PROD_BRAND"),
+                                itemRs.getString("RI_PROD_SIZE"),
+                                itemRs.getString("RI_PROD_TYPE"),
+                                itemRs.getDouble("RI_PROD_PRICE"),
+                                itemRs.getInt("RI_RESTOCKED_QUANTITY")
+                            );
+                            items.add(item);
+                        }
+                    }
+                }
+
+                RestockData restock = new RestockData(restockId, year, month, day, time, items);
+                restockList.add(restock);
+            }
+        } catch (SQLException e) {
+            handleSQLException(e);
+        }
     }
 
     /**
@@ -62,6 +125,7 @@ public class RestockDataManager {
 
             conn.commit();
             productDataManager.loadProducts(); // Refresh product list
+            loadRestocks(); // Refresh restock list
             return true;
         } catch (SQLException e) {
             if (conn != null) {
@@ -127,6 +191,52 @@ public class RestockDataManager {
 
             conn.commit();
             productDataManager.loadProducts(); // Refresh product list
+            loadRestocks(); // Refresh restock list
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            handleSQLException(e);
+            return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Deletes a restock event and its associated items from the database.
+     *
+     * @param restockId The ID of the restock to delete.
+     * @return True if deletion is successful, false otherwise.
+     */
+    public boolean deleteRestock(int restockId) {
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false); // Begin transaction
+
+            try (PreparedStatement pstmt = conn.prepareStatement(DELETE_RESTOCK_QUERY)) {
+                pstmt.setInt(1, restockId);
+                int rowsAffected = pstmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("No restock found with ID: " + restockId);
+                }
+            }
+
+            conn.commit();
+            loadRestocks(); // Refresh restock list
             return true;
         } catch (SQLException e) {
             if (conn != null) {
@@ -331,7 +441,7 @@ public class RestockDataManager {
                 JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null,
-                "Error during restocking: " + errorMessage,
+                "Database error: " + errorMessage,
                 "Database Error",
                 JOptionPane.ERROR_MESSAGE);
         }
