@@ -12,10 +12,37 @@ public class UserAccountDataManager {
     private static final String UPDATE_USER_QUERY = "UPDATE UserAccount SET USER_NAME = ?, USER_PASSWORD = ?, USER_ROLE = ? WHERE USER_NAME = ?";
     
     // Using LinkedList instead of ArrayList
-    private List<UserAccountData> userAccounts;
+    private final List<UserAccountData> userAccounts;
+    
+    // Fields to store logged-in user's username and role
+    private String loggedInUsername;
+    private String loggedInRole;
     
     public UserAccountDataManager() {
         this.userAccounts = new LinkedList<>(); // Initialize as LinkedList
+        this.loggedInUsername = null;
+        this.loggedInRole = null;
+    }
+    
+    // Getters for logged-in username and role
+    public String getLoggedInUsername() {
+        return loggedInUsername;
+    }
+    
+    public String getLoggedInRole() {
+        return loggedInRole;
+    }
+    
+    // Method to set logged-in user details
+    public void setLoggedInUser(String username, String role) {
+        this.loggedInUsername = username;
+        this.loggedInRole = role;
+    }
+    
+    // Method to clear logged-in user details
+    public void clearLoggedInUser() {
+        this.loggedInUsername = null;
+        this.loggedInRole = null;
     }
     
     // Method to fetch and load user accounts from the database
@@ -100,7 +127,6 @@ public class UserAccountDataManager {
         } catch (SQLException e) {
             // SQLite error codes for specific constraints
             String errorMessage = e.getMessage();
-            int errorCode = e.getErrorCode();
             
             if (errorMessage.contains("SQLITE_CONSTRAINT_NOTNULL")) {
                 JOptionPane.showMessageDialog(null, 
@@ -277,7 +303,7 @@ public class UserAccountDataManager {
 
     // Method to validate user login credentials securely
     public boolean validateUserLogin(String username, String password) {
-        String sql = "SELECT 1 FROM UserAccount WHERE USER_NAME = ? AND USER_PASSWORD = ?";
+        String sql = "SELECT USER_ROLE FROM UserAccount WHERE USER_NAME = ? AND USER_PASSWORD = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -286,7 +312,12 @@ public class UserAccountDataManager {
             pstmt.setString(2, password);
 
             try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next(); // If a record is found, login is valid
+                if (rs.next()) {
+                    // Store logged-in user details
+                    setLoggedInUser(username, rs.getString("USER_ROLE"));
+                    return true;
+                }
+                return false;
             }
 
         } catch (SQLException e) {

@@ -7,14 +7,16 @@ import java.awt.event.*;
 public class AddUserAccountGUI extends javax.swing.JFrame {
     
     private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
+    private UserAccountDataManager userAccountDataHandling;
     
     public AddUserAccountGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
     }
     
-    public AddUserAccountGUI(UserAccountsGUI parentGUI) {
+    public AddUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataHandling) {
         this.parentGUI = parentGUI;
+        this.userAccountDataHandling = userAccountDataHandling;
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
         
@@ -191,8 +193,7 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
             JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            UserAccountDataManager manager = new UserAccountDataManager();
-            boolean success = manager.addUserAccount(username, password, role);
+            boolean success = userAccountDataHandling.addUserAccount(username, password, role);
             if (success) {
                 JOptionPane.showMessageDialog(this, 
                     "User account added successfully!",
@@ -201,8 +202,9 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
                 if (parentGUI != null) {
                     parentGUI.refreshTable(); // Refresh the parent GUI table
                 }
+                dispose(); // Close the dialog
             }
-        }      
+        }    
     }//GEN-LAST:event_addBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

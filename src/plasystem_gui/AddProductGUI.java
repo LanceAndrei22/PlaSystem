@@ -12,7 +12,7 @@ import javax.swing.event.*;
  */
 public class AddProductGUI extends JFrame {
     private MainProgramGUI parent;
-    private ProductDataManager dataHandling;
+    private ProductDataManager productDataHandling;
     private final ErrorValueHandling isDataValid = new ErrorValueHandling();
 
     /**
@@ -27,11 +27,11 @@ public class AddProductGUI extends JFrame {
      * Constructor initializing the AddProductGUI with necessary dependencies.
      *
      * @param parent       The parent MainProgramGUI to refresh the table.
-     * @param dataHandling The ProductDataManager to handle database operations.
+     * @param productDataHandling The ProductDataManager to handle database operations.
      */
-    public AddProductGUI(MainProgramGUI parent, ProductDataManager dataHandling) {
+    public AddProductGUI(MainProgramGUI parent, ProductDataManager productDataHandling) {
         this.parent = parent;
-        this.dataHandling = dataHandling;
+        this.productDataHandling = productDataHandling;
         initComponents();
         setLocationRelativeTo(null);
         
@@ -304,7 +304,7 @@ public class AddProductGUI extends JFrame {
             return;
         }
 
-        boolean success = dataHandling.addProduct(name, brand, size, type, price, quantity, restockValue);
+        boolean success = productDataHandling.addProduct(name, brand, size, type, price, quantity, restockValue);
         if (success) {
             parent.refreshTable();
             JOptionPane.showMessageDialog(null, "Product added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);

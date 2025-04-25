@@ -19,7 +19,7 @@ public class ProductDataManager {
         "PROD_QUANTITY = ?, PROD_RESTOCK_VALUE = ? WHERE PROD_ID = ?";
     private static final String DELETE_PRODUCT_QUERY = "DELETE FROM Product WHERE PROD_ID = ?";
 
-    private List<ProductData> productList;
+    private final List<ProductData> productList;
 
     /**
      * Constructor initializes the product list.

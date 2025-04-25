@@ -1,28 +1,31 @@
 package plasystem_gui;
 
+import plasystem_functions.UserAccountData;
 import plasystem_functions.UserAccountDataManager;
 import javax.swing.JOptionPane;
 import java.awt.event.*;
 
 public class EditUserAccountGUI extends javax.swing.JFrame {
     private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
-    private String originalUsername; // Store original username to identify the user for update
+    private UserAccountDataManager userAccountDataHandling;
+    private UserAccountData userAccount; // Store the UserAccountData object
     
     public EditUserAccountGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
     }
     
-    public EditUserAccountGUI(UserAccountsGUI parentGUI, String username, String password, String role) {
+    public EditUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataHandling, UserAccountData userAccount) {
         this.parentGUI = parentGUI;
-        this.originalUsername = username;
+        this.userAccountDataHandling = userAccountDataHandling;
+        this.userAccount = userAccount;
         initComponents();
         setLocationRelativeTo(null); // Center the frame
         
-        // Pre-populate fields
-        usernameTxtField.setText(username);
-        passwordTxtField.setText(password);
-        roleComboBox.setSelectedItem(role);
+        // Pre-populate fields using getter methods
+        usernameTxtField.setText(userAccount.getUsername());
+        passwordTxtField.setText(userAccount.getUserPassword());
+        roleComboBox.setSelectedItem(userAccount.getUserRole());
         
         // Register with parent
         parentGUI.addChildWindow(this);
@@ -190,8 +193,7 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
             JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            UserAccountDataManager manager = new UserAccountDataManager();
-            boolean success = manager.updateUserAccount(originalUsername, username, password, role);
+            boolean success = userAccountDataHandling.updateUserAccount(userAccount.getUsername(), username, password, role);
             if (success) {
                 JOptionPane.showMessageDialog(this, 
                     "User account updated successfully!",

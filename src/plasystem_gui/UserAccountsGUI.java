@@ -14,15 +14,18 @@ import java.awt.event.WindowEvent;
 
 public class UserAccountsGUI extends javax.swing.JFrame {
     
-    private MainProgramGUI parent;
-    private TableRowSorter<DefaultTableModel> sorter; // Store the sorter for reuse
-    private List<JFrame> childWindows = new ArrayList<>(); // Track open child GUIs
+    private final MainProgramGUI parent;
+    private final UserAccountDataManager userAccountDataHandling;
+    private final TableRowSorter<DefaultTableModel> sorter; // Store the sorter for reuse
+    private final List<JFrame> childWindows = new ArrayList<>(); // Track open child GUIs
 
-    public UserAccountsGUI(MainProgramGUI parent) {
+    public UserAccountsGUI(MainProgramGUI parent, UserAccountDataManager userAccountDataHandling) {
+        this.parent = parent;
+        this.userAccountDataHandling = userAccountDataHandling;
         initComponents();
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
-        this.parent = parent;
-        loadUserAccounts();
+        userAccountDataHandling.loadUserAccounts();  // Load user accounts from DB
+        loadUserAccountsTable();
         
         // Initialize the TableRowSorter
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
@@ -60,12 +63,8 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     }
     
     // Method to load user accounts into the JTable
-    private void loadUserAccounts() {
-        // Fetch all user accounts from the database
-        UserAccountDataManager userAccountManager = new UserAccountDataManager();
-        userAccountManager.loadUserAccounts();  // Load user accounts from DB
-
-        List<UserAccountData> userList = userAccountManager.getUserAccounts();  // Get the list of user accounts
+    private void loadUserAccountsTable() {
+        List<UserAccountData> userList = userAccountDataHandling.getUserAccounts();  // Get the list of user accounts
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         model.setRowCount(0); // Clear existing rows
 
@@ -81,7 +80,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     
     // Method to refresh the table
     public void refreshTable() {
-        loadUserAccounts();
+        loadUserAccountsTable();
         // Reapply the current filter if any
         if (searchTxtField.getText().trim().length() > 0) {
             searchTxtFieldKeyReleased(null);
@@ -246,7 +245,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActBtnActionPerformed
-        JFrame addUserAccountPanel = new AddUserAccountGUI(this);
+        JFrame addUserAccountPanel = new AddUserAccountGUI(this, userAccountDataHandling);
         addUserAccountPanel.setVisible(true);
         addUserAccountPanel.pack();
         addUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -269,6 +268,16 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         // Get the username from the selected row (column 0)
         String username = (String) userAccountsTable.getModel().getValueAt(modelRow, 0);
 
+        // Prevent admin from deleting their own account
+        if ("admin".equals(userAccountDataHandling.getLoggedInRole()) && 
+            username.equals(userAccountDataHandling.getLoggedInUsername())) {
+            JOptionPane.showMessageDialog(this, 
+                "You cannot delete your own account.",
+                "Permission Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         // Confirm deletion
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Are you sure you want to delete the user '" + username + "'?",
@@ -277,8 +286,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             JOptionPane.WARNING_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            UserAccountDataManager manager = new UserAccountDataManager();
-            boolean success = manager.deleteUserAccount(username);
+            boolean success = userAccountDataHandling.deleteUserAccount(username);
             if (success) {
                 JOptionPane.showMessageDialog(this, 
                     "User account deleted successfully!",
@@ -302,13 +310,38 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         // Convert view row index to model row index to handle sorting
         int modelRow = userAccountsTable.convertRowIndexToModel(selectedRow);
 
-        // Get user details from the selected row
+        // Get the username from the selected row
         String username = (String) userAccountsTable.getModel().getValueAt(modelRow, 0);
-        String password = (String) userAccountsTable.getModel().getValueAt(modelRow, 1);
-        String role = (String) userAccountsTable.getModel().getValueAt(modelRow, 2);
 
-        // Launch EditUserAccountGUI with the selected user's details
-        EditUserAccountGUI editUserAccountPanel = new EditUserAccountGUI(this, username, password, role);
+        // Prevent admin from editing their own account
+        if ("admin".equals(userAccountDataHandling.getLoggedInRole()) && 
+            username.equals(userAccountDataHandling.getLoggedInUsername())) {
+            JOptionPane.showMessageDialog(this, 
+                "You cannot edit your own account.",
+                "Permission Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Find the UserAccountData object for the selected user
+        UserAccountData selectedUser = null;
+        for (UserAccountData user : userAccountDataHandling.getUserAccounts()) {
+            if (user.getUsername().equals(username)) {
+                selectedUser = user;
+                break;
+            }
+        }
+
+        if (selectedUser == null) {
+            JOptionPane.showMessageDialog(this, 
+                "User data not found.",
+                "Data Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Launch EditUserAccountGUI with the selected user's UserAccountData
+        EditUserAccountGUI editUserAccountPanel = new EditUserAccountGUI(this, userAccountDataHandling, selectedUser);
         editUserAccountPanel.setVisible(true);
         editUserAccountPanel.pack();
         editUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

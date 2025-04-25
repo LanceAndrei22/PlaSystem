@@ -13,7 +13,7 @@ import javax.swing.event.*;
  */
 public class EditProductGUI extends JFrame {
     private MainProgramGUI parent;
-    private ProductDataManager dataHandling;
+    private ProductDataManager productDataHandling;
     private ProductData product;
     private final ErrorValueHandling isDataValid = new ErrorValueHandling();
     
@@ -30,13 +30,13 @@ public class EditProductGUI extends JFrame {
      * Constructor to initialize EditProductGUI with existing product data.
      *
      * @param parent       The parent MainProgramGUI to refresh the table.
-     * @param dataHandling The ProductDataManager to handle database operations.
+     * @param productDataHandling The ProductDataManager to handle database operations.
      * @param product      The ProductData object to edit.
      * @param selectedRow  The index of the selected row in the table.
      */
-    public EditProductGUI(MainProgramGUI parent, ProductDataManager dataHandling, ProductData product, int selectedRow) {
+    public EditProductGUI(MainProgramGUI parent, ProductDataManager productDataHandling, ProductData product, int selectedRow) {
         this.parent = parent;
-        this.dataHandling = dataHandling;
+        this.productDataHandling = productDataHandling;
         this.product = product;
         initComponents();
         setLocationRelativeTo(null);
@@ -347,7 +347,7 @@ public class EditProductGUI extends JFrame {
             return;
         }
 
-        boolean success = dataHandling.updateProduct(
+        boolean success = productDataHandling.updateProduct(
             product.getProductId(),
             name,
             brand,

@@ -29,7 +29,7 @@ public class TransactionDataManager {
         "UPDATE Product SET PROD_QUANTITY = PROD_QUANTITY - ? WHERE PROD_ID = ?";
 
     private final ProductDataManager productDataManager;
-    private List<TransactionData> transactionList;
+    private final List<TransactionData> transactionList;
 
     /**
      * Constructor initializes the transaction list and ProductDataManager dependency.

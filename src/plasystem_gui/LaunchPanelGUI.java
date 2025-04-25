@@ -7,14 +7,14 @@ import java.awt.event.KeyEvent;
 
 public class LaunchPanelGUI extends javax.swing.JFrame {
     
-    private UserAccountDataManager loginAccount;
+    private final UserAccountDataManager userAccountDataHandling;
     
     public LaunchPanelGUI() {
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
         
         // Initialize the UserAccountDataManager and load user accounts
-        loginAccount = new UserAccountDataManager();
+        userAccountDataHandling = new UserAccountDataManager();
         
         // Add KeyListeners for Enter key action
         addEnterKeyListener(UsernameTextField);
@@ -33,7 +33,7 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
     }
     
     private void launchMainProgram() {
-        JFrame mainProgram = new MainProgramGUI(); // Create an instance of the main program GUI
+        JFrame mainProgram = new MainProgramGUI(userAccountDataHandling); // Pass UserAccountDataManager
         mainProgram.setVisible(true); // Set the main program frame visible
         mainProgram.pack();
         mainProgram.setLocationRelativeTo(null);
@@ -177,7 +177,7 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
             return;
         }
 
-        if (loginAccount.validateUserLogin(username, password)) {
+        if (userAccountDataHandling.validateUserLogin(username, password)) {
             launchMainProgram();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.");

@@ -27,17 +27,31 @@ public class MainProgramGUI extends JFrame {
     // Instance of TransactionDataManager
     private final TransactionDataManager transactionDataHandling = new TransactionDataManager(productDataHandling);
     
+    // Instance of UserAccountDataManager
+    private UserAccountDataManager userAccountDataHandling;
+    
     // List to track open child GUIs
     private final List<JFrame> childGUIs = new ArrayList<>();
     
     // Map to track instances of active GUIs
     private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
     
+    
+    /**
+     * Default constructor for the MainProgramGUI.
+     */
+    public MainProgramGUI() {
+        initComponents(); // Initialize components of the GUI
+        setLocationRelativeTo(null); // Set the window to open in the center of the screen
+    }
+    
     /**
      * Constructor initializing the Main Program GUI.
      * Populates the table with existing game data upon program start.
+     * @param userAccountDataHandling 
      */
-    public MainProgramGUI() {
+    public MainProgramGUI(UserAccountDataManager userAccountDataHandling) {
+        this.userAccountDataHandling = userAccountDataHandling;
         initComponents(); // Initialize components of the GUI
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
         
@@ -50,6 +64,21 @@ public class MainProgramGUI extends JFrame {
         if (productList.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Database is empty", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
+        
+        // Update greetings label with username and role
+        String username = userAccountDataHandling.getLoggedInUsername();
+        String role = userAccountDataHandling.getLoggedInRole();
+        if (username != null && role != null) {
+            greetingsLabel.setText("Welcome To PlaSystem! " + username + ", " + role);
+        }
+        
+        enableRoleControl();
+    }
+    
+    // Method to do Role Based Access Control
+    private void enableRoleControl() {
+        // Apply role-based access control
+        RoleBasedAccessControl.applyRolePermissions(this, userAccountDataHandling.getLoggedInRole());
     }
     
     // Method to add a child GUI to the tracking list
@@ -150,6 +179,7 @@ public class MainProgramGUI extends JFrame {
         logoutBtn = new javax.swing.JButton();
         transactHistoryBtn = new javax.swing.JButton();
         restockHistoryBtn = new javax.swing.JButton();
+        greetingsLabel = new javax.swing.JLabel();
         backgroundDesign = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -398,6 +428,12 @@ public class MainProgramGUI extends JFrame {
         });
         Secondary_Buttons.add(restockHistoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(597, 6, -1, 46));
 
+        greetingsLabel.setFont(new java.awt.Font("Verdana", 3, 14)); // NOI18N
+        greetingsLabel.setForeground(new java.awt.Color(255, 255, 255));
+        greetingsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        greetingsLabel.setText("Welcome To PlaSystem! Username, Role");
+        Secondary_Buttons.add(greetingsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 440, 50));
+
         mainPanel.add(Secondary_Buttons, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 720, 1250, -1));
 
         backgroundDesign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/bg_mainprogram.png"))); // NOI18N
@@ -528,7 +564,7 @@ public class MainProgramGUI extends JFrame {
     }//GEN-LAST:event_lowstockBtnActionPerformed
 
     private void userAccountsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userAccountsBtnActionPerformed
-        JFrame userAccountsPanel = new UserAccountsGUI(this);
+        JFrame userAccountsPanel = new UserAccountsGUI(this, userAccountDataHandling);
         userAccountsPanel.setVisible(true);
         userAccountsPanel.pack();
         userAccountsPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -572,37 +608,38 @@ public class MainProgramGUI extends JFrame {
     }//GEN-LAST:event_printInventoryBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Main_Button_Panel;
-    private javax.swing.JPanel Secondary_Buttons;
-    private javax.swing.JButton addBtn;
-    private javax.swing.JLabel backgroundDesign;
-    private javax.swing.JPanel dataPanel;
-    private javax.swing.JButton deleteBtn;
-    private javax.swing.JButton editBtn;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JButton logoutBtn;
-    private javax.swing.JButton lowstockBtn;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JTable plasystemTbl;
-    private javax.swing.JScrollPane plasystemTblScrollPane;
-    private javax.swing.JButton printInventoryBtn;
-    private javax.swing.JButton restockBtn;
-    private javax.swing.JButton restockHistoryBtn;
-    private javax.swing.JPanel searchPanel;
+    public javax.swing.JPanel Main_Button_Panel;
+    public javax.swing.JPanel Secondary_Buttons;
+    public javax.swing.JButton addBtn;
+    public javax.swing.JLabel backgroundDesign;
+    public javax.swing.JPanel dataPanel;
+    public javax.swing.JButton deleteBtn;
+    public javax.swing.JButton editBtn;
+    public javax.swing.JLabel greetingsLabel;
+    public javax.swing.JLabel jLabel10;
+    public javax.swing.JLabel jLabel11;
+    public javax.swing.JLabel jLabel12;
+    public javax.swing.JLabel jLabel2;
+    public javax.swing.JLabel jLabel3;
+    public javax.swing.JLabel jLabel4;
+    public javax.swing.JLabel jLabel5;
+    public javax.swing.JLabel jLabel6;
+    public javax.swing.JLabel jLabel7;
+    public javax.swing.JLabel jLabel8;
+    public javax.swing.JLabel jLabel9;
+    public javax.swing.JButton logoutBtn;
+    public javax.swing.JButton lowstockBtn;
+    public javax.swing.JPanel mainPanel;
+    public javax.swing.JTable plasystemTbl;
+    public javax.swing.JScrollPane plasystemTblScrollPane;
+    public javax.swing.JButton printInventoryBtn;
+    public javax.swing.JButton restockBtn;
+    public javax.swing.JButton restockHistoryBtn;
+    public javax.swing.JPanel searchPanel;
     private javax.swing.JComboBox<String> searchPrmtrBox;
-    private javax.swing.JTextField searchTxtField;
-    private javax.swing.JButton transactBtn;
-    private javax.swing.JButton transactHistoryBtn;
-    private javax.swing.JButton userAccountsBtn;
+    public javax.swing.JTextField searchTxtField;
+    public javax.swing.JButton transactBtn;
+    public javax.swing.JButton transactHistoryBtn;
+    public javax.swing.JButton userAccountsBtn;
     // End of variables declaration//GEN-END:variables
 }
