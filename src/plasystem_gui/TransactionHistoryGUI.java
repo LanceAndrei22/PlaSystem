@@ -314,7 +314,8 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_searchTxtFieldKeyReleased
 
     private void exportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportBtnActionPerformed
-        // TODO add your handling code here:
+        TransactionReportGenerator reportGenerator = new TransactionReportGenerator(transactionList);
+        reportGenerator.generateReport(this);
     }//GEN-LAST:event_exportBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

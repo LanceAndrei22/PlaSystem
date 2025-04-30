@@ -14,8 +14,6 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
      * Default constructor initializing the RestockHistoryGUI.
      */
     public RestockHistoryGUI() {
-        this.restockDataManager = new RestockDataManager(new ProductDataManager());
-        this.restockList = new LinkedList<>();
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -211,13 +209,6 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     /**
-     * Handles the "Export" button click (placeholder for future implementation).
-     */
-    private void exportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_exportBtnActionPerformed
-    
-    /**
      * Handles the "Delete" button click, removing the selected restock using RestockDataManager.
      */
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
@@ -308,6 +299,11 @@ public class RestockHistoryGUI extends javax.swing.JFrame {
             sorter.setRowFilter(null);
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
+
+    private void exportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportBtnActionPerformed
+        RestockReportGenerator reportGenerator = new RestockReportGenerator(restockList);
+        reportGenerator.generateReport(this);
+    }//GEN-LAST:event_exportBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design1;

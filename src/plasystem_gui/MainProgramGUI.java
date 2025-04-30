@@ -175,7 +175,7 @@ public class MainProgramGUI extends JFrame {
         searchPrmtrBox = new javax.swing.JComboBox<>();
         Secondary_Buttons = new javax.swing.JPanel();
         userAccountsBtn = new javax.swing.JButton();
-        printInventoryBtn = new javax.swing.JButton();
+        exportInventoryBtn = new javax.swing.JButton();
         logoutBtn = new javax.swing.JButton();
         transactHistoryBtn = new javax.swing.JButton();
         restockHistoryBtn = new javax.swing.JButton();
@@ -392,13 +392,13 @@ public class MainProgramGUI extends JFrame {
         });
         Secondary_Buttons.add(userAccountsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(899, 6, -1, 46));
 
-        printInventoryBtn.setText("🖨️ Print Inventory");
-        printInventoryBtn.addActionListener(new java.awt.event.ActionListener() {
+        exportInventoryBtn.setText("🖨️ Export Inventory");
+        exportInventoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                printInventoryBtnActionPerformed(evt);
+                exportInventoryBtnActionPerformed(evt);
             }
         });
-        Secondary_Buttons.add(printInventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1034, 6, 170, 46));
+        Secondary_Buttons.add(exportInventoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1034, 6, 170, 46));
 
         logoutBtn.setBackground(new java.awt.Color(255, 102, 102));
         logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -603,9 +603,10 @@ public class MainProgramGUI extends JFrame {
         addChildGUI(restockHistoryPanel); // Track child GUI
     }//GEN-LAST:event_restockHistoryBtnActionPerformed
 
-    private void printInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printInventoryBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_printInventoryBtnActionPerformed
+    private void exportInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportInventoryBtnActionPerformed
+        InventoryReportGenerator reportGenerator = new InventoryReportGenerator(productList);
+        reportGenerator.generateReport(this);
+    }//GEN-LAST:event_exportInventoryBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel Main_Button_Panel;
@@ -615,6 +616,7 @@ public class MainProgramGUI extends JFrame {
     public javax.swing.JPanel dataPanel;
     public javax.swing.JButton deleteBtn;
     public javax.swing.JButton editBtn;
+    public javax.swing.JButton exportInventoryBtn;
     public javax.swing.JLabel greetingsLabel;
     public javax.swing.JLabel jLabel10;
     public javax.swing.JLabel jLabel11;
@@ -632,11 +634,10 @@ public class MainProgramGUI extends JFrame {
     public javax.swing.JPanel mainPanel;
     public javax.swing.JTable plasystemTbl;
     public javax.swing.JScrollPane plasystemTblScrollPane;
-    public javax.swing.JButton printInventoryBtn;
     public javax.swing.JButton restockBtn;
     public javax.swing.JButton restockHistoryBtn;
     public javax.swing.JPanel searchPanel;
-    private javax.swing.JComboBox<String> searchPrmtrBox;
+    public javax.swing.JComboBox<String> searchPrmtrBox;
     public javax.swing.JTextField searchTxtField;
     public javax.swing.JButton transactBtn;
     public javax.swing.JButton transactHistoryBtn;

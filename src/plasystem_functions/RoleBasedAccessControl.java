@@ -24,7 +24,7 @@ public class RoleBasedAccessControl {
             JButton restockBtn = (JButton) gui.getClass().getDeclaredField("restockBtn").get(gui);
             JButton lowstockBtn = (JButton) gui.getClass().getDeclaredField("lowstockBtn").get(gui);
             JButton userAccountsBtn = (JButton) gui.getClass().getDeclaredField("userAccountsBtn").get(gui);
-            JButton printInventoryBtn = (JButton) gui.getClass().getDeclaredField("printInventoryBtn").get(gui);
+            JButton exportInventoryBtn = (JButton) gui.getClass().getDeclaredField("exportInventoryBtn").get(gui);
             JButton transactHistoryBtn = (JButton) gui.getClass().getDeclaredField("transactHistoryBtn").get(gui);
             JButton restockHistoryBtn = (JButton) gui.getClass().getDeclaredField("restockHistoryBtn").get(gui);
             JTable productTable = (JTable) gui.getClass().getDeclaredField("plasystemTbl").get(gui);
@@ -37,7 +37,7 @@ public class RoleBasedAccessControl {
             restockBtn.setEnabled(true);
             lowstockBtn.setEnabled(true);
             userAccountsBtn.setEnabled(true);
-            printInventoryBtn.setEnabled(true);
+            exportInventoryBtn.setEnabled(true);
             transactHistoryBtn.setEnabled(true);
             restockHistoryBtn.setEnabled(true);
             productTable.setEnabled(true);
@@ -52,7 +52,7 @@ public class RoleBasedAccessControl {
                 restockBtn.setEnabled(false);
                 lowstockBtn.setEnabled(false);
                 userAccountsBtn.setEnabled(false);
-                printInventoryBtn.setEnabled(false);
+                exportInventoryBtn.setEnabled(false);
                 transactHistoryBtn.setEnabled(false);
                 restockHistoryBtn.setEnabled(false);
                 productTable.setEnabled(false);
@@ -64,7 +64,7 @@ public class RoleBasedAccessControl {
                         deleteBtn.setEnabled(false);
                         transactBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
-                        printInventoryBtn.setEnabled(false);
+                        exportInventoryBtn.setEnabled(false);
                         transactHistoryBtn.setEnabled(false);
                         break;
                     case "cashier":
@@ -73,7 +73,7 @@ public class RoleBasedAccessControl {
                         deleteBtn.setEnabled(false);
                         restockBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
-                        printInventoryBtn.setEnabled(false);
+                        exportInventoryBtn.setEnabled(false);
                         restockHistoryBtn.setEnabled(false);
                         break;
                     case "store_manager":
@@ -96,7 +96,7 @@ public class RoleBasedAccessControl {
                         restockBtn.setEnabled(false);
                         lowstockBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
-                        printInventoryBtn.setEnabled(false);
+                        exportInventoryBtn.setEnabled(false);
                         transactHistoryBtn.setEnabled(false);
                         restockHistoryBtn.setEnabled(false);
                         productTable.setEnabled(false);
