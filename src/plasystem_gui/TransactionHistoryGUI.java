@@ -1,13 +1,20 @@
 package plasystem_gui;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import plasystem_functions.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class TransactionHistoryGUI extends javax.swing.JFrame {
-    private TransactionDataManager transactionDataManager;
+    private TransactionDataManager transactionDataModel;
     private List<TransactionData> transactionList;
+        // List to track open child GUIs
+    private final List<JFrame> childGUIs = new ArrayList<>();
+    // Map to track instances of active GUIs
+    private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
     
     /**
      * Default constructor initializing the TransactionHistoryGUI.
@@ -23,7 +30,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
      * @param transactionDataManager The TransactionDataManager instance to use for database operations.
      */
     public TransactionHistoryGUI(TransactionDataManager transactionDataManager) {
-        this.transactionDataManager = transactionDataManager;
+        this.transactionDataModel = transactionDataManager;
         this.transactionList = transactionDataManager.getTransactionList();
         initComponents();
         setLocationRelativeTo(null);
@@ -31,15 +38,77 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         new TransactionHistoryTableRenderer(transHistorytbl, 667); // 667 is the table width
     }
     
+    // Method to add a child GUI to the tracking list
+    public void addChildGUI(JFrame child) {
+        childGUIs.add(child);
+    }
+
+    // Method to remove a child GUI from the tracking list
+    public void removeChildGUI(JFrame child) {
+        childGUIs.remove(child);
+    }
+    
+    /**
+     * Launches or focuses a single instance of a GUI.
+     *
+     * @param guiClass The class of the GUI to launch.
+     * @param creator  A lambda to create a new instance of the GUI if needed.
+     * @return The GUI instance.
+     */
+    private <T extends JFrame> T launchSingleInstance(Class<T> guiClass, Supplier<T> creator) {
+        JFrame existingInstance = activeGUIs.get(guiClass);
+        if (existingInstance != null && !existingInstance.isDisplayable()) {
+            activeGUIs.remove(guiClass); // Remove disposed instance
+            existingInstance = null;
+        }
+
+        if (existingInstance != null) {
+            JOptionPane.showMessageDialog(
+                existingInstance,
+                "Only one instance can be present.",
+                "Instance Warning",
+                JOptionPane.WARNING_MESSAGE
+            );
+            existingInstance.requestFocus();
+            existingInstance.setVisible(true);
+            return guiClass.cast(existingInstance);
+        }
+
+        T newInstance = creator.get();
+        newInstance.setVisible(true);
+        newInstance.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        newInstance.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                activeGUIs.remove(guiClass);
+                removeChildGUI(newInstance);
+            }
+        });
+        activeGUIs.put(guiClass, newInstance);
+        addChildGUI(newInstance);
+        return newInstance;
+    }
+    
+    // Override dispose to close all child windows
+    @Override
+    public void dispose() {
+        // Close all child windows
+        for (JFrame child : new ArrayList<>(childGUIs)) {
+            child.dispose();
+        }
+        childGUIs.clear(); // Clear the list
+        super.dispose(); // Call parent dispose
+    }
+    
     /**
      * Updates the transaction history table with data from the database.
      */
     private void updateTable() {
-        DefaultTableModel model = (DefaultTableModel) transHistorytbl.getModel();
-        model.setRowCount(0); // Clear existing rows
+        DefaultTableModel transHistoryTblModel = (DefaultTableModel) transHistorytbl.getModel();
+        transHistoryTblModel.setRowCount(0); // Clear existing rows
 
         for (TransactionData transaction : transactionList) {
-            model.addRow(new Object[]{
+            transHistoryTblModel.addRow(new Object[]{
                 transaction.getTransactionId(),
                 transaction.getFormattedDate().split(" ")[0], // Date (YYYY-MM-DD)
                 transaction.getTransDateTime(), // Time
@@ -69,7 +138,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         detailsBtn = new javax.swing.JButton();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
-        Design1 = new javax.swing.JLabel();
+        design1 = new javax.swing.JLabel();
         deleteBtn = new javax.swing.JButton();
         refreshBtn = new javax.swing.JButton();
         exportBtn = new javax.swing.JButton();
@@ -124,10 +193,10 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
 
         searchPrmtrBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Year", "Month", "Day", "Date", "Total Amount", "Payment Amount", "Change Given" }));
 
-        Design1.setBackground(new java.awt.Color(255, 102, 102));
-        Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/transact_history_title.png"))); // NOI18N
-        Design1.setOpaque(true);
+        design1.setBackground(new java.awt.Color(255, 102, 102));
+        design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/transact_history_title.png"))); // NOI18N
+        design1.setOpaque(true);
 
         deleteBtn.setBackground(new java.awt.Color(255, 102, 102));
         deleteBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -159,7 +228,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(design1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(transHistoryScrollPane)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -181,7 +250,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, Short.MAX_VALUE)
+                .addComponent(design1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, Short.MAX_VALUE)
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -216,7 +285,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Convert view index to model index to account for sorting/filtering
+        // Convert view index to transHistoryTblModel index to account for sorting/filtering
         selectedRow = transHistorytbl.convertRowIndexToModel(selectedRow);
         int transactionId = (int) transHistorytbl.getModel().getValueAt(selectedRow, 0);
         TransactionData selectedTransaction = transactionList.stream()
@@ -225,9 +294,13 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             .orElse(null);
 
         if (selectedTransaction != null) {
-            THDetailsGUI detailsPanel = new THDetailsGUI(selectedTransaction);
-            detailsPanel.setVisible(true);
-            detailsPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            launchSingleInstance(THDetailsGUI.class, () -> {
+                THDetailsGUI thDetailGUI = new THDetailsGUI(selectedTransaction);
+                thDetailGUI.pack();
+                thDetailGUI.setLocationRelativeTo(null);
+                thDetailGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                return thDetailGUI;
+            });
         } else {
             JOptionPane.showMessageDialog(this, "Transaction not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -243,16 +316,16 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Convert view index to model index
+        // Convert view index to transHistoryTblModel index
         selectedRow = transHistorytbl.convertRowIndexToModel(selectedRow);
         int transactionId = (int) transHistorytbl.getModel().getValueAt(selectedRow, 0);
 
-        int confirm = JOptionPane.showConfirmDialog(this,
+        int confirmDelete = JOptionPane.showConfirmDialog(this,
             "Do you really want to delete transaction ID " + transactionId + "?",
             "Delete",
             JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            boolean success = transactionDataManager.deleteTransaction(transactionId);
+        if (confirmDelete == JOptionPane.YES_OPTION) {
+            boolean success = transactionDataModel.deleteTransaction(transactionId);
             if (success) {
                 updateTable();
                 JOptionPane.showMessageDialog(this, "Transaction deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -273,8 +346,8 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
      * Handles search functionality, filtering the table based on the search text and parameter.
      */
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
-        DefaultTableModel model = (DefaultTableModel) transHistorytbl.getModel();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        DefaultTableModel transHistoryTblModel = (DefaultTableModel) transHistorytbl.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(transHistoryTblModel);
         transHistorytbl.setRowSorter(sorter);
 
         String searchText = searchTxtField.getText().trim();
@@ -319,8 +392,8 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exportBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Design1;
     private javax.swing.JButton deleteBtn;
+    private javax.swing.JLabel design1;
     private javax.swing.JButton detailsBtn;
     private javax.swing.JButton exportBtn;
     private javax.swing.JButton refreshBtn;

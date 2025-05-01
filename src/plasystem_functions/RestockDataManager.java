@@ -132,7 +132,7 @@ public class RestockDataManager {
                 try {
                     conn.rollback();
                 } catch (SQLException rollbackEx) {
-                    rollbackEx.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error Rollback (restockProduct)." + rollbackEx);
                 }
             }
             handleSQLException(e);
@@ -143,7 +143,7 @@ public class RestockDataManager {
                     conn.setAutoCommit(true);
                     conn.close();
                 } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error Close (restockProduct)." + closeEx);
                 }
             }
         }
@@ -198,7 +198,7 @@ public class RestockDataManager {
                 try {
                     conn.rollback();
                 } catch (SQLException rollbackEx) {
-                    rollbackEx.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error Rollback (restockMultipleProducts)." + rollbackEx);
                 }
             }
             handleSQLException(e);
@@ -209,7 +209,7 @@ public class RestockDataManager {
                     conn.setAutoCommit(true);
                     conn.close();
                 } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error Close (restockMultipleProducts)." + closeEx);
                 }
             }
         }
@@ -243,7 +243,7 @@ public class RestockDataManager {
                 try {
                     conn.rollback();
                 } catch (SQLException rollbackEx) {
-                    rollbackEx.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error Rollback (deleteRestock)." + rollbackEx);
                 }
             }
             handleSQLException(e);
@@ -254,7 +254,7 @@ public class RestockDataManager {
                     conn.setAutoCommit(true);
                     conn.close();
                 } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error Close (deleteRestock)." + closeEx);
                 }
             }
         }

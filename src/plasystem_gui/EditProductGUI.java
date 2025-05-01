@@ -12,10 +12,10 @@ import javax.swing.event.*;
  * GUI for editing existing data in the application.
  */
 public class EditProductGUI extends JFrame {
-    private MainProgramGUI parent;
-    private ProductDataManager productDataHandling;
+    private MainProgramGUI parentGUI;
+    private ProductDataManager productDataModel;
     private ProductData product;
-    private final ErrorValueHandling isDataValid = new ErrorValueHandling();
+    private final ErrorValueHandling dataValidator = new ErrorValueHandling();
     
     
     /**
@@ -29,14 +29,14 @@ public class EditProductGUI extends JFrame {
     /**
      * Constructor to initialize EditProductGUI with existing product data.
      *
-     * @param parent       The parent MainProgramGUI to refresh the table.
-     * @param productDataHandling The ProductDataManager to handle database operations.
+     * @param parent       The parentGUI MainProgramGUI to refresh the table.
+     * @param productDataManager The ProductDataManager to handle database operations.
      * @param product      The ProductData object to edit.
      * @param selectedRow  The index of the selected row in the table.
      */
-    public EditProductGUI(MainProgramGUI parent, ProductDataManager productDataHandling, ProductData product, int selectedRow) {
-        this.parent = parent;
-        this.productDataHandling = productDataHandling;
+    public EditProductGUI(MainProgramGUI parent, ProductDataManager productDataManager, ProductData product, int selectedRow) {
+        this.parentGUI = parent;
+        this.productDataModel = productDataManager;
         this.product = product;
         initComponents();
         setLocationRelativeTo(null);
@@ -66,14 +66,6 @@ public class EditProductGUI extends JFrame {
             int value = (int) restockValuePicker.getValue();
             if (value < 0) {
                 restockValuePicker.setValue(0);
-            }
-        });
-        
-        // Unregister from parent when window is closed
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                parent.removeChildGUI(EditProductGUI.this);
             }
         });
     }
@@ -293,73 +285,72 @@ public class EditProductGUI extends JFrame {
      * @param evt The ActionEvent triggered by clicking the save button.
      */
     private void saveBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(null, 
+        int confirmEdit = JOptionPane.showConfirmDialog(null, 
             "Do you wish to save changes for " + nameTxtField.getText() + "?", 
             "Edit Product", 
             JOptionPane.YES_NO_OPTION);
 
-        if (confirm != JOptionPane.YES_OPTION) {
+        if (confirmEdit != JOptionPane.YES_OPTION) {
             return;
         }
 
-        String name = nameTxtField.getText().trim();
-        String size = sizeTxtField.getText().trim();
-        String brand = brandTxtField.getText().trim();
-        String type = typeTxtField.getText().trim();
-        String priceText = priceTxtField.getText().trim();
-        String quantityText = String.valueOf(quantityPicker.getValue());
-        String restockValueText = String.valueOf(restockValuePicker.getValue());
+        String prodName = nameTxtField.getText().trim();
+        String prodSize = sizeTxtField.getText().trim();
+        String prodBrand = brandTxtField.getText().trim();
+        String prodType = typeTxtField.getText().trim();
+        String prodPriceText = priceTxtField.getText().trim();
+        String prodQuantityText = String.valueOf(quantityPicker.getValue());
+        String prodRestockValueText = String.valueOf(restockValuePicker.getValue());
 
         // Validate inputs
-        if (name.isEmpty() || size.isEmpty() || brand.isEmpty() || type.isEmpty() || priceText.isEmpty()) {
+        if (prodName.isEmpty() || prodSize.isEmpty() || prodBrand.isEmpty() || prodType.isEmpty() || prodPriceText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        double price;
-        if (!isDataValid.isDouble(priceText)) {
+        double prodPrice;
+        if (!dataValidator.isDouble(prodPriceText)) {
             JOptionPane.showMessageDialog(null, "Invalid price format.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        price = Double.parseDouble(priceText);
-        if (price < 0) {
+        prodPrice = Double.parseDouble(prodPriceText);
+        if (prodPrice < 0) {
             JOptionPane.showMessageDialog(null, "Price cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!isDataValid.isInteger(quantityText)) {
+        if (!dataValidator.isInteger(prodQuantityText)) {
             JOptionPane.showMessageDialog(null, "Invalid quantity format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int quantity = Integer.parseInt(quantityText);
-        if (quantity < 0) {
+        int prodQuantity = Integer.parseInt(prodQuantityText);
+        if (prodQuantity < 0) {
             JOptionPane.showMessageDialog(null, "Quantity cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!isDataValid.isInteger(restockValueText)) {
+        if (!dataValidator.isInteger(prodRestockValueText)) {
             JOptionPane.showMessageDialog(null, "Invalid restock value format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int restockValue = Integer.parseInt(restockValueText);
-        if (restockValue < 0) {
+        int prodRestockValue = Integer.parseInt(prodRestockValueText);
+        if (prodRestockValue < 0) {
             JOptionPane.showMessageDialog(null, "Restock value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        boolean success = productDataHandling.updateProduct(
-            product.getProductId(),
-            name,
-            brand,
-            size,
-            type,
-            price,
-            quantity,
-            restockValue
+        boolean editSuccess = productDataModel.updateProduct(product.getProductId(),
+            prodName,
+            prodBrand,
+            prodSize,
+            prodType,
+            prodPrice,
+            prodQuantity,
+            prodRestockValue
         );
 
-        if (success) {
-            parent.refreshTable();
+        if (editSuccess) {
+            parentGUI.updateProductTable();
             JOptionPane.showMessageDialog(null, "Product updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         }
@@ -371,7 +362,7 @@ public class EditProductGUI extends JFrame {
      * @param evt The ActionEvent captured from the GUI.
      */
     private void cancelBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window (the frame)
+        dispose(); // Close the current window
     }//GEN-LAST:event_cancelBtnActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

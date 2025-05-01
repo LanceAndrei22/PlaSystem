@@ -3,11 +3,10 @@ package plasystem_gui;
 import plasystem_functions.UserAccountData;
 import plasystem_functions.UserAccountDataManager;
 import javax.swing.JOptionPane;
-import java.awt.event.*;
 
 public class EditUserAccountGUI extends javax.swing.JFrame {
     private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
-    private UserAccountDataManager userAccountDataHandling;
+    private UserAccountDataManager userAccountDataModel;
     private UserAccountData userAccount; // Store the UserAccountData object
     
     public EditUserAccountGUI() {
@@ -15,9 +14,9 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
     }
     
-    public EditUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataHandling, UserAccountData userAccount) {
+    public EditUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataManager, UserAccountData userAccount) {
         this.parentGUI = parentGUI;
-        this.userAccountDataHandling = userAccountDataHandling;
+        this.userAccountDataModel = userAccountDataManager;
         this.userAccount = userAccount;
         initComponents();
         setLocationRelativeTo(null); // Center the frame
@@ -26,17 +25,6 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
         usernameTxtField.setText(userAccount.getUsername());
         passwordTxtField.setText(userAccount.getUserPassword());
         roleComboBox.setSelectedItem(userAccount.getUserRole());
-        
-        // Register with parent
-        parentGUI.addChildWindow(this);
-
-        // Unregister when window is closed
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                parentGUI.removeChildWindow(EditUserAccountGUI.this);
-            }
-        });
     }
 
     /**
@@ -193,7 +181,7 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
             JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean success = userAccountDataHandling.updateUserAccount(userAccount.getUsername(), username, password, role);
+            boolean success = userAccountDataModel.updateUserAccount(userAccount.getUsername(), username, password, role);
             if (success) {
                 JOptionPane.showMessageDialog(this, 
                     "User account updated successfully!",

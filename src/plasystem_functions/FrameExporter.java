@@ -41,8 +41,7 @@ public class FrameExporter {
             ImageIO.write(capture, "png", outputFile);
             JOptionPane.showMessageDialog(null, "Frame exported as image: " + outputFile.getAbsolutePath());
         } catch (IOException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error exporting frame as image.");
+            JOptionPane.showMessageDialog(null, "Error exporting frame as image." + ex);
         }
     }
 }

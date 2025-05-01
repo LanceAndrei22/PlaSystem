@@ -33,18 +33,18 @@ public class THDetailsGUI extends javax.swing.JFrame {
      * Updates the table with transaction items.
      */
     private void updateTable() {
-        DefaultTableModel model = (DefaultTableModel) thDetailstbl.getModel();
-        model.setRowCount(0); // Clear existing rows
+        DefaultTableModel thTblModel = (DefaultTableModel) thDetailstbl.getModel();
+        thTblModel.setRowCount(0); // Clear existing rows
 
-        for (TransactionItemData item : transaction.getTransactionItems()) {
-            model.addRow(new Object[]{
-                item.getTI_productName(),
-                item.getTI_productBrand(),
-                item.getTI_productSize(),
-                item.getTI_productType(),
-                item.getTI_buyQuantity(),
-                item.getTI_unitPrice(),
-                item.getTI_totalPrice()
+        for (TransactionItemData thItem : transaction.getTransactionItems()) {
+            thTblModel.addRow(new Object[]{
+                thItem.getTI_productName(),
+                thItem.getTI_productBrand(),
+                thItem.getTI_productSize(),
+                thItem.getTI_productType(),
+                thItem.getTI_buyQuantity(),
+                thItem.getTI_unitPrice(),
+                thItem.getTI_totalPrice()
             });
         }
     }
@@ -60,7 +60,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
 
         thDetailsScrollPane = new javax.swing.JScrollPane();
         thDetailstbl = new javax.swing.JTable();
-        Design1 = new javax.swing.JLabel();
+        design1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -95,10 +95,10 @@ public class THDetailsGUI extends javax.swing.JFrame {
         });
         thDetailsScrollPane.setViewportView(thDetailstbl);
 
-        Design1.setBackground(new java.awt.Color(255, 102, 102));
-        Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/thdetails_title.png"))); // NOI18N
-        Design1.setOpaque(true);
+        design1.setBackground(new java.awt.Color(255, 102, 102));
+        design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/thdetails_title.png"))); // NOI18N
+        design1.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,7 +108,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
                 .addComponent(thDetailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE))
+                .addComponent(design1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,7 +117,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
                 .addComponent(thDetailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, Short.MAX_VALUE)
+                    .addComponent(design1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, Short.MAX_VALUE)
                     .addGap(252, 252, 252)))
         );
 
@@ -166,7 +166,7 @@ public class THDetailsGUI extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Design1;
+    private javax.swing.JLabel design1;
     private javax.swing.JScrollPane thDetailsScrollPane;
     private javax.swing.JTable thDetailstbl;
     // End of variables declaration//GEN-END:variables

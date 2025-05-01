@@ -2,34 +2,22 @@ package plasystem_gui;
 
 import plasystem_functions.UserAccountDataManager;
 import javax.swing.*;
-import java.awt.event.*;
 
 public class AddUserAccountGUI extends javax.swing.JFrame {
     
     private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
-    private UserAccountDataManager userAccountDataHandling;
+    private UserAccountDataManager userAccountDataModel;
     
     public AddUserAccountGUI() {
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
     }
     
-    public AddUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataHandling) {
+    public AddUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataManger) {
         this.parentGUI = parentGUI;
-        this.userAccountDataHandling = userAccountDataHandling;
+        this.userAccountDataModel = userAccountDataManger;
         initComponents();
         setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
-        
-        // Register with parent
-        parentGUI.addChildWindow(this);
-
-        // Unregister when window is closed
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                parentGUI.removeChildWindow(AddUserAccountGUI.this);
-            }
-        });
     }
 
     /**
@@ -193,7 +181,7 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
             JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean success = userAccountDataHandling.addUserAccount(username, password, role);
+            boolean success = userAccountDataModel.addUserAccount(username, password, role);
             if (success) {
                 JOptionPane.showMessageDialog(this, 
                     "User account added successfully!",

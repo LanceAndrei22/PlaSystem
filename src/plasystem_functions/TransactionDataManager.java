@@ -265,7 +265,7 @@ public class TransactionDataManager {
             try {
                 if (conn != null) conn.rollback();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error AddTransaction1." + ex);
             }
             String errorMessage = e.getMessage();
             if (errorMessage.contains("SQLITE_CONSTRAINT_NOTNULL")) {
@@ -294,7 +294,7 @@ public class TransactionDataManager {
                     conn.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error AddTransaction2." + e);
             }
         }
     }

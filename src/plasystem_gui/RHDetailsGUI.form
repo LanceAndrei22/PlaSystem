@@ -29,7 +29,7 @@
               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Component id="Design1" alignment="0" pref="683" max="32767" attributes="0"/>
+              <Component id="design1" alignment="0" pref="683" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -41,7 +41,7 @@
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="Design1" pref="61" max="32767" attributes="0"/>
+                  <Component id="design1" pref="61" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="274" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -112,7 +112,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="Design1">
+    <Component class="javax.swing.JLabel" name="design1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="cc" red="99" type="rgb"/>

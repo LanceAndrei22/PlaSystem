@@ -17,25 +17,25 @@ public class RoleBasedAccessControl {
     public static void applyRolePermissions(MainProgramGUI gui, String role) {
         try {
             // Get references to all buttons and the product table using reflection
-            JButton addBtn = (JButton) gui.getClass().getDeclaredField("addBtn").get(gui);
-            JButton editBtn = (JButton) gui.getClass().getDeclaredField("editBtn").get(gui);
-            JButton deleteBtn = (JButton) gui.getClass().getDeclaredField("deleteBtn").get(gui);
-            JButton transactBtn = (JButton) gui.getClass().getDeclaredField("transactBtn").get(gui);
-            JButton restockBtn = (JButton) gui.getClass().getDeclaredField("restockBtn").get(gui);
-            JButton lowstockBtn = (JButton) gui.getClass().getDeclaredField("lowstockBtn").get(gui);
+            JButton addProductBtn = (JButton) gui.getClass().getDeclaredField("addProductBtn").get(gui);
+            JButton editProductBtn = (JButton) gui.getClass().getDeclaredField("editProductBtn").get(gui);
+            JButton deleteProductBtn = (JButton) gui.getClass().getDeclaredField("deleteProductBtn").get(gui);
+            JButton transactionBtn = (JButton) gui.getClass().getDeclaredField("transactionBtn").get(gui);
+            JButton restockProductBtn = (JButton) gui.getClass().getDeclaredField("restockProductBtn").get(gui);
+            JButton lowStockBtn = (JButton) gui.getClass().getDeclaredField("lowStockBtn").get(gui);
             JButton userAccountsBtn = (JButton) gui.getClass().getDeclaredField("userAccountsBtn").get(gui);
             JButton exportInventoryBtn = (JButton) gui.getClass().getDeclaredField("exportInventoryBtn").get(gui);
             JButton transactHistoryBtn = (JButton) gui.getClass().getDeclaredField("transactHistoryBtn").get(gui);
             JButton restockHistoryBtn = (JButton) gui.getClass().getDeclaredField("restockHistoryBtn").get(gui);
-            JTable productTable = (JTable) gui.getClass().getDeclaredField("plasystemTbl").get(gui);
+            JTable productTable = (JTable) gui.getClass().getDeclaredField("productTbl").get(gui);
 
             // Enable all buttons and the table by default (admin role)
-            addBtn.setEnabled(true);
-            editBtn.setEnabled(true);
-            deleteBtn.setEnabled(true);
-            transactBtn.setEnabled(true);
-            restockBtn.setEnabled(true);
-            lowstockBtn.setEnabled(true);
+            addProductBtn.setEnabled(true);
+            editProductBtn.setEnabled(true);
+            deleteProductBtn.setEnabled(true);
+            transactionBtn.setEnabled(true);
+            restockProductBtn.setEnabled(true);
+            lowStockBtn.setEnabled(true);
             userAccountsBtn.setEnabled(true);
             exportInventoryBtn.setEnabled(true);
             transactHistoryBtn.setEnabled(true);
@@ -45,12 +45,12 @@ public class RoleBasedAccessControl {
             // Disable buttons and table based on role
             if (role == null) {
                 // Fallback: disable all buttons and the table if role is null
-                addBtn.setEnabled(false);
-                editBtn.setEnabled(false);
-                deleteBtn.setEnabled(false);
-                transactBtn.setEnabled(false);
-                restockBtn.setEnabled(false);
-                lowstockBtn.setEnabled(false);
+                addProductBtn.setEnabled(false);
+                editProductBtn.setEnabled(false);
+                deleteProductBtn.setEnabled(false);
+                transactionBtn.setEnabled(false);
+                restockProductBtn.setEnabled(false);
+                lowStockBtn.setEnabled(false);
                 userAccountsBtn.setEnabled(false);
                 exportInventoryBtn.setEnabled(false);
                 transactHistoryBtn.setEnabled(false);
@@ -58,51 +58,49 @@ public class RoleBasedAccessControl {
                 productTable.setEnabled(false);
             } else {
                 switch (role) {
-                    case "restocker":
-                        addBtn.setEnabled(false);
-                        editBtn.setEnabled(false);
-                        deleteBtn.setEnabled(false);
-                        transactBtn.setEnabled(false);
+                    case "restocker" -> {
+                        addProductBtn.setEnabled(false);
+                        editProductBtn.setEnabled(false);
+                        deleteProductBtn.setEnabled(false);
+                        transactionBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
                         exportInventoryBtn.setEnabled(false);
                         transactHistoryBtn.setEnabled(false);
-                        break;
-                    case "cashier":
-                        addBtn.setEnabled(false);
-                        editBtn.setEnabled(false);
-                        deleteBtn.setEnabled(false);
-                        restockBtn.setEnabled(false);
+                    }
+                    case "cashier" -> {
+                        addProductBtn.setEnabled(false);
+                        editProductBtn.setEnabled(false);
+                        deleteProductBtn.setEnabled(false);
+                        restockProductBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
                         exportInventoryBtn.setEnabled(false);
                         restockHistoryBtn.setEnabled(false);
-                        break;
-                    case "store_manager":
-                        userAccountsBtn.setEnabled(false);
-                        break;
-                    case "inventory_manager":
-                        transactBtn.setEnabled(false);
+                    }
+                    case "store_manager" -> userAccountsBtn.setEnabled(false);
+                    case "inventory_manager" -> {
+                        transactionBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
                         transactHistoryBtn.setEnabled(false);
-                        break;
-                    case "admin":
-                        // All buttons and table remain enabled
-                        break;
-                    default:
+                    }
+                    case "admin" -> {
+                    }
+                    default -> {
                         // Unknown role: disable all buttons and the table
-                        addBtn.setEnabled(false);
-                        editBtn.setEnabled(false);
-                        deleteBtn.setEnabled(false);
-                        transactBtn.setEnabled(false);
-                        restockBtn.setEnabled(false);
-                        lowstockBtn.setEnabled(false);
+                        addProductBtn.setEnabled(false);
+                        editProductBtn.setEnabled(false);
+                        deleteProductBtn.setEnabled(false);
+                        transactionBtn.setEnabled(false);
+                        restockProductBtn.setEnabled(false);
+                        lowStockBtn.setEnabled(false);
                         userAccountsBtn.setEnabled(false);
                         exportInventoryBtn.setEnabled(false);
                         transactHistoryBtn.setEnabled(false);
                         restockHistoryBtn.setEnabled(false);
                         productTable.setEnabled(false);
-                        break;
+                    }
                 }
-            }
+                // All buttons and table remain enabled
+                            }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             // Log error and disable all buttons and the table as a fallback
             System.err.println("Error accessing components for role-based access control: " + e.getMessage());
@@ -130,7 +128,7 @@ public class RoleBasedAccessControl {
                 transactHistoryBtn.setEnabled(false);
                 restockHistoryBtn.setEnabled(false);
                 productTable.setEnabled(false);
-            } catch (Exception ex) {
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
                 System.err.println("Failed to disable components: " + ex.getMessage());
             }
         }

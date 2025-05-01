@@ -11,9 +11,9 @@ import javax.swing.event.*;
  * A GUI window allowing users to add new data to the application.
  */
 public class AddProductGUI extends JFrame {
-    private MainProgramGUI parent;
-    private ProductDataManager productDataHandling;
-    private final ErrorValueHandling isDataValid = new ErrorValueHandling();
+    private MainProgramGUI parentGUI;
+    private ProductDataManager productDataModel;
+    private final ErrorValueHandling dataValidator = new ErrorValueHandling();
 
     /**
      * Default constructor initializing the AddDataGUI.
@@ -26,12 +26,12 @@ public class AddProductGUI extends JFrame {
     /**
      * Constructor initializing the AddProductGUI with necessary dependencies.
      *
-     * @param parent       The parent MainProgramGUI to refresh the table.
-     * @param productDataHandling The ProductDataManager to handle database operations.
+     * @param parent       The parentGUI MainProgramGUI to refresh the table.
+     * @param productDataManager The ProductDataManager to handle database operations.
      */
-    public AddProductGUI(MainProgramGUI parent, ProductDataManager productDataHandling) {
-        this.parent = parent;
-        this.productDataHandling = productDataHandling;
+    public AddProductGUI(MainProgramGUI parent, ProductDataManager productDataManager) {
+        this.parentGUI = parent;
+        this.productDataModel = productDataManager;
         initComponents();
         setLocationRelativeTo(null);
         
@@ -47,14 +47,6 @@ public class AddProductGUI extends JFrame {
             int value = (int) restockValuePicker.getValue();
             if (value < 0) {
                 restockValuePicker.setValue(0);
-            }
-        });
-        
-        // Unregister from parent when window is closed
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                parent.removeChildGUI(AddProductGUI.this);
             }
         });
     }
@@ -254,59 +246,59 @@ public class AddProductGUI extends JFrame {
      * @param evt The ActionEvent captured from the GUI.
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(null, "Do you want to add this product?", "Add New Product", JOptionPane.YES_NO_OPTION);
-        if (confirm != JOptionPane.YES_OPTION) {
+        int confirmAdd = JOptionPane.showConfirmDialog(null, "Do you want to add this product?", "Add New Product", JOptionPane.YES_NO_OPTION);
+        if (confirmAdd != JOptionPane.YES_OPTION) {
             return;
         }
 
-        String name = nameTxtField.getText().trim();
-        String size = sizeTxtField.getText().trim();
-        String brand = brandTxtField.getText().trim();
-        String type = typeTxtField.getText().trim();
-        String priceText = priceTxtField.getText().trim();
-        String quantityText = String.valueOf(quantityPicker.getValue());
-        String restockValueText = String.valueOf(restockValuePicker.getValue());
+        String prodName = nameTxtField.getText().trim();
+        String prodSize = sizeTxtField.getText().trim();
+        String prodBrand = brandTxtField.getText().trim();
+        String prodType = typeTxtField.getText().trim();
+        String prodPriceText = priceTxtField.getText().trim();
+        String prodQuantityText = String.valueOf(quantityPicker.getValue());
+        String prodRestockValueText = String.valueOf(restockValuePicker.getValue());
 
         // Validate inputs
-        if (name.isEmpty() || size.isEmpty() || brand.isEmpty() || type.isEmpty() || priceText.isEmpty()) {
+        if (prodName.isEmpty() || prodSize.isEmpty() || prodBrand.isEmpty() || prodType.isEmpty() || prodPriceText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        double price;
-        if (!isDataValid.isDouble(priceText)) {
+        double prodPrice;
+        if (!dataValidator.isDouble(prodPriceText)) {
             JOptionPane.showMessageDialog(null, "Invalid price format.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        price = Double.parseDouble(priceText);
-        if (price < 0) {
+        prodPrice = Double.parseDouble(prodPriceText);
+        if (prodPrice < 0) {
             JOptionPane.showMessageDialog(null, "Price cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!isDataValid.isInteger(quantityText)) {
+        if (!dataValidator.isInteger(prodQuantityText)) {
             JOptionPane.showMessageDialog(null, "Invalid quantity format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int quantity = Integer.parseInt(quantityText);
-        if (quantity < 0) {
+        int prodQuantity = Integer.parseInt(prodQuantityText);
+        if (prodQuantity < 0) {
             JOptionPane.showMessageDialog(null, "Quantity cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!isDataValid.isInteger(restockValueText)) {
+        if (!dataValidator.isInteger(prodRestockValueText)) {
             JOptionPane.showMessageDialog(null, "Invalid restock value format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int restockValue = Integer.parseInt(restockValueText);
-        if (restockValue < 0) {
+        int prodRestockValue = Integer.parseInt(prodRestockValueText);
+        if (prodRestockValue < 0) {
             JOptionPane.showMessageDialog(null, "Restock value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        boolean success = productDataHandling.addProduct(name, brand, size, type, price, quantity, restockValue);
-        if (success) {
-            parent.refreshTable();
+        boolean addSuccess = productDataModel.addProduct(prodName, prodBrand, prodSize, prodType, prodPrice, prodQuantity, prodRestockValue);
+        if (addSuccess) {
+            parentGUI.updateProductTable();
             JOptionPane.showMessageDialog(null, "Product added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             // Clear other fields
             nameTxtField.setText("");
@@ -325,7 +317,7 @@ public class AddProductGUI extends JFrame {
      * @param evt The ActionEvent captured from the GUI.
      */
     private void cancelBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window (the frame)
+        dispose(); // Close the current window
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

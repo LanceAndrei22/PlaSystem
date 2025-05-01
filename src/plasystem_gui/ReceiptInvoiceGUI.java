@@ -106,7 +106,7 @@ public class ReceiptInvoiceGUI extends JFrame {
 
         receiptIDTxtField.setForeground(new java.awt.Color(51, 51, 51));
         receiptIDTxtField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        receiptIDTxtField.setText("0415-777-452");
+        receiptIDTxtField.setText("#number");
 
         itemLabel.setForeground(new java.awt.Color(51, 51, 51));
         itemLabel.setText("Item");
@@ -250,7 +250,7 @@ public class ReceiptInvoiceGUI extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dateLabel)
-                    .addComponent(currentDataLabel))
+                    .addComponent(currentDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(salesInvoiceLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

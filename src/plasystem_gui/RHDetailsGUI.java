@@ -38,17 +38,17 @@ public class RHDetailsGUI extends javax.swing.JFrame {
             return;
         }
 
-        DefaultTableModel model = (DefaultTableModel) rhDetailsTbl.getModel();
-        model.setRowCount(0); // Clear existing rows
+        DefaultTableModel rhTblModel = (DefaultTableModel) rhDetailsTbl.getModel();
+        rhTblModel.setRowCount(0); // Clear existing rows
 
-        for (RestockItemData item : restock.getRestockItems()) {
-            model.addRow(new Object[]{
-                item.getRI_productName(),
-                item.getRI_productBrand(),
-                item.getRI_productSize(),
-                item.getRI_productType(),
-                item.getRI_productPrice(),
-                item.getRI_restockedQuantity()
+        for (RestockItemData rhItem : restock.getRestockItems()) {
+            rhTblModel.addRow(new Object[]{
+                rhItem.getRI_productName(),
+                rhItem.getRI_productBrand(),
+                rhItem.getRI_productSize(),
+                rhItem.getRI_productType(),
+                rhItem.getRI_productPrice(),
+                rhItem.getRI_restockedQuantity()
             });
         }
     }
@@ -104,7 +104,7 @@ public class RHDetailsGUI extends javax.swing.JFrame {
 
         rhDetailsScrollPane = new javax.swing.JScrollPane();
         rhDetailsTbl = new javax.swing.JTable();
-        Design1 = new javax.swing.JLabel();
+        design1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -139,11 +139,11 @@ public class RHDetailsGUI extends javax.swing.JFrame {
         });
         rhDetailsScrollPane.setViewportView(rhDetailsTbl);
 
-        Design1.setBackground(new java.awt.Color(153, 204, 0));
-        Design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/rhdetails_title.png"))); // NOI18N
-        Design1.setToolTipText("");
-        Design1.setOpaque(true);
+        design1.setBackground(new java.awt.Color(153, 204, 0));
+        design1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        design1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/rhdetails_title.png"))); // NOI18N
+        design1.setToolTipText("");
+        design1.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,7 +153,7 @@ public class RHDetailsGUI extends javax.swing.JFrame {
                 .addComponent(rhDetailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Design1, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE))
+                .addComponent(design1, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,7 +162,7 @@ public class RHDetailsGUI extends javax.swing.JFrame {
                 .addComponent(rhDetailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(Design1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, Short.MAX_VALUE)
+                    .addComponent(design1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, Short.MAX_VALUE)
                     .addGap(274, 274, 274)))
         );
 
@@ -170,7 +170,7 @@ public class RHDetailsGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Design1;
+    private javax.swing.JLabel design1;
     private javax.swing.JScrollPane rhDetailsScrollPane;
     private javax.swing.JTable rhDetailsTbl;
     // End of variables declaration//GEN-END:variables

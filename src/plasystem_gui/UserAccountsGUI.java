@@ -1,5 +1,7 @@
 package plasystem_gui;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import plasystem_functions.UserAccountData;
 import plasystem_functions.UserAccountDataManager;
 import javax.swing.table.DefaultTableModel;
@@ -7,64 +9,98 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class UserAccountsGUI extends javax.swing.JFrame {
-    
-    private final MainProgramGUI parent;
-    private final UserAccountDataManager userAccountDataHandling;
-    private final TableRowSorter<DefaultTableModel> sorter; // Store the sorter for reuse
-    private final List<JFrame> childWindows = new ArrayList<>(); // Track open child GUIs
+    private final UserAccountDataManager userAccountDataModel;
+    private final TableRowSorter<DefaultTableModel> tableSorter; // Store the tableSorter for reuse
+    // List to track open child GUIs
+    private final List<JFrame> childGUIs = new ArrayList<>();
+    // Map to track instances of active GUIs
+    private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
 
-    public UserAccountsGUI(MainProgramGUI parent, UserAccountDataManager userAccountDataHandling) {
-        this.parent = parent;
-        this.userAccountDataHandling = userAccountDataHandling;
+    public UserAccountsGUI(UserAccountDataManager userAccountDataManager) {
+        this.userAccountDataModel = userAccountDataManager;
         initComponents();
         setLocationRelativeTo(null); // Set the window to open in the center of the screen
-        userAccountDataHandling.loadUserAccounts();  // Load user accounts from DB
+        userAccountDataManager.loadUserAccounts();  // Load user accounts from DB
         loadUserAccountsTable();
         
         // Initialize the TableRowSorter
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
-        sorter = new TableRowSorter<>(model);
-        userAccountsTable.setRowSorter(sorter);
-        
-        // Unregister from parent when window is closed
-        addWindowListener(new WindowAdapter() {
+        tableSorter = new TableRowSorter<>(model);
+        userAccountsTable.setRowSorter(tableSorter);
+    }
+    
+    // Method to add a child GUI to the tracking list
+    public void addChildGUI(JFrame child) {
+        childGUIs.add(child);
+    }
+
+    // Method to remove a child GUI from the tracking list
+    public void removeChildGUI(JFrame child) {
+        childGUIs.remove(child);
+    }
+    
+    /**
+     * Launches or focuses a single instance of a GUI.
+     *
+     * @param guiClass The class of the GUI to launch.
+     * @param creator  A lambda to create a new instance of the GUI if needed.
+     * @return The GUI instance.
+     */
+    private <T extends JFrame> T launchSingleInstance(Class<T> guiClass, Supplier<T> creator) {
+        JFrame existingInstance = activeGUIs.get(guiClass);
+        if (existingInstance != null && !existingInstance.isDisplayable()) {
+            activeGUIs.remove(guiClass); // Remove disposed instance
+            existingInstance = null;
+        }
+
+        if (existingInstance != null) {
+            JOptionPane.showMessageDialog(
+                existingInstance,
+                "Only one instance can be present.",
+                "Instance Warning",
+                JOptionPane.WARNING_MESSAGE
+            );
+            existingInstance.requestFocus();
+            existingInstance.setVisible(true);
+            return guiClass.cast(existingInstance);
+        }
+
+        T newInstance = creator.get();
+        newInstance.setVisible(true);
+        newInstance.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        newInstance.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                parent.removeChildGUI(UserAccountsGUI.this);
+                activeGUIs.remove(guiClass);
+                removeChildGUI(newInstance);
             }
         });
-    }
-    
-    // Method to add a child window to the tracking list
-    public void addChildWindow(JFrame child) {
-        childWindows.add(child);
-    }
-    
-    // Method to remove a child window from the tracking list
-    public void removeChildWindow(JFrame child) {
-        childWindows.remove(child);
+        activeGUIs.put(guiClass, newInstance);
+        addChildGUI(newInstance);
+        return newInstance;
     }
     
     // Override dispose to close all child windows
     @Override
     public void dispose() {
         // Close all child windows
-        for (JFrame child : new ArrayList<>(childWindows)) {
+        for (JFrame child : new ArrayList<>(childGUIs)) {
             child.dispose();
         }
-        childWindows.clear(); // Clear the list
+        childGUIs.clear(); // Clear the list
         super.dispose(); // Call parent dispose
     }
     
     // Method to load user accounts into the JTable
     private void loadUserAccountsTable() {
-        List<UserAccountData> userList = userAccountDataHandling.getUserAccounts();  // Get the list of user accounts
+        List<UserAccountData> userList = userAccountDataModel.getUserAccounts();  // Get the list of user accounts
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         model.setRowCount(0); // Clear existing rows
 
@@ -245,11 +281,13 @@ public class UserAccountsGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActBtnActionPerformed
-        JFrame addUserAccountPanel = new AddUserAccountGUI(this, userAccountDataHandling);
-        addUserAccountPanel.setVisible(true);
-        addUserAccountPanel.pack();
-        addUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        addChildWindow(addUserAccountPanel); // Track the child window
+        launchSingleInstance(AddUserAccountGUI.class, () -> {
+            AddUserAccountGUI addUserActGUI = new AddUserAccountGUI(this, userAccountDataModel);
+            addUserActGUI.pack();
+            addUserActGUI.setLocationRelativeTo(null);
+            addUserActGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            return addUserActGUI;
+        });
     }//GEN-LAST:event_addUserActBtnActionPerformed
 
     private void deleteUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserActBtnActionPerformed
@@ -269,8 +307,8 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         String username = (String) userAccountsTable.getModel().getValueAt(modelRow, 0);
 
         // Prevent admin from deleting their own account
-        if ("admin".equals(userAccountDataHandling.getLoggedInRole()) && 
-            username.equals(userAccountDataHandling.getLoggedInUsername())) {
+        if ("admin".equals(userAccountDataModel.getLoggedInRole()) && 
+            username.equals(userAccountDataModel.getLoggedInUsername())) {
             JOptionPane.showMessageDialog(this, 
                 "You cannot delete your own account.",
                 "Permission Error", 
@@ -286,7 +324,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             JOptionPane.WARNING_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean success = userAccountDataHandling.deleteUserAccount(username);
+            boolean success = userAccountDataModel.deleteUserAccount(username);
             if (success) {
                 JOptionPane.showMessageDialog(this, 
                     "User account deleted successfully!",
@@ -314,8 +352,8 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         String username = (String) userAccountsTable.getModel().getValueAt(modelRow, 0);
 
         // Prevent admin from editing their own account
-        if ("admin".equals(userAccountDataHandling.getLoggedInRole()) && 
-            username.equals(userAccountDataHandling.getLoggedInUsername())) {
+        if ("admin".equals(userAccountDataModel.getLoggedInRole()) && 
+            username.equals(userAccountDataModel.getLoggedInUsername())) {
             JOptionPane.showMessageDialog(this, 
                 "You cannot edit your own account.",
                 "Permission Error", 
@@ -323,14 +361,11 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Find the UserAccountData object for the selected user
-        UserAccountData selectedUser = null;
-        for (UserAccountData user : userAccountDataHandling.getUserAccounts()) {
-            if (user.getUsername().equals(username)) {
-                selectedUser = user;
-                break;
-            }
-        }
+        UserAccountData selectedUser = userAccountDataModel.getUserAccounts()
+            .stream()
+            .filter(user -> user.getUsername().equals(username))
+            .findFirst()
+            .orElse(null);
 
         if (selectedUser == null) {
             JOptionPane.showMessageDialog(this, 
@@ -340,12 +375,14 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Launch EditUserAccountGUI with the selected user's UserAccountData
-        EditUserAccountGUI editUserAccountPanel = new EditUserAccountGUI(this, userAccountDataHandling, selectedUser);
-        editUserAccountPanel.setVisible(true);
-        editUserAccountPanel.pack();
-        editUserAccountPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        addChildWindow(editUserAccountPanel); // Track the child window
+        // Launch EditUserAccountGUI with the selected user's UserAccountData        
+        launchSingleInstance(EditUserAccountGUI.class, () -> {
+            EditUserAccountGUI editUserActGUI = new EditUserAccountGUI(this, userAccountDataModel, selectedUser);
+            editUserActGUI.pack();
+            editUserActGUI.setLocationRelativeTo(null);
+            editUserActGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            return editUserActGUI;
+        });
     }//GEN-LAST:event_editUserActBtnActionPerformed
 
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
@@ -366,9 +403,9 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
         // Apply the row filter
         if (searchText.isEmpty()) {
-            sorter.setRowFilter(null); // Clear filter if search text is empty
+            tableSorter.setRowFilter(null); // Clear filter if search text is empty
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
+            tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
 

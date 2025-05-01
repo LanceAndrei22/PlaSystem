@@ -7,18 +7,18 @@ import java.awt.event.KeyEvent;
 
 public class LaunchPanelGUI extends javax.swing.JFrame {
     
-    private final UserAccountDataManager userAccountDataHandling;
+    private final UserAccountDataManager userAccountDataModel;
     
     public LaunchPanelGUI() {
         initComponents(); // Initialize GUI components
         setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
         
         // Initialize the UserAccountDataManager and load user accounts
-        userAccountDataHandling = new UserAccountDataManager();
+        userAccountDataModel = new UserAccountDataManager();
         
         // Add KeyListeners for Enter key action
-        addEnterKeyListener(UsernameTextField);
-        addEnterKeyListener(PasswordTextField);
+        addEnterKeyListener(usernameTxtField);
+        addEnterKeyListener(passwordTxtField);
     }
     
     private void addEnterKeyListener(JTextField textField) {
@@ -26,14 +26,14 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    launchButtonActionPerformed(null); // Simulate button click when Enter is pressed
+                    launchBtnActionPerformed(null); // Simulate button click when Enter is pressed
                 }
             }
         });
     }
     
     private void launchMainProgram() {
-        JFrame mainProgram = new MainProgramGUI(userAccountDataHandling); // Pass UserAccountDataManager
+        JFrame mainProgram = new MainProgramGUI(userAccountDataModel); // Pass UserAccountDataManager
         mainProgram.setVisible(true); // Set the main program frame visible
         mainProgram.pack();
         mainProgram.setLocationRelativeTo(null);
@@ -49,108 +49,107 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        PasswordTextField = new javax.swing.JPasswordField();
-        VersionTextField = new javax.swing.JLabel();
-        launchButton = new javax.swing.JButton();
-        exitButton = new javax.swing.JButton();
-        PasswordLabel = new javax.swing.JLabel();
-        UsernameTextField = new javax.swing.JTextField();
-        UsernameLabel = new javax.swing.JLabel();
-        Background_Design = new javax.swing.JLabel();
+        launchPanel = new javax.swing.JPanel();
+        passwordTxtField = new javax.swing.JPasswordField();
+        versionTxTField = new javax.swing.JLabel();
+        launchBtn = new javax.swing.JButton();
+        exitBtn = new javax.swing.JButton();
+        passwordLabel = new javax.swing.JLabel();
+        usernameTxtField = new javax.swing.JTextField();
+        usernameLabel = new javax.swing.JLabel();
+        backgroundDesign = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        PasswordTextField.setText("tjb123");
+        passwordTxtField.setText("tjb123");
 
-        VersionTextField.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
-        VersionTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        VersionTextField.setText("version 2.0.0");
+        versionTxTField.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        versionTxTField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        versionTxTField.setText("version 3.0.0");
 
-        launchButton.setBackground(new java.awt.Color(0, 153, 255));
-        launchButton.setForeground(new java.awt.Color(255, 255, 255));
-        launchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/launchbtn_icon.png"))); // NOI18N
-        launchButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        launchButton.addActionListener(new java.awt.event.ActionListener() {
+        launchBtn.setBackground(new java.awt.Color(0, 153, 255));
+        launchBtn.setForeground(new java.awt.Color(255, 255, 255));
+        launchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/launchbtn_icon.png"))); // NOI18N
+        launchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        launchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                launchButtonActionPerformed(evt);
+                launchBtnActionPerformed(evt);
             }
         });
 
-        exitButton.setBackground(new java.awt.Color(255, 102, 102));
-        exitButton.setForeground(new java.awt.Color(255, 255, 255));
-        exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/exitbtn_icon.png"))); // NOI18N
-        exitButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        exitButton.setInheritsPopupMenu(true);
-        exitButton.addActionListener(new java.awt.event.ActionListener() {
+        exitBtn.setBackground(new java.awt.Color(255, 102, 102));
+        exitBtn.setForeground(new java.awt.Color(255, 255, 255));
+        exitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/exitbtn_icon.png"))); // NOI18N
+        exitBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        exitBtn.setInheritsPopupMenu(true);
+        exitBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitButtonActionPerformed(evt);
+                exitBtnActionPerformed(evt);
             }
         });
 
-        PasswordLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        PasswordLabel.setText(" Password :");
+        passwordLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        passwordLabel.setText(" Password :");
 
-        UsernameTextField.setText("admin");
+        usernameTxtField.setText("admin");
 
-        UsernameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        UsernameLabel.setText("Username :");
+        usernameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        usernameLabel.setText("Username :");
 
-        Background_Design.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        Background_Design.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/launchpanel_mainmenu.gif"))); // NOI18N
+        backgroundDesign.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        backgroundDesign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/launchpanel_mainmenu.gif"))); // NOI18N
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout launchPanelLayout = new javax.swing.GroupLayout(launchPanel);
+        launchPanel.setLayout(launchPanelLayout);
+        launchPanelLayout.setHorizontalGroup(
+            launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(launchPanelLayout.createSequentialGroup()
                 .addContainerGap(203, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(VersionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(235, 235, 235))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(UsernameLabel)
-                            .addComponent(PasswordLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(UsernameTextField)
-                            .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addComponent(launchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(usernameLabel)
+                    .addComponent(passwordLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(usernameTxtField)
+                    .addComponent(passwordTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addComponent(launchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(220, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Background_Design, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(versionTxTField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(456, 456, 456))
+            .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(backgroundDesign, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        launchPanelLayout.setVerticalGroup(
+            launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(launchPanelLayout.createSequentialGroup()
                 .addContainerGap(374, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(UsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(UsernameLabel))
+                .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
+                        .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(usernameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usernameLabel))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PasswordLabel))
-                        .addGap(44, 44, 44))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(launchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(59, 59, 59))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)))
-                .addComponent(VersionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addComponent(Background_Design)
+                        .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(passwordTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passwordLabel))
+                        .addGap(49, 49, 49)
+                        .addComponent(versionTxTField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
+                        .addComponent(launchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(117, 117, 117))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, launchPanelLayout.createSequentialGroup()
+                        .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(118, 118, 118))))
+            .addGroup(launchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(launchPanelLayout.createSequentialGroup()
+                    .addComponent(backgroundDesign)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -158,45 +157,45 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(launchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(launchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void launchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchButtonActionPerformed
-        String username = UsernameTextField.getText().trim();
-        String password = new String(PasswordTextField.getPassword()).trim();
+    private void launchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchBtnActionPerformed
+        String username = usernameTxtField.getText().trim();
+        String password = new String(passwordTxtField.getPassword()).trim();
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter both username and password.");
             return;
         }
 
-        if (userAccountDataHandling.validateUserLogin(username, password)) {
+        if (userAccountDataModel.validateUserLogin(username, password)) {
             launchMainProgram();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.");
         }
-    }//GEN-LAST:event_launchButtonActionPerformed
+    }//GEN-LAST:event_launchBtnActionPerformed
 
-    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+    private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
         System.exit(0); // Close the application
-    }//GEN-LAST:event_exitButtonActionPerformed
+    }//GEN-LAST:event_exitBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Background_Design;
-    private javax.swing.JLabel PasswordLabel;
-    private javax.swing.JPasswordField PasswordTextField;
-    private javax.swing.JLabel UsernameLabel;
-    private javax.swing.JTextField UsernameTextField;
-    private javax.swing.JLabel VersionTextField;
-    private javax.swing.JButton exitButton;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JButton launchButton;
+    private javax.swing.JLabel backgroundDesign;
+    private javax.swing.JButton exitBtn;
+    private javax.swing.JButton launchBtn;
+    private javax.swing.JPanel launchPanel;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JPasswordField passwordTxtField;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTxtField;
+    private javax.swing.JLabel versionTxTField;
     // End of variables declaration//GEN-END:variables
 }

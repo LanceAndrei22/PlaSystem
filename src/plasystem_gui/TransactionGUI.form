@@ -41,7 +41,7 @@
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Component id="Design" alignment="0" pref="879" max="32767" attributes="0"/>
+              <Component id="design" alignment="0" pref="879" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -62,7 +62,7 @@
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="Design" min="-2" pref="73" max="-2" attributes="0"/>
+                  <Component id="design" min="-2" pref="73" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="598" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -334,7 +334,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="cartTable">
+            <Component class="javax.swing.JTable" name="cartTbl">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Typewriter" size="10" style="0"/>
@@ -516,7 +516,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submitBtnActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="Design">
+    <Component class="javax.swing.JLabel" name="design">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="99" green="99" red="ff" type="rgb"/>

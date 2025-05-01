@@ -176,7 +176,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="dateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="currentDataLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="currentDataLabel" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="salesInvoiceLabel" min="-2" max="-2" attributes="0"/>
@@ -201,7 +201,7 @@
               <Color blue="33" green="33" red="33" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="0415-777-452"/>
+            <Property name="text" type="java.lang.String" value="#number"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="itemLabel">

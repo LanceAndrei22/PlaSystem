@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.util.List;
-import plasystem_functions.ProductData;
 
 /**
  * A renderer class to format and dynamically size columns in a JTable based on content.

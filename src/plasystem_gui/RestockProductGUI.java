@@ -12,8 +12,8 @@ public class RestockProductGUI extends javax.swing.JFrame {
     private ProductDataManager productDataManager;
     private RestockDataManager restockDataManager;
     private MainProgramGUI parentGUI;
-    private ErrorValueHandling errorHandler;
-    private TableRowSorter<DefaultTableModel> sorter;
+    private ErrorValueHandling dataValidator;
+    private TableRowSorter<DefaultTableModel> tableSorter;
     
     /**
      * Default constructor for the RestockProductGUI.
@@ -34,32 +34,32 @@ public class RestockProductGUI extends javax.swing.JFrame {
         this.parentGUI = mainGUI;
         this.productDataManager = productDataManager;
         this.restockDataManager = restockDataManager;
-        this.errorHandler = new ErrorValueHandling();
+        this.dataValidator = new ErrorValueHandling();
         initComponents();
         setLocationRelativeTo(null);
         initializeTable();
     }
     
     /**
-     * Initializes the table and sorter.
+     * Initializes the table and tableSorter.
      */
     private void initializeTable() {
         populateTable();
         applyTableRenderer();
-        sorter = new TableRowSorter<>((DefaultTableModel) restockTable.getModel());
-        restockTable.setRowSorter(sorter);
+        tableSorter = new TableRowSorter<>((DefaultTableModel) restockProductTbl.getModel());
+        restockProductTbl.setRowSorter(tableSorter);
     }
     
     /**
      * Populates the restock table with products where quantity is less than or equal to restock value.
      */
     private void populateTable() {
-        DefaultTableModel model = (DefaultTableModel) restockTable.getModel();
-        model.setRowCount(0);
+        DefaultTableModel restockProductTblModel = (DefaultTableModel) restockProductTbl.getModel();
+        restockProductTblModel.setRowCount(0);
         List<ProductData> productList = productDataManager.getList();
         for (ProductData product : productList) {
             if (product.getProductQuantity() <= product.getProductRestockValue()) {
-                model.addRow(new Object[]{
+                restockProductTblModel.addRow(new Object[]{
                     false, // Select
                     product.getProductId(),
                     product.getProductName(),
@@ -75,29 +75,14 @@ public class RestockProductGUI extends javax.swing.JFrame {
      * Applies the custom table renderer for column alignment.
      */
     private void applyTableRenderer() {
-        new RestockTableRenderer(restockTable);
+        new RestockTableRenderer(restockProductTbl);
     }
     
     /**
      * Refreshes the table with the latest database state, resetting selections and quantities.
      */
     private void refreshTable() {
-        DefaultTableModel model = (DefaultTableModel) restockTable.getModel();
-        model.setRowCount(0); // Clear table
-        List<ProductData> productList = productDataManager.getList();
-        for (ProductData product : productList) {
-            if (product.getProductQuantity() <= product.getProductRestockValue()) {
-                model.addRow(new Object[]{
-                    false, // Select
-                    product.getProductId(),
-                    product.getProductName(),
-                    product.getProductQuantity(),
-                    product.getProductRestockValue(),
-                    0 // Incoming Qty
-                });
-            }
-        }
-
+        populateTable();
         // Reapply renderer and search filter
         applyTableRenderer();
         if (!searchTxtField.getText().trim().isEmpty()) {
@@ -109,25 +94,25 @@ public class RestockProductGUI extends javax.swing.JFrame {
      * Validates and processes restocking for selected products as a single restock event.
      */
     private void restockItems() {
-        DefaultTableModel model = (DefaultTableModel) restockTable.getModel();
+        DefaultTableModel restockProductTblModel = (DefaultTableModel) restockProductTbl.getModel();
         List<Map<String, Object>> items = new ArrayList<>();
         
         // Validate all selected items using view indices
-        for (int i = 0; i < model.getRowCount(); i++) {
-            boolean selected = (Boolean) model.getValueAt(i, 0);
+        for (int i = 0; i < restockProductTblModel.getRowCount(); i++) {
+            boolean selected = (Boolean) restockProductTblModel.getValueAt(i, 0);
             if (selected) {
-                Object incomingQtyObj = model.getValueAt(i, 5);
+                Object incomingQtyObj = restockProductTblModel.getValueAt(i, 5);
                 if (incomingQtyObj == null || incomingQtyObj.toString().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(this,
-                        "Incoming quantity for product '" + model.getValueAt(i, 2) + "' cannot be empty.",
+                        "Incoming quantity for product '" + restockProductTblModel.getValueAt(i, 2) + "' cannot be empty.",
                         "Input Error",
                         JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 String incomingQtyStr = incomingQtyObj.toString();
-                if (!errorHandler.isInteger(incomingQtyStr)) {
+                if (!dataValidator.isInteger(incomingQtyStr)) {
                     JOptionPane.showMessageDialog(this,
-                        "Invalid incoming quantity for product '" + model.getValueAt(i, 2) + "'. Must be a non-negative integer.",
+                        "Invalid incoming quantity for product '" + restockProductTblModel.getValueAt(i, 2) + "'. Must be a non-negative integer.",
                         "Input Error",
                         JOptionPane.ERROR_MESSAGE);
                     return;
@@ -135,12 +120,12 @@ public class RestockProductGUI extends javax.swing.JFrame {
                 int incomingQty = Integer.parseInt(incomingQtyStr);
                 if (incomingQty <= 0) {
                     JOptionPane.showMessageDialog(this,
-                        "Incoming quantity for product '" + model.getValueAt(i, 2) + "' must be greater than 0.",
+                        "Incoming quantity for product '" + restockProductTblModel.getValueAt(i, 2) + "' must be greater than 0.",
                         "Input Error",
                         JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                int productId = (Integer) model.getValueAt(i, 1);
+                int productId = (Integer) restockProductTblModel.getValueAt(i, 1);
                 ProductData product = productDataManager.getList().stream()
                     .filter(p -> p.getProductId() == productId)
                     .findFirst()
@@ -169,10 +154,10 @@ public class RestockProductGUI extends javax.swing.JFrame {
 
         // Process restocking as a single event
         try {
-            boolean success = restockDataManager.restockMultipleProducts(items);
-            if (success) {
+            boolean restockSuccess = restockDataManager.restockMultipleProducts(items);
+            if (restockSuccess) {
                 refreshTable();
-                parentGUI.refreshTable();
+                parentGUI.updateProductTable();
                 JOptionPane.showMessageDialog(this,
                     "Restocking successful!",
                     "Success",
@@ -206,11 +191,11 @@ public class RestockProductGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         labelPane = new javax.swing.JPanel();
-        Titlelabel = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         restockBtn = new javax.swing.JButton();
-        restockScrollPane = new javax.swing.JScrollPane();
-        restockTable = new javax.swing.JTable();
+        restockProductScrollPane = new javax.swing.JScrollPane();
+        restockProductTbl = new javax.swing.JTable();
         searchPanel = new javax.swing.JPanel();
         searchTxtField = new javax.swing.JTextField();
         searchPrmtrBox = new javax.swing.JComboBox<>();
@@ -222,10 +207,10 @@ public class RestockProductGUI extends javax.swing.JFrame {
 
         labelPane.setBackground(new java.awt.Color(0, 204, 51));
 
-        Titlelabel.setBackground(new java.awt.Color(0, 204, 51));
-        Titlelabel.setForeground(new java.awt.Color(0, 204, 51));
-        Titlelabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Titlelabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/restocktitle.png"))); // NOI18N
+        titleLabel.setBackground(new java.awt.Color(0, 204, 51));
+        titleLabel.setForeground(new java.awt.Color(0, 204, 51));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plasystem_resources/restocktitle.png"))); // NOI18N
 
         javax.swing.GroupLayout labelPaneLayout = new javax.swing.GroupLayout(labelPane);
         labelPane.setLayout(labelPaneLayout);
@@ -233,14 +218,14 @@ public class RestockProductGUI extends javax.swing.JFrame {
             labelPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(labelPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Titlelabel, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+                .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
                 .addContainerGap())
         );
         labelPaneLayout.setVerticalGroup(
             labelPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(labelPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Titlelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, Short.MAX_VALUE)
+                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, Short.MAX_VALUE)
                 .addGap(26, 26, 26))
         );
 
@@ -258,10 +243,10 @@ public class RestockProductGUI extends javax.swing.JFrame {
             }
         });
 
-        restockScrollPane.setBorder(null);
+        restockProductScrollPane.setBorder(null);
 
-        restockTable.setAutoCreateRowSorter(true);
-        restockTable.setModel(new javax.swing.table.DefaultTableModel(
+        restockProductTbl.setAutoCreateRowSorter(true);
+        restockProductTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null}
             },
@@ -284,7 +269,7 @@ public class RestockProductGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        restockScrollPane.setViewportView(restockTable);
+        restockProductScrollPane.setViewportView(restockProductTbl);
 
         searchPanel.setOpaque(false);
 
@@ -331,7 +316,7 @@ public class RestockProductGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(restockScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE))
+                        .addComponent(restockProductScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(201, 201, 201)
                         .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -356,7 +341,7 @@ public class RestockProductGUI extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(refreshBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(restockScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addComponent(restockProductScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -372,13 +357,41 @@ public class RestockProductGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void restockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockBtnActionPerformed
-        restockItems();
+        // Check if any items are selected
+        DefaultTableModel restockProductTblModel = (DefaultTableModel) restockProductTbl.getModel();
+        boolean hasSelectedItems = false;
+        for (int i = 0; i < restockProductTblModel.getRowCount(); i++) {
+            if ((Boolean) restockProductTblModel.getValueAt(i, 0)) {
+                hasSelectedItems = true;
+                break;
+            }
+        }
+
+        if (!hasSelectedItems) {
+            JOptionPane.showMessageDialog(this,
+                "No items selected for restocking.",
+                "Restock Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Show confirmation dialog
+        int response = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to restock the selected items?",
+            "Confirm Restock",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+
+        // Proceed with restocking only if the user clicks "Yes"
+        if (response == JOptionPane.YES_OPTION) {
+            restockItems();
+        }
     }//GEN-LAST:event_restockBtnActionPerformed
 
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
         String searchText = searchTxtField.getText().trim();
         String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
-        DefaultTableModel model = (DefaultTableModel) restockTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) restockProductTbl.getModel();
         int columnIndex = model.findColumn(columnNameToSearch);
 
         if (columnIndex == -1) {
@@ -390,9 +403,9 @@ public class RestockProductGUI extends javax.swing.JFrame {
         }
 
         if (searchText.isEmpty()) {
-            sorter.setRowFilter(null);
+            tableSorter.setRowFilter(null);
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
+            tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
 
@@ -401,15 +414,15 @@ public class RestockProductGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_refreshBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Titlelabel;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JPanel labelPane;
     private javax.swing.JButton refreshBtn;
     private javax.swing.JButton restockBtn;
-    private javax.swing.JScrollPane restockScrollPane;
-    private javax.swing.JTable restockTable;
+    private javax.swing.JScrollPane restockProductScrollPane;
+    private javax.swing.JTable restockProductTbl;
     private javax.swing.JPanel searchPanel;
     private javax.swing.JComboBox<String> searchPrmtrBox;
     private javax.swing.JTextField searchTxtField;
+    private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

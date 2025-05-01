@@ -7,15 +7,11 @@ import javax.swing.table.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class LowStockGUI extends javax.swing.JFrame{
     
-    private TableRowSorter<DefaultTableModel> sorter; // Store the sorter for reuse
-    private ProductDataManager dataHandler;
+    private TableRowSorter<DefaultTableModel> tableSorter; // Store the tableSorter for reuse
     private List<ProductData> productList;
-    private MainProgramGUI parent;
     private Timer refreshTimer; // Timer for dynamic updates
     
     public LowStockGUI(){
@@ -23,31 +19,21 @@ public class LowStockGUI extends javax.swing.JFrame{
         setLocationRelativeTo(null);
     }
 
-    public LowStockGUI(MainProgramGUI parent, ProductDataManager dataHandler) {
-        this.parent = parent;
-        this.dataHandler = dataHandler;
-        this.productList = dataHandler.getList(); // Load product list
+    public LowStockGUI(ProductDataManager productDataModel) {
+        this.productList = productDataModel.getList(); // Load product list
 
         initComponents();
         setLocationRelativeTo(null);
 
         DefaultTableModel model = (DefaultTableModel) lowstockTable.getModel();
-        sorter = new TableRowSorter<>(model);
-        lowstockTable.setRowSorter(sorter);
+        tableSorter = new TableRowSorter<>(model);
+        lowstockTable.setRowSorter(tableSorter);
         model.setRowCount(0); // Clear table
         
         leftAlignProdID();
 
         refreshLowStockTable();
         startRefreshTimer();
-        
-        // Unregister from parent when window is closed
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                parent.removeChildGUI(LowStockGUI.this);
-            }
-        });
     }
     
     // Start a timer to refresh the table every 1 second
@@ -216,12 +202,11 @@ public class LowStockGUI extends javax.swing.JFrame{
 
         // Apply the row filter
         if (searchText.isEmpty()) {
-            sorter.setRowFilter(null); // Clear filter if search text is empty
+            tableSorter.setRowFilter(null); // Clear filter if search text is empty
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
+            tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Design;
