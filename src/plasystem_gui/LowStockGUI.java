@@ -97,6 +97,7 @@ public class LowStockGUI extends javax.swing.JFrame{
         setResizable(false);
 
         lowstockTable.setAutoCreateRowSorter(true);
+        lowstockTable.getTableHeader().setReorderingAllowed(false);
         lowstockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null}

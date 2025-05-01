@@ -96,7 +96,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="lowstockTable.setAutoCreateRowSorter(true);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="lowstockTable.setAutoCreateRowSorter(true);&#xa;lowstockTable.getTableHeader().setReorderingAllowed(false);"/>
           </AuxValues>
         </Component>
       </SubComponents>

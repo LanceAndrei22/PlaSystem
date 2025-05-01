@@ -245,6 +245,7 @@ public class RestockProductGUI extends javax.swing.JFrame {
 
         restockProductScrollPane.setBorder(null);
 
+        restockProductTbl.getTableHeader().setReorderingAllowed(false);
         restockProductTbl.setAutoCreateRowSorter(true);
         restockProductTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
