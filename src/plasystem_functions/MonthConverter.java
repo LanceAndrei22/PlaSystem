@@ -6,17 +6,19 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
- * Utility class for converting month names to numeric format.
+ * Utility class for converting month names to their two-digit numeric equivalents in the PlaSystem application.
+ * Supports case-insensitive month name inputs and returns the original input for invalid month names.
  */
 public class MonthConverter {
 
     /**
-     * Converts a month name to its two-digit numeric equivalent.
-     * For example, "April" or "april" returns "04". If the input is not a valid month name,
-     * the original input is returned unchanged.
+     * Converts a month name to its two-digit numeric equivalent (e.g., "April" or "april" returns "04").
+     * If the input is not a valid month name (e.g., "Invalid"), null, or empty, the original input is returned unchanged.
+     * The conversion is case-insensitive and uses English locale for month name validation.
      *
-     * @param monthName The month name to convert (case-insensitive).
-     * @return A two-digit numeric string (e.g., "04") or the original input if invalid.
+     * @param monthName The month name to convert (case-insensitive). May be null or empty.
+     * @return A two-digit numeric string (e.g., "04" for April) if the input is a valid month name,
+     *         or the original input if invalid, null, or empty.
      */
     public static String monthNameToNumeric(String monthName) {
         if (monthName == null || monthName.trim().isEmpty()) {

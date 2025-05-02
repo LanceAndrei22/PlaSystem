@@ -5,14 +5,24 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 
 /**
- * Utility class to apply role-based access control by enabling/disabling buttons and the product table in MainProgramGUI.
+ * Utility class for applying role-based access control in the PlaSystem application.
+ * Enables or disables buttons and the product table in the MainProgramGUI based on the
+ * user's role, using reflection to access GUI components.
  */
 public class RoleBasedAccessControl {
     
     /**
-     * Applies role-based permissions by enabling/disabling buttons and the product table in MainProgramGUI based on the user's role.
-     * @param gui The MainProgramGUI instance containing the buttons and table.
-     * @param role The role of the logged-in user.
+     * Applies role-based permissions by enabling or disabling buttons and the product table
+     * in the MainProgramGUI based on the user's role. Uses reflection to access GUI components.
+     * Disables all components as a fallback if the role is null, unknown, or if reflection fails.
+     *
+     * @param gui  The MainProgramGUI instance containing the buttons and table. Must not be null.
+     * @param role The role of the logged-in user (e.g., "admin", "cashier", "restocker",
+     *             "store_manager", "inventory_manager"). May be null.
+     * @throws NullPointerException if gui is null.
+     * @throws IllegalStateException if reflection fails to access required fields due to
+     *                               NoSuchFieldException or IllegalAccessException, with a
+     *                               fallback to disable all components.
      */
     public static void applyRolePermissions(MainProgramGUI gui, String role) {
         try {
@@ -100,7 +110,7 @@ public class RoleBasedAccessControl {
                     }
                 }
                 // All buttons and table remain enabled
-                            }
+            }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             // Log error and disable all buttons and the table as a fallback
             System.err.println("Error accessing components for role-based access control: " + e.getMessage());

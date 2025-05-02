@@ -5,15 +5,21 @@ import javax.swing.table.*;
 import java.awt.*;
 
 /**
- * Custom renderer for the restock table to adjust column widths dynamically.
+ * Custom renderer for the restock table in the PlaSystem application, dynamically adjusting
+ * column widths to fit content. Minimizes the "Select" (checkbox) and "ID" columns while
+ * sizing other columns based on their maximum content width, with padding and a width cap.
  */
 public class RestockTableRenderer {
+    /** The JTable to render. */
     private final JTable table;
 
     /**
-     * Constructor applies rendering to the specified table.
+     * Constructs a RestockTableRenderer to apply rendering to the specified table.
+     * Adjusts column widths upon initialization to fit content and optimize display.
      *
-     * @param table The JTable to render.
+     * @param table The JTable to render. Must not be null and must have at least 2 columns
+     *              (Select, ID, and potentially others).
+     * @throws NullPointerException if table or its column model is null.
      */
     public RestockTableRenderer(JTable table) {
         this.table = table;
@@ -21,7 +27,12 @@ public class RestockTableRenderer {
     }
 
     /**
-     * Adjusts column widths to fit content, minimizing "Select" and "ID" columns.
+     * Adjusts column widths to fit content, setting fixed minimal widths for the "Select" (checkbox)
+     * and "ID" columns, and dynamically sizing other columns based on their maximum content width.
+     * Applies padding to all columns and caps dynamic column widths at 300 pixels to prevent
+     * excessive expansion.
+     *
+     * @throws NullPointerException if the table's column model is null.
      */
     private void adjustColumnWidths() {
         TableColumnModel columnModel = table.getColumnModel();
@@ -55,9 +66,10 @@ public class RestockTableRenderer {
     }
 
     /**
-     * Calculates the maximum width needed for the ID column based on content.
+     * Calculates the maximum width needed for the ID column based on the content of all rows.
+     * Uses the table's font metrics to measure the width of ID values and adds padding.
      *
-     * @return The calculated width.
+     * @return The calculated width for the ID column in pixels, including padding.
      */
     private int calculateMaxIdWidth() {
         int maxWidth = 0;

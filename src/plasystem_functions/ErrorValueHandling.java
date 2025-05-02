@@ -1,20 +1,21 @@
 package plasystem_functions;
 
 /**
- * Handles error checking for numeric inputs.
+ * Utility class for validating numeric input strings in the PlaSystem application.
+ * Provides methods to check if a string represents a valid non-negative integer or
+ * a non-negative double with at most two decimal places.
  */
 public class ErrorValueHandling {
 
     /**
      * Checks if the input string represents a valid non-negative number, either an integer
-     * (e.g., "0", "123") or a double floating-point number with at most two decimal places
-     * (e.g., "12.34", "12.3", "0.00", "0.0"). Numbers with three or more decimal places
-     * (e.g., "12.345", "0.000"), invalid formats (e.g., "letters", "12.34.56"), and negative
-     * numbers (e.g., "-12.34") are rejected.
+     * (e.g., "0", "123") or a double with at most two decimal places (e.g., "12.34", "12.3", "0.00", "0.0").
+     * Invalid inputs, such as numbers with three or more decimal places (e.g., "12.345"), non-numeric strings
+     * (e.g., "letters"), malformed numbers (e.g., "12.34.56"), or negative numbers (e.g., "-12.34"), are rejected.
      *
-     * @param input The string to be checked.
-     * @return {@code true} if the input is a valid non-negative number with at most two
-     *         decimal places, {@code false} otherwise.
+     * @param input The string to be validated.
+     * @return {@code true} if the input is a valid non-negative number with at most two decimal places,
+     *         {@code false} if the input is null, empty, or invalid.
      */
     public boolean isDouble(String input) {
         if (input == null || input.trim().isEmpty()) {
@@ -39,12 +40,13 @@ public class ErrorValueHandling {
     }
 
     /**
-     * Checks if the input string represents a valid non-negative integer
-     * (e.g., "0", "123"). Invalid formats (e.g., "12.34", "letters", "12a") and negative
-     * numbers (e.g., "-123") are rejected.
+     * Checks if the input string represents a valid non-negative integer (e.g., "0", "123").
+     * Invalid inputs, such as decimal numbers (e.g., "12.34"), non-numeric strings (e.g., "letters"),
+     * mixed strings (e.g., "12a"), or negative numbers (e.g., "-123"), are rejected.
      *
-     * @param input The string to be checked.
-     * @return {@code true} if the input is a valid non-negative integer, {@code false} otherwise.
+     * @param input The string to be validated.
+     * @return {@code true} if the input is a valid non-negative integer,
+     *         {@code false} if the input is null, empty, or invalid.
      */
     public boolean isInteger(String input) {
         if (input == null || input.trim().isEmpty()) {

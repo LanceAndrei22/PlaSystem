@@ -4,15 +4,26 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.text.DecimalFormat;
 
+/**
+ * Custom renderer for the transaction history table in the PlaSystem application.
+ * Configures column widths, applies decimal formatting to amount columns (Total Amount,
+ * Payment Amount, Change Given), and sets alignment (left for ID, right for amounts).
+ */
 public class TransactionHistoryTableRenderer {
+    /** The JTable to render. */
     private final JTable table;
+    
+    /** The preferred total width of the table in pixels. */
     private final int tableWidth;
 
     /**
-     * Constructor for TransactionTableRenderer.
+     * Constructs a TransactionHistoryTableRenderer to initialize rendering for the specified table.
+     * Applies custom column widths, decimal formatting, and alignment based on the provided table width.
      *
-     * @param table      The JTable to render.
-     * @param tableWidth The preferred width of the table.
+     * @param table      The JTable to render. Must not be null and must have at least 6 columns
+     *                   (ID, Date, Time, Total Amount, Payment Amount, Change Given).
+     * @param tableWidth The preferred width of the table in pixels. Should be positive.
+     * @throws NullPointerException if table or its column model is null.
      */
     public TransactionHistoryTableRenderer(JTable table, int tableWidth) {
         this.table = table;
@@ -23,7 +34,11 @@ public class TransactionHistoryTableRenderer {
     }
 
     /**
-     * Applies custom column widths, minimizing the ID column.
+     * Applies custom column widths, setting a minimal fixed width for the ID column and
+     * distributing the remaining width equally among other columns. Assumes the table has
+     * at least 6 columns (ID, Date, Time, Total Amount, Payment Amount, Change Given).
+     *
+     * @throws NullPointerException if the table's column model is null.
      */
     private void applyColumnWidths() {
         TableColumnModel columnModel = table.getColumnModel();
@@ -47,7 +62,10 @@ public class TransactionHistoryTableRenderer {
     }
 
     /**
-     * Applies decimal formatting to amount columns.
+     * Applies decimal formatting to the amount columns (Total Amount, Payment Amount, Change Given)
+     * using a custom DecimalFormatRenderer to display values with two decimal places.
+     *
+     * @throws NullPointerException if the table's column model is null.
      */
     private void applyDecimalFormatting() {
         DecimalFormatRenderer renderer = new DecimalFormatRenderer();
@@ -59,7 +77,11 @@ public class TransactionHistoryTableRenderer {
     }
 
     /**
-     * Applies alignment to columns: left for ID, right for amounts.
+     * Applies alignment to columns: left for the ID column, right for the amount columns
+     * (Total Amount, Payment Amount, Change Given). Uses a left-aligned renderer for the ID
+     * column and a right-aligned DecimalFormatRenderer for the amount columns.
+     *
+     * @throws NullPointerException if the table's column model is null.
      */
     private void applyColumnAlignment() {
         TableColumnModel columnModel = table.getColumnModel();
@@ -78,17 +100,31 @@ public class TransactionHistoryTableRenderer {
     }
 
     /**
-     * Custom renderer to format double values to two decimal places.
+     * Custom renderer to format numeric values to two decimal places in table cells.
+     * Extends DefaultTableCellRenderer to format numbers using a DecimalFormat with "#0.00" pattern.
      */
     private static class DecimalFormatRenderer extends DefaultTableCellRenderer {
+        /** Formatter for displaying numbers with two decimal places. */
         private final DecimalFormat formatter = new DecimalFormat("#0.00");
 
+        /**
+         * Renders a table cell, formatting numeric values to two decimal places and passing
+         * non-numeric values unchanged. Applies the specified alignment and selection styling.
+         *
+         * @param table      The JTable containing the cell.
+         * @param value      The value to render (expected to be a Number for amount columns).
+         * @param isSelected True if the cell is selected.
+         * @param hasFocus   True if the cell has focus.
+         * @param row        The row index of the cell.
+         * @param column     The column index of the cell.
+         * @return The rendered component for the table cell.
+         */
         @Override
         public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
                                                                boolean isSelected, boolean hasFocus,
                                                                int row, int column) {
-            if (value instanceof Number) {
-                value = formatter.format(((Number) value).doubleValue());
+            if (value instanceof Number number) {
+                value = formatter.format(number.doubleValue());
             }
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }

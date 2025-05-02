@@ -9,26 +9,37 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Handles the generation of inventory reports in CSV format.
+ * Utility class for generating inventory reports in CSV format for the PlaSystem application.
+ * The report includes product details and highlights low stock items, saving the output to a
+ * timestamped file in the "inventory_reports" directory.
  */
 public class InventoryReportGenerator {
+    /** Directory path where inventory reports are saved. */
     private static final String REPORTS_DIRECTORY = "inventory_reports";
+
+    /** List of products to include in the report. */
     private final List<ProductData> productList;
+
+    /** Column headers for the CSV report. */
     private final String[] HEADERS = {"ID", "Name", "Brand", "Size", "Type", "Price", "Quantity", "Restock Value"};
 
     /**
-     * Constructor initializing the product list for report generation.
+     * Constructs an InventoryReportGenerator with the specified list of products.
      *
-     * @param productList The list of products to include in the report.
+     * @param productList The list of products to include in the report. Must not be null.
+     * @throws NullPointerException if productList is null.
      */
     public InventoryReportGenerator(List<ProductData> productList) {
         this.productList = productList;
     }
 
     /**
-     * Generates a CSV inventory report after prompting the user for confirmation.
+     * Generates a CSV inventory report after prompting the user for confirmation. If confirmed,
+     * the report is saved in the "inventory_reports" directory with a timestamped filename
+     * (e.g., InventoryReport_YYYY-MM-DD_HHMMSS.csv). Displays a success or error message to the user.
      *
-     * @param parent The parent JFrame for displaying dialogues.
+     * @param parent The parent JFrame for displaying confirmation and result dialogs. May be null
+     *               if no parent is required.
      */
     public void generateReport(JFrame parent) {
         // Prompt user to confirm export
@@ -69,10 +80,14 @@ public class InventoryReportGenerator {
     }
 
     /**
-     * Generates a CSV report with the inventory data.
+     * Generates a CSV report containing inventory data, including a header with metadata and
+     * product details. Each row includes product attributes and a "Low Stock" indicator based
+     * on the comparison of quantity and restock value.
      *
-     * @param filePath The path where the CSV file will be saved.
-     * @throws IOException If an error occurs during file writing.
+     * @param filePath The path where the CSV file will be saved. Must not be null or empty.
+     * @throws IOException If an error occurs during file writing, such as insufficient permissions
+     *                     or disk space issues.
+     * @throws NullPointerException If filePath is null.
      */
     private void generateCSVReport(String filePath) throws IOException {
         try (FileWriter writer = new FileWriter(filePath)) {

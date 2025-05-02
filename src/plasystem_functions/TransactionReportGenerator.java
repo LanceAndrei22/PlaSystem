@@ -9,29 +9,40 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Handles the generation of transaction reports in CSV format, including transaction details and their items.
+ * Utility class for generating transaction reports in CSV format for the PlaSystem application.
+ * The report includes transaction details and their associated items, saved to a timestamped
+ * file in the "transaction_reports" directory.
  */
 public class TransactionReportGenerator {
+    /** Directory path where transaction reports are saved. */
     private static final String REPORTS_DIRECTORY = "transaction_reports";
+    
+    /** List of transactions to include in the report. */
     private final List<TransactionData> transactionList;
+    
+    /** Column headers for the CSV report, combining transaction and item details. */
     private static final String[] COMBINED_HEADERS = {
         "Transaction ID", "Date", "Time", "Total Amount", "Payment Amount", "Change Amount",
         "Product Name", "Brand", "Size", "Type", "Buy Quantity", "Unit Price", "Total Price"
     };
 
     /**
-     * Constructor initializing the transaction list for report generation.
+     * Constructs a TransactionReportGenerator with the specified list of transactions.
      *
-     * @param transactionList The list of transactions to include in the report.
+     * @param transactionList The list of transactions to include in the report. Must not be null.
+     * @throws NullPointerException if transactionList is null.
      */
     public TransactionReportGenerator(List<TransactionData> transactionList) {
         this.transactionList = transactionList;
     }
 
     /**
-     * Generates a CSV transaction report after prompting the user for confirmation.
+     * Generates a CSV transaction report after prompting the user for confirmation. If confirmed,
+     * the report is saved in the "transaction_reports" directory with a timestamped filename
+     * (e.g., TransactionReport_YYYY-MM-DD_HHMMSS.csv). Displays a success or error message to the user.
      *
-     * @param parent The parent JFrame for displaying dialogues.
+     * @param parent The parent JFrame for displaying confirmation and result dialogs. May be null
+     *               if no parent is required.
      */
     public void generateReport(JFrame parent) {
         // Prompt user to confirm export
@@ -72,10 +83,15 @@ public class TransactionReportGenerator {
     }
 
     /**
-     * Generates a CSV report with transaction data and their items in a flattened format.
+     * Generates a CSV report containing transaction data and their associated items in a
+     * flattened format. Each row represents a transaction item with its transaction details.
+     * Includes a header with metadata and column names.
      *
-     * @param filePath The path where the CSV file will be saved.
-     * @throws IOException If an error occurs during file writing.
+     * @param filePath The path where the CSV file will be saved. Must not be null or empty.
+     * @throws IOException If an error occurs during file writing, such as insufficient permissions
+     *                     or disk space issues.
+     * @throws NullPointerException If filePath is null or if transactionList or any transaction
+     *                              item's attributes are null.
      */
     private void generateCSVReport(String filePath) throws IOException {
         try (FileWriter writer = new FileWriter(filePath)) {

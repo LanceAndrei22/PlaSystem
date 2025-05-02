@@ -6,29 +6,44 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * A renderer class to format and dynamically size columns in a JTable based on content.
- * Aligns columns as follows:
- * - Product ID, Name, Brand, Size, Type: Left-aligned
- * - Price, Quantity, Restock Value: Right-aligned
- * - Price: Formatted to two decimal places
+ * Utility class for formatting and dynamically sizing columns in a JTable displaying product data
+ * in the PlaSystem application. Aligns columns (left for ID, Name, Brand, Size, Type; right for
+ * Price, Quantity, Restock Value), formats the Price column to two decimal places, and adjusts
+ * column widths based on content length while respecting a total table width constraint.
  */
 public class ProductTableRenderer {
-
-    private static final int PADDING = 10; // Padding for visual appeal
-    private static final int[] LEFT_ALIGNED_COLUMNS = {0, 1, 2, 3, 4}; // Product ID, Name, Brand, Size, Type
-    private static final int[] RIGHT_ALIGNED_COLUMNS = {5, 6, 7}; // Price, Quantity, Restock Value
-    private static final int PRICE_COLUMN = 5; // Index of Price column
+    /** Padding added to column widths for visual appeal (in pixels). */
+    private static final int PADDING = 10;
+    
+    /** Indices of left-aligned columns: Product ID, Name, Brand, Size, Type. */
+    private static final int[] LEFT_ALIGNED_COLUMNS = {0, 1, 2, 3, 4};
+    
+    /** Indices of right-aligned columns: Price, Quantity, Restock Value. */
+    private static final int[] RIGHT_ALIGNED_COLUMNS = {5, 6, 7};
+    
+    /** Index of the Price column, which requires special formatting. */
+    private static final int PRICE_COLUMN = 5;
 
     /**
-     * Constructor to set up renders and dynamically size columns for the given JTable.
+     * Constructs a ProductTableRenderer to set up cell renderers and dynamically size columns
+     * for the given JTable based on the provided product data and total table width.
      *
-     * @param alignTable The JTable to format.
-     * @param productList The list of ProductData to determine maximum content lengths.
-     * @param totalTableWidth The total width available for the table (in pixels).
+     * @param alignTable      The JTable to format. Must not be null and must have at least 8 columns
+     *                        (ID, Name, Brand, Size, Type, Price, Quantity, Restock Value).
+     * @param productList     The list of ProductData objects to determine maximum content lengths.
+     *                        May be empty, in which case default values are used.
+     * @param totalTableWidth The total width available for the table (in pixels). Should be positive.
+     * @throws NullPointerException if alignTable or its column model is null.
      */
     public ProductTableRenderer(JTable alignTable, List<ProductData> productList, int totalTableWidth) {
         // Renderer for Price column (2 decimal places, right-aligned)
         DefaultTableCellRenderer priceRenderer = new DefaultTableCellRenderer() {
+            /**
+             * Sets the value for the Price column, formatting numeric values to two decimal places
+             * and aligning right. Non-numeric values are displayed as-is.
+             *
+             * @param value The value to display in the cell.
+             */
             @Override
             protected void setValue(Object value) {
                 try {
@@ -43,6 +58,12 @@ public class ProductTableRenderer {
 
         // Renderer for other right-aligned columns (Quantity, Restock Value)
         DefaultTableCellRenderer rightAlignedRenderer = new DefaultTableCellRenderer() {
+            /**
+             * Sets the value for right-aligned columns (Quantity, Restock Value), aligning right.
+             * Null values are displayed as empty strings.
+             *
+             * @param value The value to display in the cell.
+             */
             @Override
             protected void setValue(Object value) {
                 setText(value != null ? value.toString() : "");
@@ -52,6 +73,12 @@ public class ProductTableRenderer {
 
         // Renderer for left-aligned columns (Product ID, Name, Brand, Size, Type)
         DefaultTableCellRenderer leftAlignedRenderer = new DefaultTableCellRenderer() {
+            /**
+             * Sets the value for left-aligned columns (Product ID, Name, Brand, Size, Type),
+             * aligning left. Null values are displayed as empty strings.
+             *
+             * @param value The value to display in the cell.
+             */
             @Override
             protected void setValue(Object value) {
                 setText(value != null ? value.toString() : "");
@@ -76,10 +103,11 @@ public class ProductTableRenderer {
     }
 
     /**
-     * Checks if a column index is right-aligned.
+     * Checks if a column index corresponds to a right-aligned column.
      *
-     * @param columnIndex The column index.
-     * @return True if the column is right-aligned, false otherwise.
+     * @param columnIndex The index of the column to check.
+     * @return {@code true} if the column is right-aligned (Price, Quantity, Restock Value),
+     *         {@code false} otherwise.
      */
     private boolean isRightAlignedColumn(int columnIndex) {
         for (int rightColumn : RIGHT_ALIGNED_COLUMNS) {
@@ -91,12 +119,15 @@ public class ProductTableRenderer {
     }
 
     /**
-     * Adjusts column widths based on the longest content in each column.
-     * Ensures total width does not exceed the table’s available width.
+     * Adjusts column widths based on the longest content in each column, ensuring the total width
+     * does not exceed the specified table width. Scales widths proportionally if necessary and
+     * applies padding for visual appeal.
      *
-     * @param table The JTable to adjust.
-     * @param productList The list of ProductData to determine content lengths.
-     * @param totalTableWidth The total width available for the table.
+     * @param table           The JTable to adjust. Must not be null.
+     * @param productList     The list of ProductData objects to determine content lengths.
+     *                        May be empty, in which case default values are used.
+     * @param totalTableWidth The total width available for the table (in pixels). Should be positive.
+     * @throws NullPointerException if table or its column model is null.
      */
     private void adjustColumnWidths(JTable table, List<ProductData> productList, int totalTableWidth) {
         TableColumnModel columnModel = table.getColumnModel();
@@ -133,11 +164,12 @@ public class ProductTableRenderer {
     }
 
     /**
-     * Gets the longest value (as a string) for a given column.
+     * Determines the longest value (as a string) for a given column based on the product list.
+     * Uses default values for empty lists to ensure reasonable column widths.
      *
-     * @param productList The list of ProductData.
+     * @param productList The list of ProductData objects. May be empty.
      * @param columnIndex The column index (0=Product ID, 1=Name, etc.).
-     * @return The longest value as a string.
+     * @return The longest value as a string for the specified column.
      */
     private String getLongestValueForColumn(List<ProductData> productList, int columnIndex) {
         String longestValue = "";
@@ -171,23 +203,25 @@ public class ProductTableRenderer {
     }
 
     /**
-     * Gets the string representation of a column’s value for a ProductData object.
+     * Retrieves the string representation of a column's value for a ProductData object.
+     * Formats the Price column to two decimal places for consistency.
      *
-     * @param product The ProductData object.
-     * @param columnIndex The column index.
-     * @return The string value.
+     * @param product     The ProductData object. Must not be null.
+     * @param columnIndex The column index (0=Product ID, 1=Name, etc.).
+     * @return The string representation of the column's value, or an empty string for invalid indices.
+     * @throws NullPointerException if product is null.
      */
     private String getColumnValue(ProductData product, int columnIndex) {
-        switch (columnIndex) {
-            case 0: return String.valueOf(product.getProductId());
-            case 1: return product.getProductName();
-            case 2: return product.getProductBrand();
-            case 3: return product.getProductSize();
-            case 4: return product.getProductType();
-            case 5: return String.format("%.2f", product.getProductPrice());
-            case 6: return String.valueOf(product.getProductQuantity());
-            case 7: return String.valueOf(product.getProductRestockValue());
-            default: return "";
-        }
+        return switch (columnIndex) {
+            case 0 -> String.valueOf(product.getProductId());
+            case 1 -> product.getProductName();
+            case 2 -> product.getProductBrand();
+            case 3 -> product.getProductSize();
+            case 4 -> product.getProductType();
+            case 5 -> String.format("%.2f", product.getProductPrice());
+            case 6 -> String.valueOf(product.getProductQuantity());
+            case 7 -> String.valueOf(product.getProductRestockValue());
+            default -> "";
+        };
     }
 }

@@ -8,33 +8,50 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Manages transaction data in the PlaSystem database, providing methods to add, load, and delete transactions,
- * including updating product quantities.
+ * Manages transaction data in the PlaSystem database, providing functionality to add, load, and
+ * delete transactions, including their items, and update product quantities. Ensures database
+ * consistency through transactions and validates inputs against schema constraints.
  */
 public class TransactionDataManager {
+    /** SQL query to insert a new transaction into the Transactions table. */
     private static final String INSERT_TRANSACTION_QUERY =
         "INSERT INTO Transactions (TRANS_DATE_YEAR, TRANS_DATE_MONTH, TRANS_DATE_DAY, TRANS_DATE_TIME, " +
         "TRANS_TOTAL_AMOUNT, TRANS_PAYMENT_AMOUNT, TRANS_CHANGE_AMOUNT) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+    /** SQL query to insert a transaction item into the TransactionItems table. */
     private static final String INSERT_TRANSACTION_ITEM_QUERY =
         "INSERT INTO TransactionItems (TI_TRANS_ID, TI_PROD_ID, TI_PROD_NAME, TI_PROD_BRAND, TI_PROD_SIZE, " +
         "TI_PROD_TYPE, TI_PROD_BUYQUANTITY, TI_PROD_UNITPRICE, TI_PROD_TOTALPRICE) " +
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    /** SQL query to select all transactions from the Transactions table. */
     private static final String SELECT_ALL_TRANSACTIONS_QUERY =
         "SELECT * FROM Transactions";
+    
+    /** SQL query to select transaction items for a specific transaction from the TransactionItems table. */
     private static final String SELECT_TRANSACTION_ITEMS_QUERY =
         "SELECT * FROM TransactionItems WHERE TI_TRANS_ID = ?";
+    
+    /** SQL query to delete a transaction from the Transactions table. */
     private static final String DELETE_TRANSACTION_QUERY =
         "DELETE FROM Transactions WHERE TRANS_ID = ?";
+    
+    /** SQL query to update the quantity of a product in the Product table. */
     private static final String UPDATE_PRODUCT_QUANTITY_QUERY =
         "UPDATE Product SET PROD_QUANTITY = PROD_QUANTITY - ? WHERE PROD_ID = ?";
 
+    /** Manager for product data operations, used to refresh product quantities after transactions. */
     private final ProductDataManager productDataManager;
+    
+    /** In-memory list of transactions, synchronized with the database. */
     private final List<TransactionData> transactionList;
 
     /**
-     * Constructor initializes the transaction list and ProductDataManager dependency.
+     * Constructs a TransactionDataManager with a dependency on ProductDataManager and initializes
+     * the transaction list by loading all transactions from the database.
      *
-     * @param productDataManager The manager for product data operations.
+     * @param productDataManager The manager for product data operations. Must not be null.
+     * @throws NullPointerException if productDataManager is null.
      */
     public TransactionDataManager(ProductDataManager productDataManager) {
         this.productDataManager = productDataManager;
@@ -43,7 +60,9 @@ public class TransactionDataManager {
     }
 
     /**
-     * Loads all transactions and their items from the database into the transactionList.
+     * Loads all transactions and their associated items from the database into the in-memory
+     * transaction list. Clears the existing list before loading to ensure synchronization with
+     * the database. Displays an error message if a database error occurs.
      */
     public void loadTransactions() {
         transactionList.clear();
@@ -76,10 +95,11 @@ public class TransactionDataManager {
     }
 
     /**
-     * Loads all transaction items for a given transaction ID.
+     * Loads all transaction items for a given transaction ID from the TransactionItems table.
+     * Displays an error message if a database error occurs.
      *
-     * @param transId The ID of the transaction.
-     * @return List of TransactionItemData objects.
+     * @param transId The ID of the transaction. Must exist in the Transactions table.
+     * @return A list of TransactionItemData objects, possibly empty if no items are found.
      */
     private List<TransactionItemData> loadTransactionItems(int transId) {
         List<TransactionItemData> items = new LinkedList<>();
@@ -112,17 +132,21 @@ public class TransactionDataManager {
     }
 
     /**
-     * Adds a new transaction to the database along with its items and updates product quantities.
+     * Adds a new transaction to the database, including its items, and updates product quantities
+     * in a single transaction. Validates inputs against schema constraints and rounds monetary
+     * amounts to two decimal places. Refreshes the transaction and product lists upon success.
+     * Displays appropriate error messages for invalid inputs or database errors.
      *
-     * @param transDateYear   The year of the transaction date.
-     * @param transDateMonth  The month of the transaction date.
-     * @param transDateDay    The day of the transaction date.
-     * @param transDateTime   The time of the transaction.
-     * @param totalAmount     The total amount of the transaction, rounded to two decimal places.
-     * @param paymentAmount   The payment amount provided.
-     * @param changeAmount    The change returned, rounded to two decimal places.
-     * @param transactionItems The list of transaction items.
-     * @return The ID of the newly created transaction, or -1 if failed.
+     * @param transDateYear    The year of the transaction date. Must not be null or empty.
+     * @param transDateMonth   The month of the transaction date. Must not be null or empty.
+     * @param transDateDay     The day of the transaction date. Must not be null or empty.
+     * @param transDateTime    The time of the transaction. Must not be null or empty.
+     * @param totalAmount      The total amount of the transaction. Must be non-negative.
+     * @param paymentAmount    The payment amount provided. Must be at least equal to totalAmount.
+     * @param changeAmount     The change returned. Must be non-negative.
+     * @param transactionItems The list of transaction items. Must not be null or empty.
+     * @return The ID of the newly created transaction, or -1 if the operation fails.
+     * @throws NullPointerException if transactionItems is null.
      */
     public int addTransaction(String transDateYear, String transDateMonth, String transDateDay, String transDateTime,
                               double totalAmount, double paymentAmount, double changeAmount,
@@ -300,10 +324,12 @@ public class TransactionDataManager {
     }
 
     /**
-     * Deletes a transaction from the database by its transaction ID.
+     * Deletes a transaction from the database by its ID, including its associated items.
+     * Refreshes the transaction list upon success. Displays an error message if the transaction
+     * ID does not exist or a database error occurs.
      *
-     * @param transactionId The ID of the transaction to delete.
-     * @return True if the transaction was deleted successfully, false otherwise.
+     * @param transactionId The ID of the transaction to delete. Must exist in the database.
+     * @return {@code true} if the transaction was deleted successfully, {@code false} otherwise.
      */
     public boolean deleteTransaction(int transactionId) {
         try (Connection conn = DBConnection.getConnection();
@@ -326,10 +352,13 @@ public class TransactionDataManager {
     }
 
     /**
-     * Validates a transaction item based on schema constraints.
+     * Validates a transaction item based on schema constraints for the TransactionItems table
+     * (e.g., non-null fields, positive quantity, non-negative prices, total price at least
+     * equal to unit price). Displays appropriate error messages for invalid inputs.
      *
-     * @param item The TransactionItemData to validate.
-     * @return True if valid, false otherwise.
+     * @param item The TransactionItemData to validate. Must not be null.
+     * @return {@code true} if the item is valid, {@code false} otherwise.
+     * @throws NullPointerException if item is null.
      */
     private boolean validateTransactionItem(TransactionItemData item) {
         if (item.getTI_productName() == null || item.getTI_productName().trim().isEmpty()) {
@@ -385,9 +414,10 @@ public class TransactionDataManager {
     }
 
     /**
-     * Gets the list of all transactions.
+     * Retrieves the in-memory list of all transactions, refreshing it from the database
+     * before returning.
      *
-     * @return The list of TransactionData objects.
+     * @return An unmodifiable view of the list of TransactionData objects.
      */
     public List<TransactionData> getTransactionList() {
         loadTransactions(); // Refresh the list before returning
@@ -395,10 +425,12 @@ public class TransactionDataManager {
     }
 
     /**
-     * Calculates the total value of a list of transaction items.
+     * Calculates the total value of a list of transaction items, summing their total prices
+     * and rounding the result to two decimal places.
      *
-     * @param items The list of TransactionItemData objects.
+     * @param items The list of TransactionItemData objects. Must not be null.
      * @return The total value of the transaction items, rounded to two decimal places.
+     * @throws NullPointerException if items is null.
      */
     public double getTotal(List<TransactionItemData> items) {
         double sum = 0;

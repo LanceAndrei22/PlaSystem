@@ -4,17 +4,28 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 /**
- * A utility class to retrieve data from the selected row of a JTable as a ProductData object.
+ * Utility class for retrieving data from the selected row of a JTable as a ProductData object in the PlaSystem application.
  * Handles cases where the table is sorted, filtered, or searched by converting view indices to model indices.
+ * Provides error handling for invalid selections or data parsing issues.
  */
 public class ProductRowSelector {
+    /** The ProductData object representing the selected row's data. */
     private ProductData productData;
+    
+    /** The model row index of the selected row, or -1 if no valid row is selected. */
     private int viewRow;
 
     /**
-     * Constructor to extract data from the selected row of the provided JTable.
+     * Constructs a ProductRowSelector to extract data from the selected row of the provided JTable.
+     * Converts the view row index to a model row index to handle sorting or filtering, retrieves
+     * the row data, and creates a ProductData object. If no row is selected, the row index is invalid,
+     * or data parsing fails, an empty ProductData object is created, and appropriate error messages
+     * are displayed.
      *
-     * @param jTable The JTable from which data needs to be extracted.
+     * @param jTable The JTable from which to extract the selected row's data. Must not be null
+     *               and must have a DefaultTableModel with at least 8 columns (ID, name, brand,
+     *               size, type, price, quantity, restock value).
+     * @throws NullPointerException if jTable or its model is null.
      */
     public ProductRowSelector(JTable jTable) {
         viewRow = jTable.getSelectedRow(); // Get the view index of the selected row
@@ -74,18 +85,20 @@ public class ProductRowSelector {
     }
 
     /**
-     * Gets the ProductData object representing the selected row.
+     * Retrieves the ProductData object representing the selected row's data.
      *
-     * @return The ProductData object, or an empty ProductData if no valid row is selected.
+     * @return The ProductData object, or an empty ProductData object if no valid row
+     *         is selected or an error occurred during data extraction.
      */
     public ProductData getProductData() {
         return productData;
     }
 
     /**
-     * Gets the model row index of the selected row.
+     * Retrieves the model row index of the selected row.
      *
-     * @return The model row index, or -1 if no valid row is selected.
+     * @return The model row index, or -1 if no valid row is selected or an error
+     *         occurred during row selection.
      */
     public int getRow() {
         return viewRow;

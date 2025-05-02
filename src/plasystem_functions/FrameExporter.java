@@ -8,15 +8,22 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * The FrameExporter class is responsible for exporting the content of a JFrame as an image.
+ * Utility class for exporting the content of a JFrame as a PNG image in the PlaSystem application.
+ * The exported image is saved in a specified directory, capturing the visual content of the frame's
+ * content pane.
  */
 public class FrameExporter {
 
     /**
-     * Exports the content of a JFrame as an image.
+     * Exports the content of a JFrame's content pane as a PNG image. The image is saved in a
+     * "receipts" directory, which is created if it does not exist. The method captures the visual
+     * content of the frame, saves it with the specified name, and displays a confirmation message
+     * upon success or an error message if the export fails.
      *
-     * @param frameToExport The JFrame whose content needs to be exported.
-     * @param imageName     The name to be given to the exported image.
+     * @param frameToExport The JFrame whose content pane will be exported as an image. Must not be null.
+     * @param imageName     The base name for the exported image file (without extension). A ".png" extension
+     *                      is automatically appended. Must not be null or empty.
+     * @throws NullPointerException if frameToExport or imageName is null.
      */
     public static void exportFrameAsImage(JFrame frameToExport, String imageName) {
         // Define the directory path to save the image

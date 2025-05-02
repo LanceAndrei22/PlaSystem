@@ -7,9 +7,20 @@ import java.sql.Statement;
 import java.io.File;
 import javax.swing.JOptionPane;
 
+/**
+ * Utility class for establishing and managing a connection to the SQLite database used by the PlaSystem application.
+ * The database is stored in a file named PlaSystem.db within a 'database' folder. This class handles the creation of
+ * the database folder and file if they do not exist, initializes the database schema, and inserts a default admin user
+ * when the database is first created.
+ */
 public class DBConnection {
+    /** The JDBC URL for connecting to the SQLite database. */
     private static final String DB_URL = "jdbc:sqlite:database/PlaSystem.db";
 
+    /** 
+     * SQL schema definition for creating the database tables, including UserAccount, Product, Restock, RestockItems,
+     * Transactions, and TransactionItems, with appropriate constraints and relationships.
+     */
     private static final String SCHEMA =
         "CREATE TABLE UserAccount (USER_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, USER_NAME TEXT NOT NULL UNIQUE," +
             "USER_PASSWORD TEXT NOT NULL, USER_ROLE TEXT NOT NULL CHECK (USER_ROLE IN ('admin', 'cashier', 'store_manager'," +
@@ -37,9 +48,18 @@ public class DBConnection {
             "TI_PROD_UNITPRICE REAL NOT NULL CHECK (TI_PROD_UNITPRICE >= 0)," +
             "TI_PROD_TOTALPRICE REAL NOT NULL CHECK (TI_PROD_TOTALPRICE >= TI_PROD_UNITPRICE));";
 
+    /** SQL statement to insert a default admin user into the UserAccount table. */
     private static final String INSERT_DEFAULT_ADMIN =
         "INSERT INTO UserAccount (USER_NAME, USER_PASSWORD, USER_ROLE) VALUES ('admin', 'tjb123', 'admin');";
 
+    /**
+     * Establishes a connection to the SQLite database. If the database folder or file does not exist,
+     * they are created, and the database is initialized with the defined schema and a default admin user.
+     * Foreign key constraints are enabled for the connection.
+     *
+     * @return A Connection object to the SQLite database.
+     * @throws SQLException If a database connection error occurs, with an error message displayed to the user.
+     */
     public static Connection getConnection() throws SQLException {
         File dbFolder = new File("database");
         File dbFile = new File("database/PlaSystem.db");

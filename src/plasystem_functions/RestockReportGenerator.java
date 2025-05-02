@@ -9,29 +9,40 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Handles the generation of restock reports in CSV format, including restock event details and their items.
+ * Utility class for generating restock reports in CSV format for the PlaSystem application.
+ * The report includes details of restock events and their associated items, saved to a
+ * timestamped file in the "restock_reports" directory.
  */
 public class RestockReportGenerator {
+    /** Directory path where restock reports are saved. */
     private static final String REPORTS_DIRECTORY = "restock_reports";
+    
+    /** List of restock events to include in the report. */
     private final List<RestockData> restockList;
+    
+    /** Column headers for the CSV report, combining restock and item details. */
     private static final String[] COMBINED_HEADERS = {
         "Restock ID", "Date", "Time",
         "Product Name", "Brand", "Size", "Type", "Price", "Restocked Quantity"
     };
 
     /**
-     * Constructor initializing the restock list for report generation.
+     * Constructs a RestockReportGenerator with the specified list of restock events.
      *
-     * @param restockList The list of restock events to include in the report.
+     * @param restockList The list of restock events to include in the report. Must not be null.
+     * @throws NullPointerException if restockList is null.
      */
     public RestockReportGenerator(List<RestockData> restockList) {
         this.restockList = restockList;
     }
 
     /**
-     * Generates a CSV restock report after prompting the user for confirmation.
+     * Generates a CSV restock report after prompting the user for confirmation. If confirmed,
+     * the report is saved in the "restock_reports" directory with a timestamped filename
+     * (e.g., RestockReport_YYYY-MM-DD_HHMMSS.csv). Displays a success or error message to the user.
      *
-     * @param parent The parent JFrame for displaying dialogues.
+     * @param parent The parent JFrame for displaying confirmation and result dialogs. May be null
+     *               if no parent is required.
      */
     public void generateReport(JFrame parent) {
         // Prompt user to confirm export
@@ -72,10 +83,15 @@ public class RestockReportGenerator {
     }
 
     /**
-     * Generates a CSV report with restock event data and their items in a flattened format.
+     * Generates a CSV report containing restock event data and their associated items in a
+     * flattened format. Each row represents a restock item with its restock event details.
+     * Includes a header with metadata and column names.
      *
-     * @param filePath The path where the CSV file will be saved.
-     * @throws IOException If an error occurs during file writing.
+     * @param filePath The path where the CSV file will be saved. Must not be null or empty.
+     * @throws IOException If an error occurs during file writing, such as insufficient permissions
+     *                     or disk space issues.
+     * @throws NullPointerException If filePath is null or if restockList or any restock item's
+     *                              attributes are null.
      */
     private void generateCSVReport(String filePath) throws IOException {
         try (FileWriter writer = new FileWriter(filePath)) {

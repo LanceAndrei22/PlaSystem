@@ -4,18 +4,26 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 /**
- * Custom table renderer for the restock history table, setting the ID column to the smallest possible width
- * and left-aligned, with Date and Time columns proportionally sized.
+ * Custom table renderer for the restock history table in the PlaSystem application.
+ * Configures the ID column with a minimal fixed width and left alignment, while
+ * distributing the remaining table width equally between the Date and Time columns.
  */
 public class RestockHistoryTableRenderer {
+    /** The JTable to render. */
     private final JTable table;
-    private static final int ID_COLUMN_WIDTH = 50; // Minimal width for ID column (in pixels)
+    
+    /** Minimal fixed width for the ID column (in pixels). */
+    private static final int ID_COLUMN_WIDTH = 50;
 
     /**
-     * Constructor initializes the renderer with the table and total width.
+     * Constructs a RestockHistoryTableRenderer to initialize rendering for the specified table.
+     * Applies custom column widths and alignment based on the provided total table width.
      *
-     * @param table      The JTable to render.
-     * @param tableWidth The total width of the table in pixels.
+     * @param table      The JTable to render. Must not be null and must have at least 3 columns
+     *                   (ID, Date, Time).
+     * @param tableWidth The total width of the table in pixels. Should be positive and sufficient
+     *                   to accommodate the ID column width.
+     * @throws NullPointerException if table or its column model is null.
      */
     public RestockHistoryTableRenderer(JTable table, int tableWidth) {
         this.table = table;
@@ -23,11 +31,13 @@ public class RestockHistoryTableRenderer {
     }
 
     /**
-     * Applies custom widths and alignment to the table columns.
-     * ID column is set to a minimal fixed width and left-aligned.
-     * Date and Time columns share the remaining width equally.
+     * Applies custom widths and alignment to the table columns. Sets the ID column to a fixed
+     * minimal width and left alignment, and equally distributes the remaining width between the
+     * Date and Time columns. Assumes the table has at least 3 columns (ID, Date, Time).
      *
-     * @param tableWidth The total width of the table in pixels.
+     * @param tableWidth The total width of the table in pixels. Should be positive and greater
+     *                   than or equal to ID_COLUMN_WIDTH to avoid negative column widths.
+     * @throws NullPointerException if the table's column model is null.
      */
     private void applyColumnWidthsAndAlignment(int tableWidth) {
         TableColumnModel columnModel = table.getColumnModel();

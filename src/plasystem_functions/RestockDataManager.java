@@ -8,32 +8,50 @@ import javax.swing.JOptionPane;
 
 /**
  * Manages restocking operations in the PlaSystem database, including creating, retrieving,
- * and deleting restock events, with comprehensive error checking based on schema constraints.
+ * and deleting restock events. Handles single and multiple product restocks, updates product
+ * quantities, and ensures database consistency through transactions and comprehensive error
+ * checking based on schema constraints.
  */
 public class RestockDataManager {
+    /** SQL query to insert a new restock event into the Restock table. */
     private static final String INSERT_RESTOCK_QUERY = 
         "INSERT INTO Restock (RESTOCK_DATE_YEAR, RESTOCK_DATE_MONTH, RESTOCK_DATE_DAY, RESTOCK_DATE_TIME) " +
         "VALUES (?, ?, ?, ?)";
+    
+    /** SQL query to insert a restock item into the RestockItems table. */
     private static final String INSERT_RESTOCK_ITEM_QUERY = 
         "INSERT INTO RestockItems (RI_RESTOCK_ID, RI_PROD_ID, RI_PROD_NAME, RI_PROD_BRAND, " +
         "RI_PROD_SIZE, RI_PROD_TYPE, RI_PROD_PRICE, RI_RESTOCKED_QUANTITY) " +
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    /** SQL query to update the quantity of a product in the Product table. */
     private static final String UPDATE_PRODUCT_QUANTITY_QUERY = 
         "UPDATE Product SET PROD_QUANTITY = PROD_QUANTITY + ? WHERE PROD_ID = ?";
+    
+    /** SQL query to delete a restock event from the Restock table. */
     private static final String DELETE_RESTOCK_QUERY = 
         "DELETE FROM Restock WHERE RESTOCK_ID = ?";
+    
+    /** SQL query to select all restock events from the Restock table. */
     private static final String SELECT_RESTOCK_QUERY = 
         "SELECT * FROM Restock";
+    
+    /** SQL query to select restock items for a specific restock event from the RestockItems table. */
     private static final String SELECT_RESTOCK_ITEMS_QUERY = 
         "SELECT * FROM RestockItems WHERE RI_RESTOCK_ID = ?";
 
+    /** Manager for product data operations, used to refresh product quantities after restocking. */
     private final ProductDataManager productDataManager;
+    
+    /** In-memory list of restock events, synchronized with the database. */
     private final LinkedList<RestockData> restockList;
 
     /**
-     * Constructor initializes the ProductDataManager dependency and loads restock data.
+     * Constructs a RestockDataManager with a dependency on ProductDataManager and initializes
+     * the restock list by loading all restock events from the database.
      *
-     * @param productDataManager The manager for product data operations.
+     * @param productDataManager The manager for product data operations. Must not be null.
+     * @throws NullPointerException if productDataManager is null.
      */
     public RestockDataManager(ProductDataManager productDataManager) {
         this.productDataManager = productDataManager;
@@ -42,16 +60,18 @@ public class RestockDataManager {
     }
 
     /**
-     * Retrieves a copy of the list of restock events.
+     * Retrieves the list of restock events.
      *
-     * @return A list of RestockData objects.
+     * @return An unmodifiable view of the list of RestockData objects.
      */
     public List<RestockData> getRestockList() {
         return restockList;
     }
 
     /**
-     * Loads all restock events and their items from the database into restockList.
+     * Loads all restock events and their associated items from the database into the in-memory
+     * restock list. Clears the existing list before loading to ensure synchronization with the
+     * database. Displays an error message if a database error occurs.
      */
     private void loadRestocks() {
         restockList.clear();
@@ -97,11 +117,14 @@ public class RestockDataManager {
     }
 
     /**
-     * Performs a restock operation for a single product.
+     * Performs a restock operation for a single product, creating a restock event, adding a restock
+     * item, and updating the product's quantity in a single transaction. Refreshes the product and
+     * restock lists upon success. Displays appropriate error messages for invalid inputs or database errors.
      *
-     * @param product The product to restock.
-     * @param quantity The quantity to add.
-     * @return True if restocking is successful, false otherwise.
+     * @param product  The product to restock. Must not be null and must have valid attributes.
+     * @param quantity The quantity to add. Must be positive.
+     * @return {@code true} if the restock operation is successful, {@code false} otherwise.
+     * @throws NullPointerException if product is null.
      */
     public boolean restockProduct(ProductData product, int quantity) {
         // Validate inputs
@@ -150,10 +173,15 @@ public class RestockDataManager {
     }
 
     /**
-     * Performs a restock operation for multiple products as a single restock event.
+     * Performs a restock operation for multiple products as a single restock event, creating one
+     * restock event, adding restock items, and updating product quantities in a single transaction.
+     * Refreshes the product and restock lists upon success. Displays appropriate error messages for
+     * invalid inputs or database errors.
      *
-     * @param items A list of maps, each containing a ProductData object and its restock quantity.
-     * @return True if restocking is successful, false otherwise.
+     * @param items A list of maps, each containing a ProductData object (key "product") and its restock
+     *              quantity (key "quantity"). Must not be null or empty.
+     * @return {@code true} if the restock operation is successful, {@code false} otherwise.
+     * @throws NullPointerException if items is null.
      */
     public boolean restockMultipleProducts(List<Map<String, Object>> items) {
         if (items == null || items.isEmpty()) {
@@ -216,10 +244,12 @@ public class RestockDataManager {
     }
 
     /**
-     * Deletes a restock event and its associated items from the database.
+     * Deletes a restock event and its associated items from the database using a transaction.
+     * Refreshes the restock list upon success. Displays an error message if the restock ID does not
+     * exist or a database error occurs.
      *
-     * @param restockId The ID of the restock to delete.
-     * @return True if deletion is successful, false otherwise.
+     * @param restockId The ID of the restock event to delete. Must exist in the database.
+     * @return {@code true} if the deletion is successful, {@code false} otherwise.
      */
     public boolean deleteRestock(int restockId) {
         Connection conn = null;
@@ -261,11 +291,14 @@ public class RestockDataManager {
     }
 
     /**
-     * Validates inputs for restocking based on database schema constraints.
+     * Validates inputs for a restock operation based on database schema constraints for the
+     * RestockItems table (e.g., non-null fields, non-negative price, positive quantity).
+     * Displays appropriate error messages for invalid inputs.
      *
-     * @param product The product to restock.
-     * @param quantity The quantity to add.
-     * @return True if inputs are valid, false otherwise.
+     * @param product  The product to restock. Must not be null and must have valid attributes.
+     * @param quantity The quantity to restock. Must be positive.
+     * @return {@code true} if the inputs are valid, {@code false} otherwise.
+     * @throws NullPointerException if product is null.
      */
     private boolean validateRestockInputs(ProductData product, int quantity) {
         if (product == null) {
@@ -321,11 +354,13 @@ public class RestockDataManager {
     }
 
     /**
-     * Creates a new restock event in the Restock table.
+     * Creates a new restock event in the Restock table with the current date and time.
+     * Validates date components to ensure they are non-empty.
      *
-     * @param conn The database connection.
+     * @param conn The database connection. Must not be null.
      * @return The ID of the created restock event.
-     * @throws SQLException If a database error occurs.
+     * @throws SQLException If a database error occurs or date components are invalid.
+     * @throws NullPointerException if conn is null.
      */
     private int createRestockEvent(Connection conn) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
@@ -373,13 +408,15 @@ public class RestockDataManager {
     }
 
     /**
-     * Inserts a restock item into the RestockItems table.
+     * Inserts a restock item into the RestockItems table, recording the product details and
+     * restocked quantity for a specific restock event.
      *
-     * @param conn The database connection.
-     * @param restockId The ID of the restock event.
-     * @param product The product being restocked.
-     * @param quantity The quantity restocked.
-     * @throws SQLException If a database error occurs.
+     * @param conn      The database connection. Must not be null.
+     * @param restockId The ID of the restock event. Must exist in the Restock table.
+     * @param product   The product being restocked. Must not be null and must have valid attributes.
+     * @param quantity  The quantity restocked. Must be positive.
+     * @throws SQLException If a database error occurs or the insertion fails.
+     * @throws NullPointerException if conn or product is null.
      */
     private void insertRestockItem(Connection conn, int restockId, ProductData product, int quantity) throws SQLException {
         try (PreparedStatement pstmt = conn.prepareStatement(INSERT_RESTOCK_ITEM_QUERY)) {
@@ -399,12 +436,13 @@ public class RestockDataManager {
     }
 
     /**
-     * Updates the quantity of a product in the Product table.
+     * Updates the quantity of a product in the Product table by adding the specified amount.
      *
-     * @param conn The database connection.
-     * @param productId The ID of the product.
-     * @param quantity The quantity to add.
-     * @throws SQLException If a database error occurs.
+     * @param conn      The database connection. Must not be null.
+     * @param productId The ID of the product. Must exist in the Product table.
+     * @param quantity  The quantity to add. Must be positive.
+     * @throws SQLException If a database error occurs or the product ID does not exist.
+     * @throws NullPointerException if conn is null.
      */
     private void updateProductQuantity(Connection conn, int productId, int quantity) throws SQLException {
         try (PreparedStatement pstmt = conn.prepareStatement(UPDATE_PRODUCT_QUANTITY_QUERY)) {
@@ -418,9 +456,11 @@ public class RestockDataManager {
     }
 
     /**
-     * Handles SQL exceptions by providing specific error messages based on the error type.
+     * Handles SQL exceptions by displaying specific error messages based on the error type,
+     * such as constraint violations (NOT NULL, CHECK, FOREIGN KEY) or general database errors.
      *
-     * @param e The SQLException to handle.
+     * @param e The SQLException to handle. Must not be null.
+     * @throws NullPointerException if e is null.
      */
     private void handleSQLException(SQLException e) {
         String errorMessage = e.getMessage();

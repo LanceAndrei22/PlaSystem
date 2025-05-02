@@ -15,10 +15,14 @@ public class CartTableRenderer {
 
     /**
      * Applies custom rendering to the provided JTable for proper alignment and formatting.
-     * - Name (Column 0): Left-aligned
-     * - Quantity (Column 1): Right-aligned
-     * - Price (Column 2): Right-aligned, formatted to two decimal places
-     * 
+     * <ul>
+     *     <li>Name (Column 0): Left-aligned</li>
+     *     <li>Quantity (Column 1): Right-aligned</li>
+     *     <li>Price (Column 2): Right-aligned, formatted to two decimal places</li>
+     * </ul>
+     * This method configures cell renderer for each column and adjusts column widths based on
+     * sample content to ensure proper display.
+     *
      * @param table The JTable to apply rendering to. Must have at least three columns.
      * @throws IllegalArgumentException if the table is null or has fewer than three columns.
      */
@@ -34,6 +38,11 @@ public class CartTableRenderer {
 
         // Renderer for Name (left-aligned)
         DefaultTableCellRenderer nameRenderer = new DefaultTableCellRenderer() {
+            /**
+             * Sets the value for the Name column cell, ensuring left alignment.
+             *
+             * @param value The value to be displayed in the cell.
+             */
             @Override
             protected void setValue(Object value) {
                 setText(value != null ? value.toString() : "");
@@ -43,6 +52,11 @@ public class CartTableRenderer {
 
         // Renderer for Quantity (right-aligned)
         DefaultTableCellRenderer quantityRenderer = new DefaultTableCellRenderer() {
+            /**
+             * Sets the value for the Quantity column cell, ensuring right alignment.
+             *
+             * @param value The value to be displayed in the cell.
+             */
             @Override
             protected void setValue(Object value) {
                 setText(value != null ? value.toString() : "");
@@ -52,6 +66,12 @@ public class CartTableRenderer {
 
         // Renderer for Price (right-aligned, two decimal places)
         DefaultTableCellRenderer priceRenderer = new DefaultTableCellRenderer() {
+            /**
+             * Sets the value for the Price column cell, formatting numeric values to two decimal
+             * places and ensuring right alignment. Non-numeric values are displayed as-is.
+             *
+             * @param value The value to be displayed in the cell.
+             */
             @Override
             protected void setValue(Object value) {
                 try {
