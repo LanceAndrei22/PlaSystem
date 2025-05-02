@@ -25,6 +25,9 @@ PlaSystem is a Java-based store management system designed specifically for plas
 - Access restocking and transaction history, export data as CSVs, and print receipts as needed.
 - Configure user roles to control access to sensitive features.
 - Refer to in-app help or documentation for detailed navigation instructions.
+  
+## Documentation
+- [Javadoc Documentation](https://lanceandrei22.github.io/PlaSystem/javadoc/): Explore the API and codebase details for developers.
 
 ## Contributing
 Contributions are welcome! To contribute:
