@@ -12,93 +12,117 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * MainProgramGUI class represents the main window of the program displaying product data.
+ * The main window of the application, displaying product data in a table and providing
+ * controls for managing products, transactions, restocking, and user accounts.
  */
 public class MainProgramGUI extends JFrame {
-    // Instance of ProductDataManager to manage data operations
+    /** The ProductDataManager instance for managing product data operations. */
     private final ProductDataManager productDataModel = new ProductDataManager();
     
-    // List of ProductData retrieved from the database
+    /** The list of ProductData objects retrieved from the database. */
     private final List<ProductData> productList = productDataModel.getList();
     
-    // Instance of RestockDataManager
+    /** The RestockDataManager instance for managing restock operations. */
     private final RestockDataManager restockDataModel = new RestockDataManager(productDataModel);
     
-    // Instance of TransactionDataManager
+    /** The TransactionDataManager instance for managing transaction operations. */
     private final TransactionDataManager transactionDataModel = new TransactionDataManager(productDataModel);
     
-    // Instance of UserAccountDataManager
+    /** The UserAccountDataManager instance for managing user account operations. */
     private UserAccountDataManager userAccountDataModel;
     
-    // List to track open child GUIs
+    /** The list tracking open child GUI windows. */
     private final List<JFrame> childGUIs = new ArrayList<>();
     
-    // Map to track instances of active GUIs
+    /** The map tracking active GUI instances to ensure single-instance behavior. */
     private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
     
-    
     /**
-     * Default constructor for the MainProgramGUI.
+     * Default constructor that initializes the MainProgramGUI.
+     * Centers the window and sets up the form components.
      */
     public MainProgramGUI() {
-        initComponents(); // Initialize components of the GUI
-        setLocationRelativeTo(null); // Set the window to open in the center of the screen
+        // Initialize the GUI components defined in the form
+        initComponents();
+        // Center the window on the screen
+        setLocationRelativeTo(null);
     }
     
     /**
-     * Constructor initializing the Main Program GUI.
-     * Populates the table with existing game data upon program start.
-     * @param userAccountDataHandling 
+     * Constructor that initializes the MainProgramGUI with user account data handling.
+     * Populates the product table, applies table formatting, and configures role-based access control.
+     *
+     * @param userAccountDataHandling The UserAccountDataManager instance for user account operations
      */
     public MainProgramGUI(UserAccountDataManager userAccountDataHandling) {
+        // Assign the user account data manager
         this.userAccountDataModel = userAccountDataHandling;
-        initComponents(); // Initialize components of the GUI
-        setLocationRelativeTo(null); // Set the window to open in the center of the screen
+        // Initialize the GUI components defined in the form
+        initComponents();
+        // Center the window on the screen
+        setLocationRelativeTo(null);
         
-        // Populate the table with product data from the database
+        // Populate the product table with data from the database
         productDataModel.updateTable(productTbl);
         
-        // Apply dynamic column formatting and sizing
-        new ProductTableRenderer(productTbl, productList, 1200); // 1200 is the table width
+        // Apply dynamic column formatting and sizing to the table
+        new ProductTableRenderer(productTbl, productList, 1200);
         
+        // Display a message if the database is empty
         if (productList.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Database is empty", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
         
-        // Update greetings label with username and userRole
+        // Update the greetings label with the logged-in user's username and role
         String username = userAccountDataHandling.getLoggedInUsername();
         String userRole = userAccountDataHandling.getLoggedInRole();
         if (username != null && userRole != null) {
             greetingsLabel.setText("Welcome To PlaSystem! " + username + ", " + userRole);
         }
         
+        // Apply role-based access control to enable/disable features
         enableRoleControl();
     }
         
-    // Method to add a child GUI to the tracking list
+    /**
+     * Adds a child GUI to the tracking list.
+     *
+     * @param child The JFrame to add as a child GUI
+     */
     public void addChildGUI(JFrame child) {
+        // Add the child GUI to the tracking list
         childGUIs.add(child);
     }
 
-    // Method to remove a child GUI from the tracking list
+    /**
+     * Removes a child GUI from the tracking list.
+     *
+     * @param child The JFrame to remove from the child GUI list
+     */
     public void removeChildGUI(JFrame child) {
+        // Remove the child GUI from the tracking list
         childGUIs.remove(child);
     }
     
     /**
-     * Launches or focuses a single instance of a GUI.
+     * Launches or focuses a single instance of a specified GUI.
+     * Ensures only one instance of the GUI is open at a time.
      *
-     * @param guiClass The class of the GUI to launch.
-     * @param creator  A lambda to create a new instance of the GUI if needed.
-     * @return The GUI instance.
+     * @param guiClass The class of the GUI to launch
+     * @param creator A Supplier to create a new instance of the GUI if needed
+     * @param <T> The type of the JFrame subclass
+     * @return The launched or existing GUI instance
      */
     private <T extends JFrame> T launchSingleInstance(Class<T> guiClass, Supplier<T> creator) {
+        // Check if an instance of the GUI already exists
         JFrame existingInstance = activeGUIs.get(guiClass);
+        // Remove the instance if it exists but is no longer displayable
         if (existingInstance != null && !existingInstance.isDisplayable()) {
-            activeGUIs.remove(guiClass); // Remove disposed instance
+            activeGUIs.remove(guiClass);
             existingInstance = null;
         }
 
+        // If an instance exists, focus it and show a warning
         if (existingInstance != null) {
             JOptionPane.showMessageDialog(
                 existingInstance,
@@ -106,42 +130,58 @@ public class MainProgramGUI extends JFrame {
                 "Instance Warning",
                 JOptionPane.WARNING_MESSAGE
             );
+            // Bring the existing instance to the foreground
             existingInstance.requestFocus();
+            // Ensure the instance is visible
             existingInstance.setVisible(true);
             return guiClass.cast(existingInstance);
         }
 
+        // Create a new instance of the GUI
         T newInstance = creator.get();
+        // Make the new instance visible
         newInstance.setVisible(true);
+        // Set the default close operation to dispose
         newInstance.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // Add a window listener to clean up when the window is closed
         newInstance.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
+                // Remove the GUI from the active instances map
                 activeGUIs.remove(guiClass);
+                // Remove the GUI from the child GUI list
                 removeChildGUI(newInstance);
             }
         });
+        // Add the new instance to the active GUIs map
         activeGUIs.put(guiClass, newInstance);
+        // Add the new instance to the child GUI list
         addChildGUI(newInstance);
         return newInstance;
     }
     
-    // Method to refresh the table after updates
+    /**
+     * Refreshes the product table with updated data.
+     * Reapplies table formatting and any active search filters.
+     */
     public void updateProductTable() {
+        // Update the table with current product data
         productDataModel.updateTable(productTbl);
         
-        // Apply dynamic column formatting and sizing
-        new ProductTableRenderer(productTbl, productList, 1200); // 1200 is the table width
+        // Reapply dynamic column formatting and sizing
+        new ProductTableRenderer(productTbl, productList, 1200);
         
-        // Reapply the current filter if any
+        // Reapply the current search filter if the search field is not empty
         if (searchTxtField.getText().trim().length() > 0) {
             searchTxtFieldKeyReleased(null);
         }
     }
     
-    // Method to do Role Based Access Control
+    /**
+     * Applies role-based access control to enable or disable features based on the user's role.
+     */
     private void enableRoleControl() {
-        // Apply userRole-based access control
+        // Apply permissions based on the logged-in user's role
         RoleBasedAccessControl.applyRolePermissions(this, userAccountDataModel.getLoggedInRole());
     }
 
@@ -447,138 +487,215 @@ public class MainProgramGUI extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     /**
-     * Method triggered when the 'Transact' button is clicked in the GUI.
-     * Initializes and opens a new TransactionGUI to start a transaction process.
-     * Passes the gameList, file path, and main data table to the TransactionGUI.
-     * @param evt Action event generated by the button click
+     * Handles the action when the "Transact" button is clicked.
+     * Opens a single instance of the TransactionGUI for processing transactions.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Transact" button
      */
     private void transactionBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_transactionBtnActionPerformed
+        // Launch or focus a single instance of TransactionGUI
         launchSingleInstance(TransactionGUI.class, () -> {
+            // Create a new TransactionGUI instance
             TransactionGUI transGUI = new TransactionGUI(this, productDataModel, transactionDataModel);
+            // Pack the GUI to fit its contents
             transGUI.pack();
+            // Center the GUI on the screen
             transGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             transGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return transGUI;
         });
     }//GEN-LAST:event_transactionBtnActionPerformed
     
     /**
-     * Method triggered when the 'Add' button is clicked in the GUI.
-     * Initializes and opens a new AddDataGUI to add new game data.
-     * Passes the gameList, main data table, and file path to the AddDataGUI.
-     * @param evt Action event generated by the button click
+     * Handles the action when the "Add Product" button is clicked.
+     * Opens a single instance of the AddProductGUI for adding new products.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Add Product" button
      */
     private void addProductBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addProductBtnActionPerformed
+        // Launch or focus a single instance of AddProductGUI
         launchSingleInstance(AddProductGUI.class, () -> {
+            // Create a new AddProductGUI instance
             AddProductGUI addGUI = new AddProductGUI(this, productDataModel);
+            // Pack the GUI to fit its contents
             addGUI.pack();
+            // Center the GUI on the screen
             addGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             addGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return addGUI;
         });
     }//GEN-LAST:event_addProductBtnActionPerformed
     
     /**
-     * Method triggered when the 'Edit' button is clicked in the GUI.
-     * Retrieves data from the selected row in the main table and opens the EditDataGUI for editing.
-     * @param evt Action event generated by the button click
+     * Handles the action when the "Edit" button is clicked.
+     * Opens a single instance of the EditProductGUI for editing the selected product.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Edit" button
      */
     private void editProductBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_editProductBtnActionPerformed
+        // Get the index of the selected row
         int editRow = productTbl.getSelectedRow();
+        // Check if a row is selected
         if (editRow != -1) {
+            // Create a ProductRowSelector to retrieve product data
             ProductRowSelector rowSelector = new ProductRowSelector(productTbl);
+            // Get the selected product's data
             ProductData product = rowSelector.getProductData();
 
+            // Launch or focus a single instance of EditProductGUI
             launchSingleInstance(EditProductGUI.class, () -> {
+                // Create a new EditProductGUI instance
                 EditProductGUI editGUI = new EditProductGUI(this, productDataModel, product, editRow);
+                // Pack the GUI to fit its contents
                 editGUI.pack();
+                // Center the GUI on the screen
                 editGUI.setLocationRelativeTo(null);
+                // Set the default close operation to dispose
                 editGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 return editGUI;
             });
         } else {
+            // Display error message if no row is selected
             JOptionPane.showMessageDialog(null, "Please select a row to edit.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_editProductBtnActionPerformed
     
     /**
-     * Method triggered when the 'Delete' button is clicked in the GUI.
-     * Deletes the selected row from the main 
-     * @param evt Action event generated by the button click
+     * Handles the action when the "Delete" button is clicked.
+     * Deletes the selected product from the database after user confirmation.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Delete" button
      */
     private void deleteProductBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_deleteProductBtnActionPerformed
+        // Get the index of the selected row
         int selectedRow = productTbl.getSelectedRow();
+        // Check if a row is selected
         if (selectedRow != -1) {
+            // Create a ProductRowSelector to retrieve product data
             ProductRowSelector rowSelector = new ProductRowSelector(productTbl);
+            // Get the selected product's ID
             int productId = rowSelector.getProductData().getProductId();
+            // Get the selected product's name
             String productName = rowSelector.getProductData().getProductName();
 
+            // Prompt user to confirm deletion
             int confirmDelete = JOptionPane.showConfirmDialog(null, 
                 "Do you really want to delete the product '" + productName + "'?",
                 "Delete", 
                 JOptionPane.YES_NO_OPTION);
+            // Proceed with deletion if user confirms
             if (confirmDelete == JOptionPane.YES_OPTION) {
+                // Attempt to delete the product from the database
                 boolean deleteSuccess = productDataModel.deleteProduct(productId);
                 if (deleteSuccess) {
+                    // Update the table to reflect the deletion
                     productDataModel.updateTable(productTbl);
+                    // Display success message
                     JOptionPane.showMessageDialog(null, "Product deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } else {
+            // Display error message if no row is selected
             JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_deleteProductBtnActionPerformed
     
     /**
-     * Method triggered when text is typed into the search text field.
-     * Filters rows in the main table based on the entered search text.
-     * @param evt Key event generated when a key is released in the search text field
+     * Handles the key release event in the search text field.
+     * Filters the product table based on the search text and selected column.
+     *
+     * @param evt The KeyEvent triggered by releasing a key in the search text field
      */
     private void searchTxtFieldKeyReleased(KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        // Get the table model
         DefaultTableModel prodTblModel = (DefaultTableModel) productTbl.getModel();
+        // Create a new TableRowSorter for filtering
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(prodTblModel);
+        // Apply the sorter to the table
         productTbl.setRowSorter(sorter);
         
         // Get the selected column name from the search parameter box
-        String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString(); // Replace "ColumnName" with the actual column name
+        String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
+        // Find the index of the selected column
         int columnIndex = prodTblModel.findColumn(columnNameToSearch);
         
-        // Apply a row filter based on the entered search text for the selected column
+        // Apply a case-insensitive regex filter to the selected column
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex));
     }//GEN-LAST:event_searchTxtFieldKeyReleased
-
+    
+    /**
+     * Handles the action when the "Restock Product" button is clicked.
+     * Opens a single instance of the RestockProductGUI for restocking products.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Restock Product" button
+     */
     private void restockProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockProductBtnActionPerformed
+        // Launch or focus a single instance of RestockProductGUI
         launchSingleInstance(RestockProductGUI.class, () -> {
+            // Create a new RestockProductGUI instance
             RestockProductGUI restockGUI = new RestockProductGUI(this, productDataModel, restockDataModel);
+            // Pack the GUI to fit its contents
             restockGUI.pack();
+            // Center the GUI on the screen
             restockGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             restockGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return restockGUI;
         });
     }//GEN-LAST:event_restockProductBtnActionPerformed
-
+    
+     /**
+     * Handles the action when the "Low Stock" button is clicked.
+     * Opens a single instance of the LowStockGUI to display low stock products.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Low Stock" button
+     */
     private void lowStockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowStockBtnActionPerformed
+        // Launch or focus a single instance of LowStockGUI
         launchSingleInstance(LowStockGUI.class, () -> {
+            // Create a new LowStockGUI instance
             LowStockGUI lowStockGUI = new LowStockGUI(productDataModel);
+            // Pack the GUI to fit its contents
             lowStockGUI.pack();
+            // Center the GUI on the screen
             lowStockGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             lowStockGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return lowStockGUI;
         });
     }//GEN-LAST:event_lowStockBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "User Accounts" button is clicked.
+     * Opens a single instance of the UserAccountsGUI for managing user accounts.
+     *
+     * @param evt The ActionEvent triggered by clicking the "User Accounts" button
+     */
     private void userAccountsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userAccountsBtnActionPerformed
+        // Launch or focus a single instance of UserAccountsGUI
         launchSingleInstance(UserAccountsGUI.class, () -> {
+            // Create a new UserAccountsGUI instance
             UserAccountsGUI userAccGUI = new UserAccountsGUI(userAccountDataModel);
+            // Pack the GUI to fit its contents
             userAccGUI.pack();
+            // Center the GUI on the screen
             userAccGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             userAccGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return userAccGUI;
         });
     }//GEN-LAST:event_userAccountsBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Logout" button is clicked.
+     * Closes all child GUIs, opens the LaunchPanelGUI, and disposes of the current window.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Logout" button
+     */
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
-        // Open LaunchPanelGUI
+        // Create and display a new LaunchPanelGUI
         JFrame launchPanel = new LaunchPanelGUI();
         launchPanel.setVisible(true);
         launchPanel.pack();
@@ -588,34 +705,65 @@ public class MainProgramGUI extends JFrame {
         for (JFrame child : new ArrayList<>(childGUIs)) {
             child.dispose();
         }
+        // Clear the child GUI list
         childGUIs.clear();
 
-        // Dispose of MainProgramGUI
+        // Dispose of the current MainProgramGUI
         this.dispose();
     }//GEN-LAST:event_logoutBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Transaction History" button is clicked.
+     * Opens a single instance of the TransactionHistoryGUI to display transaction records.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Transaction History" button
+     */
     private void transactHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactHistoryBtnActionPerformed
+        // Launch or focus a single instance of TransactionHistoryGUI
         launchSingleInstance(TransactionHistoryGUI.class, () -> {
+            // Create a new TransactionHistoryGUI instance
             TransactionHistoryGUI transHistoryGUI = new TransactionHistoryGUI(transactionDataModel);
+            // Pack the GUI to fit its contents
             transHistoryGUI.pack();
+            // Center the GUI on the screen
             transHistoryGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             transHistoryGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return transHistoryGUI;
         });
     }//GEN-LAST:event_transactHistoryBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Restock History" button is clicked.
+     * Opens a single instance of the RestockHistoryGUI to display restock records.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Restock History" button
+     */
     private void restockHistoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockHistoryBtnActionPerformed
+        // Launch or focus a single instance of RestockHistoryGUI
         launchSingleInstance(RestockHistoryGUI.class, () -> {
+            // Create a new RestockHistoryGUI instance
             RestockHistoryGUI restockHistoryGUI = new RestockHistoryGUI(restockDataModel);
+            // Pack the GUI to fit its contents
             restockHistoryGUI.pack();
+            // Center the GUI on the screen
             restockHistoryGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             restockHistoryGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return restockHistoryGUI;
         });
     }//GEN-LAST:event_restockHistoryBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Export Inventory" button is clicked.
+     * Generates and exports an inventory report.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Export Inventory" button
+     */
     private void exportInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportInventoryBtnActionPerformed
+        // Create an InventoryReportGenerator with the product list
         InventoryReportGenerator reportGenerator = new InventoryReportGenerator(productList);
+        // Generate and export the inventory report
         reportGenerator.generateReport(this);
     }//GEN-LAST:event_exportInventoryBtnActionPerformed
 

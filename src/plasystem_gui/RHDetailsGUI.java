@@ -5,43 +5,64 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.text.DecimalFormat;
 
-public class RHDetailsGUI extends javax.swing.JFrame {
+/**
+ * A graphical user interface (GUI) window for displaying the details of a restock operation.
+ * This class provides a table showing the items included in a specific restock, with formatted price display.
+ */
+public class RHDetailsGUI extends JFrame {
+    /** The RestockData object containing the restock details to be displayed. */
     private final RestockData restock;
 
     /**
-     * Default constructor initializing the RHDetailsGUI.
+     * Default constructor that initializes the RHDetailsGUI.
+     * Centers the window and sets up the form components.
      */
     public RHDetailsGUI() {
+        // Initialize with null restock data
         this.restock = null;
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
     }
 
     /**
-     * Creates new form RHDetailsGUI with restock data.
+     * Constructor that initializes the RHDetailsGUI with restock data.
+     * Sets up the form components, centers the window, and populates the table with restock items.
      *
-     * @param restock The restock whose items are to be displayed.
+     * @param restock The RestockData object containing the restock items to display
      */
     public RHDetailsGUI(RestockData restock) {
+        // Assign the restock data
         this.restock = restock;
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
+        // Apply price formatting to the table
         new PriceTableRenderer(rhDetailsTbl);
+        // Populate the table with restock items
         updateTable();
     }
     
     /**
-     * Updates the table with restock items.
+     * Updates the table with the items from the restock data.
      */
     private void updateTable() {
+        // Check if restock data or items are null
         if (restock == null || restock.getRestockItems() == null) {
+            // Exit if no valid data is available
             return;
         }
 
+        // Get the table model
         DefaultTableModel rhTblModel = (DefaultTableModel) rhDetailsTbl.getModel();
-        rhTblModel.setRowCount(0); // Clear existing rows
+        // Clear existing rows
+        rhTblModel.setRowCount(0);
 
+        // Iterate through the restock items
         for (RestockItemData rhItem : restock.getRestockItems()) {
+            // Add each item as a new row in the table
             rhTblModel.addRow(new Object[]{
                 rhItem.getRI_productName(),
                 rhItem.getRI_productBrand(),
@@ -54,13 +75,21 @@ public class RHDetailsGUI extends javax.swing.JFrame {
     }
     
     /**
-     * Custom renderer to format and align price columns.
+     * Custom renderer to format and align price columns in the table.
      */
     private static class PriceTableRenderer {
+        /** The JTable to which the renderer is applied. */
         private final JTable table;
 
+        /**
+         * Constructor that initializes the renderer for a specific table.
+         *
+         * @param table The JTable to apply price formatting to
+         */
         public PriceTableRenderer(JTable table) {
+            // Assign the table
             this.table = table;
+            // Apply formatting and alignment to the price column
             applyPriceFormattingAndAlignment();
         }
 
@@ -68,28 +97,46 @@ public class RHDetailsGUI extends javax.swing.JFrame {
          * Applies decimal formatting and right alignment to the price column.
          */
         private void applyPriceFormattingAndAlignment() {
+            // Create a renderer for decimal formatting
             DecimalFormatRenderer renderer = new DecimalFormatRenderer();
+            // Set right alignment for the renderer
             renderer.setHorizontalAlignment(SwingConstants.RIGHT);
+            // Get the table's column model
             TableColumnModel columnModel = table.getColumnModel();
-            // Apply to Price (index 4)
+            // Apply the renderer to the Price column (index 4)
             columnModel.getColumn(4).setCellRenderer(renderer);
         }
+    }
+
+    /**
+     * Inner renderer to format double values to two decimal places.
+     */
+    private static class DecimalFormatRenderer extends DefaultTableCellRenderer {
+        /** The DecimalFormat instance for formatting numbers to two decimal places. */
+        private final DecimalFormat formatter = new DecimalFormat("#0.00");
 
         /**
-         * Inner renderer to format double values to two decimal places.
+         * Formats the cell value, applying two-decimal-place formatting for numeric values.
+         *
+         * @param table The JTable being rendered
+         * @param value The value to render
+         * @param isSelected Whether the cell is selected
+         * @param hasFocus Whether the cell has focus
+         * @param row The row index of the cell
+         * @param column The column index of the cell
+         * @return The rendered component
          */
-        private static class DecimalFormatRenderer extends DefaultTableCellRenderer {
-            private final DecimalFormat formatter = new DecimalFormat("#0.00");
-
-            @Override
-            public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
-                                                                   boolean isSelected, boolean hasFocus,
-                                                                   int row, int column) {
-                if (value instanceof Number) {
-                    value = formatter.format(((Number) value).doubleValue());
-                }
-                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        @Override
+        public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                                                               boolean isSelected, boolean hasFocus,
+                                                               int row, int column) {
+            // Check if the value is a number
+            if (value instanceof Number number) {
+                // Format the number to two decimal places
+                value = formatter.format(number.doubleValue());
             }
+            // Call the superclass method to render the cell
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
 

@@ -15,97 +15,162 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class UserAccountsGUI extends javax.swing.JFrame {
-    private final UserAccountDataManager userAccountDataModel;
-    private final TableRowSorter<DefaultTableModel> tableSorter; // Store the tableSorter for reuse
-    // List to track open child GUIs
+/**
+ * A graphical user interface (GUI) window for managing user accounts.
+ * This class provides a table to display user accounts and buttons to add, edit, delete, and search accounts.
+ */
+public class UserAccountsGUI extends JFrame {
+    /** The UserAccountDataManager instance for managing user account operations. */
+    private UserAccountDataManager userAccountDataModel;
+    /** The TableRowSorter for sorting and filtering the user accounts table. */
+    private TableRowSorter<DefaultTableModel> tableSorter;
+    /** The list tracking open child GUI windows. */
     private final List<JFrame> childGUIs = new ArrayList<>();
-    // Map to track instances of active GUIs
+    /** The map tracking active GUI instances to ensure single-instance behavior. */
     private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
-
-    public UserAccountsGUI(UserAccountDataManager userAccountDataManager) {
-        this.userAccountDataModel = userAccountDataManager;
+    
+    /**
+     * Default constructor that initializes the UserAccountsGUI.
+     * Centers the window and sets up the form components.
+     */
+    public UserAccountsGUI() {
+        // Initialize the GUI components defined in the form
         initComponents();
-        setLocationRelativeTo(null); // Set the window to open in the center of the screen
-        userAccountDataManager.loadUserAccounts();  // Load user accounts from DB
+        // Center the window on the screen
+        setLocationRelativeTo(null);
+    }
+    
+    /**
+     * Constructor that initializes the UserAccountsGUI with a provided UserAccountDataManager.
+     * Sets up the form components, centers the window, and loads user account data into the table.
+     *
+     * @param userAccountDataManager The UserAccountDataManager instance for database operations
+     */
+    public UserAccountsGUI(UserAccountDataManager userAccountDataManager) {
+        // Assign the user account data manager
+        this.userAccountDataModel = userAccountDataManager;
+        // Initialize the GUI components defined in the form
+        initComponents();
+        // Center the window on the screen
+        setLocationRelativeTo(null);
+        // Load user accounts from the database
+        userAccountDataModel.loadUserAccounts();
+        // Populate the table with user account data
         loadUserAccountsTable();
         
         // Initialize the TableRowSorter
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         tableSorter = new TableRowSorter<>(model);
+        // Apply the sorter to the table
         userAccountsTable.setRowSorter(tableSorter);
     }
     
-    // Method to add a child GUI to the tracking list
+    /**
+     * Adds a child GUI to the tracking list.
+     *
+     * @param child The JFrame to add as a child GUI
+     */
     public void addChildGUI(JFrame child) {
+        // Add the child GUI to the tracking list
         childGUIs.add(child);
     }
 
-    // Method to remove a child GUI from the tracking list
+    /**
+     * Removes a child GUI from the tracking list.
+     *
+     * @param child The JFrame to remove from the child GUI list
+     */
     public void removeChildGUI(JFrame child) {
+        // Remove the child GUI from the tracking list
         childGUIs.remove(child);
     }
     
     /**
-     * Launches or focuses a single instance of a GUI.
+     * Launches or focuses a single instance of a specified GUI.
+     * Ensures only one instance of the GUI is open at a time.
      *
-     * @param guiClass The class of the GUI to launch.
-     * @param creator  A lambda to create a new instance of the GUI if needed.
-     * @return The GUI instance.
+     * @param guiClass The class of the GUI to launch
+     * @param creator A Supplier to create a new instance of the GUI if needed
+     * @param <T> The type of the JFrame subclass
+     * @return The launched or existing GUI instance
      */
     private <T extends JFrame> T launchSingleInstance(Class<T> guiClass, Supplier<T> creator) {
+        // Check if an instance of the GUI already exists
         JFrame existingInstance = activeGUIs.get(guiClass);
+        // Remove the instance if it exists but is no longer displayable
         if (existingInstance != null && !existingInstance.isDisplayable()) {
-            activeGUIs.remove(guiClass); // Remove disposed instance
+            activeGUIs.remove(guiClass);
             existingInstance = null;
         }
 
+        // If an instance exists, focus it and show a warning
         if (existingInstance != null) {
+            // Display warning message
             JOptionPane.showMessageDialog(
                 existingInstance,
                 "Only one instance can be present.",
                 "Instance Warning",
                 JOptionPane.WARNING_MESSAGE
             );
+            // Bring the existing instance to the foreground
             existingInstance.requestFocus();
+            // Ensure the instance is visible
             existingInstance.setVisible(true);
             return guiClass.cast(existingInstance);
         }
 
+        // Create a new instance of the GUI
         T newInstance = creator.get();
+        // Make the new instance visible
         newInstance.setVisible(true);
+        // Set the default close operation to dispose
         newInstance.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // Add a window listener to clean up when the window is closed
         newInstance.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
+                // Remove the GUI from the active instances map
                 activeGUIs.remove(guiClass);
+                // Remove the GUI from the child GUI list
                 removeChildGUI(newInstance);
             }
         });
+        // Add the new instance to the active GUIs map
         activeGUIs.put(guiClass, newInstance);
+        // Add the new instance to the child GUI list
         addChildGUI(newInstance);
         return newInstance;
     }
     
-    // Override dispose to close all child windows
+    /**
+     * Disposes of the window and closes all child GUIs.
+     */
     @Override
     public void dispose() {
-        // Close all child windows
+        // Close all child GUIs
         for (JFrame child : new ArrayList<>(childGUIs)) {
             child.dispose();
         }
-        childGUIs.clear(); // Clear the list
-        super.dispose(); // Call parent dispose
+        // Clear the child GUI list
+        childGUIs.clear();
+        // Call the superclass dispose method to close the window
+        super.dispose();
     }
     
-    // Method to load user accounts into the JTable
+    /**
+     * Loads user account data into the JTable.
+     */
     private void loadUserAccountsTable() {
-        List<UserAccountData> userList = userAccountDataModel.getUserAccounts();  // Get the list of user accounts
+        // Get the list of user accounts
+        List<UserAccountData> userList = userAccountDataModel.getUserAccounts();
+        // Get the table model
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
-        model.setRowCount(0); // Clear existing rows
+        // Clear existing rows
+        model.setRowCount(0);
 
-        // Add each user to the table
+        // Iterate through the user list
         for (UserAccountData user : userList) {
+            // Add each user as a new row
             model.addRow(new Object[] {
                 user.getUsername(),
                 user.getUserPassword(),
@@ -114,10 +179,13 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         }
     }
     
-    // Method to refresh the table
+    /**
+     * Refreshes the user accounts table with the latest data.
+     */
     public void refreshTable() {
+        // Reload the table with current user account data
         loadUserAccountsTable();
-        // Reapply the current filter if any
+        // Reapply the current search filter if the search field is not empty
         if (searchTxtField.getText().trim().length() > 0) {
             searchTxtFieldKeyReleased(null);
         }
@@ -279,20 +347,40 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Handles the action when the "Add" button is clicked.
+     * Opens a single instance of the AddUserAccountGUI to add a new user account.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Add" button
+     */
     private void addUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActBtnActionPerformed
+        // Launch or focus a single instance of AddUserAccountGUI
         launchSingleInstance(AddUserAccountGUI.class, () -> {
+            // Create a new AddUserAccountGUI instance
             AddUserAccountGUI addUserActGUI = new AddUserAccountGUI(this, userAccountDataModel);
+            // Pack the GUI to fit its contents
             addUserActGUI.pack();
+            // Center the GUI on the screen
             addUserActGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             addUserActGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return addUserActGUI;
         });
     }//GEN-LAST:event_addUserActBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Delete" button is clicked.
+     * Deletes the selected user account after confirmation, preventing self-deletion by admin.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Delete" button
+     */
     private void deleteUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserActBtnActionPerformed
+        // Get the index of the selected row
         int selectedRow = userAccountsTable.getSelectedRow();
+        // Check if a row is selected
         if (selectedRow == -1) {
+            // Display error message if no row is selected
             JOptionPane.showMessageDialog(this, 
                 "Please select a user to delete.",
                 "Selection Error", 
@@ -309,6 +397,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         // Prevent admin from deleting their own account
         if ("admin".equals(userAccountDataModel.getLoggedInRole()) && 
             username.equals(userAccountDataModel.getLoggedInUsername())) {
+            // Display error message for self-deletion attempt
             JOptionPane.showMessageDialog(this, 
                 "You cannot delete your own account.",
                 "Permission Error", 
@@ -316,28 +405,41 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Confirm deletion
+        // Prompt user to confirm deletion
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Are you sure you want to delete the user '" + username + "'?",
             "Confirm Delete", 
             JOptionPane.YES_NO_OPTION, 
             JOptionPane.WARNING_MESSAGE);
         
+        // Proceed with deletion if user confirms
         if (confirm == JOptionPane.YES_OPTION) {
+            // Attempt to delete the user account
             boolean success = userAccountDataModel.deleteUserAccount(username);
             if (success) {
+                // Display success message
                 JOptionPane.showMessageDialog(this, 
                     "User account deleted successfully!",
                     "Success", 
                     JOptionPane.INFORMATION_MESSAGE);
-                refreshTable(); // Refresh the table
+                // Refresh the table
+                refreshTable();
             }
         }
     }//GEN-LAST:event_deleteUserActBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Edit" button is clicked.
+     * Opens a single instance of the EditUserAccountGUI for the selected user, preventing self-editing by admin.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Edit" button
+     */
     private void editUserActBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editUserActBtnActionPerformed
+        // Get the index of the selected row
         int selectedRow = userAccountsTable.getSelectedRow();
+        // Check if a row is selected
         if (selectedRow == -1) {
+            // Display error message if no row is selected
             JOptionPane.showMessageDialog(this, 
                 "Please select a user to edit.",
                 "Selection Error", 
@@ -354,6 +456,7 @@ public class UserAccountsGUI extends javax.swing.JFrame {
         // Prevent admin from editing their own account
         if ("admin".equals(userAccountDataModel.getLoggedInRole()) && 
             username.equals(userAccountDataModel.getLoggedInUsername())) {
+            // Display error message for self-editing attempt
             JOptionPane.showMessageDialog(this, 
                 "You cannot edit your own account.",
                 "Permission Error", 
@@ -361,13 +464,16 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             return;
         }
 
+        // Find the selected user's data
         UserAccountData selectedUser = userAccountDataModel.getUserAccounts()
             .stream()
             .filter(user -> user.getUsername().equals(username))
             .findFirst()
             .orElse(null);
 
+        // Validate that the user data was found
         if (selectedUser == null) {
+            // Display error message if user data is not found
             JOptionPane.showMessageDialog(this, 
                 "User data not found.",
                 "Data Error", 
@@ -375,25 +481,40 @@ public class UserAccountsGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Launch EditUserAccountGUI with the selected user's UserAccountData        
+        // Launch or focus a single instance of EditUserAccountGUI
         launchSingleInstance(EditUserAccountGUI.class, () -> {
+            // Create a new EditUserAccountGUI instance
             EditUserAccountGUI editUserActGUI = new EditUserAccountGUI(this, userAccountDataModel, selectedUser);
+            // Pack the GUI to fit its contents
             editUserActGUI.pack();
+            // Center the GUI on the screen
             editUserActGUI.setLocationRelativeTo(null);
+            // Set the default close operation to dispose
             editUserActGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             return editUserActGUI;
         });
     }//GEN-LAST:event_editUserActBtnActionPerformed
-
+    
+    /**
+     * Handles the key release event in the search text field.
+     * Filters the user accounts table based on the search text and selected column.
+     *
+     * @param evt The KeyEvent triggered by releasing a key in the search text field
+     */
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        // Retrieve and trim the search text
         String searchText = searchTxtField.getText().trim();
+        // Get the selected column name for searching
         String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
+        // Get the table model
         DefaultTableModel model = (DefaultTableModel) userAccountsTable.getModel();
         
-        // Find the column index
+        // Find the index of the selected column
         int columnIndex = model.findColumn(columnNameToSearch);
         
+        // Validate the column index
         if (columnIndex == -1) {
+            // Display error message if the column is invalid
             JOptionPane.showMessageDialog(this, 
                 "Invalid column selected for search.",
                 "Search Error", 
@@ -403,8 +524,10 @@ public class UserAccountsGUI extends javax.swing.JFrame {
 
         // Apply the row filter
         if (searchText.isEmpty()) {
-            tableSorter.setRowFilter(null); // Clear filter if search text is empty
+            // Clear the filter if the search text is empty
+            tableSorter.setRowFilter(null);
         } else {
+            // Apply a case-insensitive regex filter to the selected column
             tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased

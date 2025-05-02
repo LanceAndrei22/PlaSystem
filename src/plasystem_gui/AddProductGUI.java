@@ -8,43 +8,62 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /**
- * A GUI window allowing users to add new data to the application.
+ * A graphical user interface (GUI) window for adding new product data to the application.
+ * This class provides input fields for product details and handles validation and submission
+ * of the data to the product data model.
  */
 public class AddProductGUI extends JFrame {
+    /** The parent MainProgramGUI instance used to refresh the product table after adding a product. */
     private MainProgramGUI parentGUI;
+    /** The ProductDataManager instance responsible for handling database operations. */
     private ProductDataManager productDataModel;
+    /** The ErrorValueHandling instance used to validate input data formats and values. */
     private final ErrorValueHandling dataValidator = new ErrorValueHandling();
 
     /**
-     * Default constructor initializing the AddDataGUI.
+     * Default constructor that initializes the AddProductGUI.
+     * Centers the window on the screen and sets up the form components.
      */
      public AddProductGUI(){
-        initComponents(); // Initialize components defined in the form
-        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+        // Initialize the GUI components defined in the form
+        initComponents();
+        // Center the window on the screen
+        setLocationRelativeTo(null);
      }
      
     /**
-     * Constructor initializing the AddProductGUI with necessary dependencies.
+     * Constructor that initializes the AddProductGUI with necessary dependencies.
+     * Sets up the form components, centers the window, and adds listeners to prevent
+     * negative values in quantity and restock value spinners.
      *
-     * @param parent       The parentGUI MainProgramGUI to refresh the table.
-     * @param productDataManager The ProductDataManager to handle database operations.
+     * @param parent The MainProgramGUI instance to refresh the product table after adding a product
+     * @param productDataManager The ProductDataManager instance to handle database operations
      */
     public AddProductGUI(MainProgramGUI parent, ProductDataManager productDataManager) {
+        // Assign the parent GUI for table refresh
         this.parentGUI = parent;
+        // Assign the data manager for database operations
         this.productDataModel = productDataManager;
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
         
-        // Ensure no negative values in spinners
+        // Add listener to prevent negative values in quantity spinner
         quantityPicker.addChangeListener((ChangeEvent e) -> {
+            // Get current spinner value
             int value = (int) quantityPicker.getValue();
+            // Reset to 0 if negative
             if (value < 0) {
                 quantityPicker.setValue(0);
             }
         });
         
+        // Add listener to prevent negative values in restock value spinner
         restockValuePicker.addChangeListener((ChangeEvent e) -> {
+            // Get current spinner value
             int value = (int) restockValuePicker.getValue();
+            // Reset to 0 if negative
             if (value < 0) {
                 restockValuePicker.setValue(0);
             }
@@ -241,16 +260,21 @@ public class AddProductGUI extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     /**
-     * ActionListener method triggered when the 'Add' button is clicked in the GUI.
+     * Handles the action when the "Add" button is clicked.
+     * Validates user input, confirms the addition, and adds the product to the data model.
+     * Updates the parent GUI table and clears input fields upon successful addition.
      *
-     * @param evt The ActionEvent captured from the GUI.
+     * @param evt The ActionEvent triggered by clicking the "Add" button
      */
     private void addBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // Prompt user to confirm the addition of the new product
         int confirmAdd = JOptionPane.showConfirmDialog(null, "Do you want to add this product?", "Add New Product", JOptionPane.YES_NO_OPTION);
+        // Exit if user does not confirm
         if (confirmAdd != JOptionPane.YES_OPTION) {
             return;
         }
 
+        // Retrieve and trim input values from text fields and spinners
         String prodName = nameTxtField.getText().trim();
         String prodSize = sizeTxtField.getText().trim();
         String prodBrand = brandTxtField.getText().trim();
@@ -259,48 +283,61 @@ public class AddProductGUI extends JFrame {
         String prodQuantityText = String.valueOf(quantityPicker.getValue());
         String prodRestockValueText = String.valueOf(restockValuePicker.getValue());
 
-        // Validate inputs
+        // Validate that all text fields are filled
         if (prodName.isEmpty() || prodSize.isEmpty() || prodBrand.isEmpty() || prodType.isEmpty() || prodPriceText.isEmpty()) {
+            // Display error message if any field is empty
             JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Validate price format and value
         double prodPrice;
         if (!dataValidator.isDouble(prodPriceText)) {
+            // Display error if price is not a valid double
             JOptionPane.showMessageDialog(null, "Invalid price format.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         prodPrice = Double.parseDouble(prodPriceText);
         if (prodPrice < 0) {
+            // Display error if price is negative
             JOptionPane.showMessageDialog(null, "Price cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Validate quantity format
         if (!dataValidator.isInteger(prodQuantityText)) {
+            // Display error if quantity is not a valid integer
             JOptionPane.showMessageDialog(null, "Invalid quantity format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int prodQuantity = Integer.parseInt(prodQuantityText);
         if (prodQuantity < 0) {
+            // Display error if quantity is negative
             JOptionPane.showMessageDialog(null, "Quantity cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Validate restock value format
         if (!dataValidator.isInteger(prodRestockValueText)) {
+            // Display error if restock value is not a valid integer
             JOptionPane.showMessageDialog(null, "Invalid restock value format. Must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int prodRestockValue = Integer.parseInt(prodRestockValueText);
         if (prodRestockValue < 0) {
+            // Display error if restock value is negative
             JOptionPane.showMessageDialog(null, "Restock value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Attempt to add the product to the data model
         boolean addSuccess = productDataModel.addProduct(prodName, prodBrand, prodSize, prodType, prodPrice, prodQuantity, prodRestockValue);
         if (addSuccess) {
+            // Update the parent GUI product table
             parentGUI.updateProductTable();
+            // Display success message
             JOptionPane.showMessageDialog(null, "Product added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            // Clear other fields
+            // Clear all input fields
             nameTxtField.setText("");
             sizeTxtField.setText("");
             brandTxtField.setText("");
@@ -312,12 +349,14 @@ public class AddProductGUI extends JFrame {
     }//GEN-LAST:event_addBtnActionPerformed
     
     /**
-     * ActionListener method triggered when the 'Cancel' button is clicked in the GUI.
+     * Handles the action when the "Cancel" button is clicked.
+     * Closes the current window without saving any changes.
      *
-     * @param evt The ActionEvent captured from the GUI.
+     * @param evt The ActionEvent triggered by clicking the "Cancel" button
      */
     private void cancelBtnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window
+        // Close the current window, discarding any input
+        dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

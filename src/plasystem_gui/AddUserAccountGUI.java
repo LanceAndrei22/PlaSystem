@@ -3,21 +3,44 @@ package plasystem_gui;
 import plasystem_functions.UserAccountDataManager;
 import javax.swing.*;
 
-public class AddUserAccountGUI extends javax.swing.JFrame {
-    
-    private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
+/**
+ * A graphical user interface (GUI) window for adding new user accounts to the application.
+ * This class provides input fields for username, password, and role, and handles validation
+ * and submission of the data to the user account data model.
+ */
+public class AddUserAccountGUI extends JFrame {
+    /** The parent UserAccountsGUI instance used to refresh the user accounts table after adding a user. */
+    private UserAccountsGUI parentGUI;
+    /** The UserAccountDataManager instance responsible for handling user account database operations. */
     private UserAccountDataManager userAccountDataModel;
     
+    /**
+     * Default constructor that initializes the AddUserAccountGUI.
+     * Centers the window on the screen and sets up the form components.
+     */
     public AddUserAccountGUI() {
+        // Initialize the GUI components defined in the form
         initComponents();
-        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+        // Center the window on the screen
+        setLocationRelativeTo(null);
     }
     
+    /**
+     * Constructor that initializes the AddUserAccountGUI with necessary dependencies.
+     * Sets up the form components and centers the window on the screen.
+     *
+     * @param parentGUI The UserAccountsGUI instance to refresh the user accounts table
+     * @param userAccountDataManger The UserAccountDataManager instance to handle database operations
+     */
     public AddUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataManger) {
+        // Assign the parent GUI for table refresh
         this.parentGUI = parentGUI;
+        // Assign the data manager for database operations
         this.userAccountDataModel = userAccountDataManger;
+        // Initialize the GUI components defined in the form
         initComponents();
-        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+        // Center the window on the screen
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -156,41 +179,64 @@ public class AddUserAccountGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Handles the action when the "Cancel" button is clicked.
+     * Closes the current window without saving any changes.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Cancel" button
+     */
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window (the frame)
+        // Close the current window, discarding any input
+        dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Add" button is clicked.
+     * Validates user input, confirms the addition, and adds the user account to the data model.
+     * Refreshes the parent GUI table and closes the window upon successful addition.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Add" button
+     */
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // Retrieve and trim input values from text fields and combo box
         String username = usernameTxtField.getText().trim();
         String password = passwordTxtField.getText().trim();
         String role = (String) roleComboBox.getSelectedItem();
         
+        // Validate that all fields are filled
         if (username.isEmpty() || password.isEmpty() || role == null) {
+            // Display error message if any field is empty
             JOptionPane.showMessageDialog(this, 
                 "Please fill in all fields.",
                 "Input Error", 
                 JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
+        // Prompt user to confirm the addition of the new user account
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Are you sure you want to add the user '" + username + "' with role '" + role + "'?",
             "Confirm Add User", 
             JOptionPane.YES_NO_OPTION, 
             JOptionPane.QUESTION_MESSAGE);
         
+        // Proceed only if user confirms (selects "Yes")
         if (confirm == JOptionPane.YES_OPTION) {
+            // Attempt to add the user account to the data model
             boolean success = userAccountDataModel.addUserAccount(username, password, role);
             if (success) {
+                // Display success message
                 JOptionPane.showMessageDialog(this, 
                     "User account added successfully!",
                     "Success", 
                     JOptionPane.INFORMATION_MESSAGE);
+                // Refresh the parent GUI table if parentGUI is not null
                 if (parentGUI != null) {
                     parentGUI.refreshTable(); // Refresh the parent GUI table
                 }
-                dispose(); // Close the dialog
+                // Close the window
+                dispose();
             }
         }    
     }//GEN-LAST:event_addBtnActionPerformed

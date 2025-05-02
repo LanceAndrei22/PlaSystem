@@ -6,68 +6,114 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class LowStockGUI extends javax.swing.JFrame{
-    
-    private TableRowSorter<DefaultTableModel> tableSorter; // Store the tableSorter for reuse
+/**
+ * A graphical user interface (GUI) window for displaying products with low stock levels.
+ * This class provides a table showing products whose quantity is at or below their restock value,
+ * with search functionality and automatic table refresh.
+ */
+public class LowStockGUI extends JFrame{
+    /** The TableRowSorter used to sort and filter the low stock table. */
+    private TableRowSorter<DefaultTableModel> tableSorter;
+    /** The list of ProductData objects containing product details. */
     private List<ProductData> productList;
-    private Timer refreshTimer; // Timer for dynamic updates
+    /** The Timer used to periodically refresh the low stock table. */
+    private Timer refreshTimer;
     
+    /**
+     * Default constructor that initializes the LowStockGUI.
+     * Centers the window on the screen and sets up the form components.
+     */
     public LowStockGUI(){
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
     }
-
+    
+    /**
+     * Constructor that initializes the LowStockGUI with product data.
+     * Sets up the form components, centers the window, configures the table, and starts the refresh timer.
+     *
+     * @param productDataModel The ProductDataManager instance providing access to product data
+     */
     public LowStockGUI(ProductDataManager productDataModel) {
-        this.productList = productDataModel.getList(); // Load product list
+        // Load the product list from the data model
+        this.productList = productDataModel.getList();
 
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
 
+        // Configure the table model and sorter
         DefaultTableModel model = (DefaultTableModel) lowstockTable.getModel();
         tableSorter = new TableRowSorter<>(model);
         lowstockTable.setRowSorter(tableSorter);
-        model.setRowCount(0); // Clear table
+        // Clear the table to prepare for data population
+        model.setRowCount(0);
         
+        // Align the Product ID column to the left
         leftAlignProdID();
 
+        // Populate the table with low stock products
         refreshLowStockTable();
+        // Start the timer to refresh the table periodically
         startRefreshTimer();
     }
     
-    // Start a timer to refresh the table every 1 second
+    /**
+     * Starts a timer to refresh the low stock table every second.
+     */
     private void startRefreshTimer() {
-        refreshTimer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshLowStockTable();
-            }
+        // Create a timer that triggers every 1000ms (1 second)
+        refreshTimer = new Timer(1000, (ActionEvent e) -> {
+            // Refresh the table with updated low stock data
+            refreshLowStockTable();
         });
+        // Start the timer
         refreshTimer.start();
     }
     
-    // Stop the timer when the window is closed
+    /**
+     * Stops the refresh timer and disposes of the window when closed.
+     */
     @Override
     public void dispose() {
+        // Check if the timer exists and stop it
         if (refreshTimer != null) {
             refreshTimer.stop();
         }
+        // Call the superclass dispose method to close the window
         super.dispose();
     }
     
+    /**
+     * Configures the Product ID column to be left-aligned in the table.
+     */
     private void leftAlignProdID() {
-        // Left-align the Product ID column (index 0)
+        // Create a renderer for left-aligned text
         DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+        // Set the alignment to left
         leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+        // Apply the renderer to the Product ID column (index 0)
         lowstockTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
     }
     
+    /**
+     * Refreshes the low stock table by populating it with products whose quantity
+     * is at or below their restock value.
+     */
     private void refreshLowStockTable() {
+        // Get the table model
         DefaultTableModel model = (DefaultTableModel) lowstockTable.getModel();
-        model.setRowCount(0); // Clear table
+        // Clear existing rows
+        model.setRowCount(0);
+        // Iterate through the product list
         for (ProductData product : this.productList) {
+            // Check if the product's quantity is at or below its restock value
             if (product.getProductQuantity() <= product.getProductRestockValue()) {
+                // Add the product to the table
                 model.addRow(new Object[]{
                     product.getProductId(),
                     product.getProductName(),
@@ -76,12 +122,17 @@ public class LowStockGUI extends javax.swing.JFrame{
                 });
             }
         }
-        // Reapply the current filter if any
+        // Reapply the current search filter if the search field is not empty
         if (searchTxtField.getText().trim().length() > 0) {
             searchTxtFieldKeyReleased(null);
         }
     }
-            
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -184,16 +235,27 @@ public class LowStockGUI extends javax.swing.JFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Handles the key release event in the search text field.
+     * Filters the table based on the search text and selected column.
+     *
+     * @param evt The KeyEvent triggered by releasing a key in the search text field
+     */
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        // Retrieve and trim the search text
         String searchText = searchTxtField.getText().trim();
+        // Get the selected column name for searching
         String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
+        // Get the table model
         DefaultTableModel model = (DefaultTableModel)lowstockTable.getModel();
 
-        // Find the column index
+        // Find the index of the selected column
         int columnIndex = model.findColumn(columnNameToSearch);
 
+        // Validate the column index
         if (columnIndex == -1) {
+            // Display error message if the column is invalid
             JOptionPane.showMessageDialog(this,
                 "Invalid column selected for search.",
                 "Search Error",
@@ -201,10 +263,12 @@ public class LowStockGUI extends javax.swing.JFrame{
             return;
         }
 
-        // Apply the row filter
+        // Apply the row filter based on the search text
         if (searchText.isEmpty()) {
-            tableSorter.setRowFilter(null); // Clear filter if search text is empty
+            // Clear the filter if the search text is empty
+            tableSorter.setRowFilter(null);
         } else {
+            // Apply a case-insensitive regex filter to the selected column
             tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased

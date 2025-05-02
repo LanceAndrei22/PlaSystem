@@ -2,26 +2,53 @@ package plasystem_gui;
 
 import plasystem_functions.UserAccountData;
 import plasystem_functions.UserAccountDataManager;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
-public class EditUserAccountGUI extends javax.swing.JFrame {
-    private UserAccountsGUI parentGUI; // Reference to parent GUI for refreshing
+/**
+ * A graphical user interface (GUI) window for editing existing user accounts in the application.
+ * This class provides input fields pre-populated with user account details and handles validation
+ * and submission of updated data to the user account data model.
+ */
+public class EditUserAccountGUI extends JFrame {
+    /** The parent UserAccountsGUI instance used to refresh the user accounts table after editing a user. */
+    private UserAccountsGUI parentGUI;
+    /** The UserAccountDataManager instance responsible for handling user account database operations. */
     private UserAccountDataManager userAccountDataModel;
-    private UserAccountData userAccount; // Store the UserAccountData object
+    /** The UserAccountData object containing the details of the user account to be edited. */
+    private UserAccountData userAccount;
     
+    /**
+     * Default constructor that initializes the EditUserAccountGUI.
+     * Centers the window on the screen and sets up the form components.
+     */
     public EditUserAccountGUI() {
+        // Initialize the GUI components defined in the form
         initComponents();
-        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+        // Center the window on the screen
+        setLocationRelativeTo(null);
     }
     
+    /**
+     * Constructor that initializes the EditUserAccountGUI with existing user account data.
+     * Sets up the form components, centers the window, and pre-populates fields with user account data.
+     *
+     * @param parentGUI The UserAccountsGUI instance to refresh the user accounts table
+     * @param userAccountDataManager The UserAccountDataManager instance to handle database operations
+     * @param userAccount The UserAccountData object containing the user account details to edit
+     */
     public EditUserAccountGUI(UserAccountsGUI parentGUI, UserAccountDataManager userAccountDataManager, UserAccountData userAccount) {
+        // Assign the parent GUI for table refresh
         this.parentGUI = parentGUI;
+        // Assign the data manager for database operations
         this.userAccountDataModel = userAccountDataManager;
+        // Assign the user account data to be edited
         this.userAccount = userAccount;
+        // Initialize the GUI components defined in the form
         initComponents();
-        setLocationRelativeTo(null); // Center the frame
+        // Center the window on the screen
+        setLocationRelativeTo(null);
         
-        // Pre-populate fields using getter methods
+        // Pre-populate input fields with existing user account data
         usernameTxtField.setText(userAccount.getUsername());
         passwordTxtField.setText(userAccount.getUserPassword());
         roleComboBox.setSelectedItem(userAccount.getUserRole());
@@ -160,13 +187,23 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Handles the action when the "Save" button is clicked.
+     * Validates user input, confirms the changes, and updates the user account in the data model.
+     * Refreshes the parent GUI table and closes the window upon successful update.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Save" button
+     */
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        // Retrieve and trim input values from text fields and combo box
         String username = usernameTxtField.getText().trim();
         String password = passwordTxtField.getText().trim();
         String role = (String) roleComboBox.getSelectedItem();
 
+        // Validate that all fields are filled
         if (username.isEmpty() || password.isEmpty() || role == null) {
+            // Display error message if any field is empty
             JOptionPane.showMessageDialog(this, 
                 "Please fill in all fields.",
                 "Input Error", 
@@ -174,29 +211,42 @@ public class EditUserAccountGUI extends javax.swing.JFrame {
             return;
         }
         
+        // Prompt user to confirm saving changes for the user account
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Are you sure you want to save changes for the user '" + username + "' with role '" + role + "'?",
             "Confirm Edit User", 
             JOptionPane.YES_NO_OPTION, 
             JOptionPane.QUESTION_MESSAGE);
         
+        // Proceed only if user confirms (selects "Yes")
         if (confirm == JOptionPane.YES_OPTION) {
+            // Attempt to update the user account in the data model
             boolean success = userAccountDataModel.updateUserAccount(userAccount.getUsername(), username, password, role);
             if (success) {
+                // Display success message
                 JOptionPane.showMessageDialog(this, 
                     "User account updated successfully!",
                     "Success", 
                     JOptionPane.INFORMATION_MESSAGE);
+                // Refresh the parent GUI table if parentGUI is not null
                 if (parentGUI != null) {
-                    parentGUI.refreshTable(); // Refresh the parent GUI table
+                    parentGUI.refreshTable();
                 }
-                dispose(); // Close the dialog
+                // Close the window
+                dispose();
             }
         }
     }//GEN-LAST:event_saveBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Cancel" button is clicked.
+     * Closes the current window without saving any changes.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Cancel" button
+     */
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        dispose(); // Close the current window (the frame)
+        // Close the current window, discarding any changes
+        dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

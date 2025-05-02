@@ -1,90 +1,121 @@
 package plasystem_gui;
 
+import java.awt.HeadlessException;
 import plasystem_functions.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.util.*;
 
 /**
- * GUI for restocking products, displaying products needing restock and allowing quantity input.
+ * A graphical user interface (GUI) window for restocking products.
+ * Displays products needing restock, allows selection and quantity input, and processes restocking operations.
  */
-public class RestockProductGUI extends javax.swing.JFrame {
-    private ProductDataManager productDataManager;
-    private RestockDataManager restockDataManager;
+public class RestockProductGUI extends JFrame {
+    /** The ProductDataManager instance for managing product data operations. */
+    private ProductDataManager productDataModel;
+    /** The RestockDataManager instance for managing restock data operations. */
+    private RestockDataManager restockDataModel;
+    /** The parent MainProgramGUI instance for updating the product table after restocking. */
     private MainProgramGUI parentGUI;
+    /** The ErrorValueHandling instance for validating input data. */
     private ErrorValueHandling dataValidator;
+    /** The TableRowSorter for sorting and filtering the restock product table. */
     private TableRowSorter<DefaultTableModel> tableSorter;
     
     /**
-     * Default constructor for the RestockProductGUI.
+     * Default constructor that initializes the RestockProductGUI.
+     * Centers the window and sets up the form components.
      */
     public RestockProductGUI(){
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
     }
     
     /**
-     * Constructor for RestockProductGUI.
+     * Constructor that initializes the RestockProductGUI with necessary dependencies.
+     * Sets up the form components, centers the window, and initializes the table with product data.
      *
-     * @param mainGUI The parent MainProgramGUI to update its table.
-     * @param productDataManager Manager for product data operations.
-     * @param restockDataManager Manager for restock data operations.
+     * @param mainGUI The parent MainProgramGUI to update its table
+     * @param productDataManager The ProductDataManager for product data operations
+     * @param restockDataManager The RestockDataManager for restock data operations
      */
     public RestockProductGUI(MainProgramGUI mainGUI, ProductDataManager productDataManager, RestockDataManager restockDataManager) {
+        // Assign the parent GUI for table updates
         this.parentGUI = mainGUI;
-        this.productDataManager = productDataManager;
-        this.restockDataManager = restockDataManager;
+        // Assign the product data manager
+        this.productDataModel = productDataManager;
+        // Assign the restock data manager
+        this.restockDataModel = restockDataManager;
+        // Initialize the data validator
         this.dataValidator = new ErrorValueHandling();
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
+        // Set up the table with product data
         initializeTable();
     }
     
     /**
-     * Initializes the table and tableSorter.
+     * Initializes the restock product table and its sorter.
      */
     private void initializeTable() {
+        // Populate the table with products needing restock
         populateTable();
+        // Apply custom renderer for column alignment
         applyTableRenderer();
+        // Initialize the table sorter
         tableSorter = new TableRowSorter<>((DefaultTableModel) restockProductTbl.getModel());
+        // Apply the sorter to the table
         restockProductTbl.setRowSorter(tableSorter);
     }
     
     /**
-     * Populates the restock table with products where quantity is less than or equal to restock value.
+     * Populates the table with products where quantity is less than or equal to the restock value.
      */
     private void populateTable() {
+        // Get the table model
         DefaultTableModel restockProductTblModel = (DefaultTableModel) restockProductTbl.getModel();
+        // Clear existing rows
         restockProductTblModel.setRowCount(0);
-        List<ProductData> productList = productDataManager.getList();
+        // Get the product list from the data manager
+        List<ProductData> productList = productDataModel.getList();
+        // Iterate through the product list
         for (ProductData product : productList) {
+            // Check if the product needs restocking
             if (product.getProductQuantity() <= product.getProductRestockValue()) {
+                // Add the product to the table
                 restockProductTblModel.addRow(new Object[]{
-                    false, // Select
+                    false, // Select checkbox
                     product.getProductId(),
                     product.getProductName(),
                     product.getProductQuantity(),
                     product.getProductRestockValue(),
-                    0 // Incoming Qty
+                    0 // Incoming quantity
                 });
             }
         }
     }
     
     /**
-     * Applies the custom table renderer for column alignment.
+     * Applies a custom table renderer to align columns appropriately.
      */
     private void applyTableRenderer() {
+        // Apply the custom renderer to the table
         new RestockTableRenderer(restockProductTbl);
     }
     
     /**
-     * Refreshes the table with the latest database state, resetting selections and quantities.
+     * Refreshes the table with the latest data, resetting selections and quantities.
      */
     private void refreshTable() {
+        // Repopulate the table with current data
         populateTable();
-        // Reapply renderer and search filter
+        // Reapply the custom renderer
         applyTableRenderer();
+        // Reapply the current search filter if the search field is not empty
         if (!searchTxtField.getText().trim().isEmpty()) {
             searchTxtFieldKeyReleased(null);
         }
@@ -94,14 +125,19 @@ public class RestockProductGUI extends javax.swing.JFrame {
      * Validates and processes restocking for selected products as a single restock event.
      */
     private void restockItems() {
+        // Get the table model
         DefaultTableModel restockProductTblModel = (DefaultTableModel) restockProductTbl.getModel();
+        // List to store items to restock
         List<Map<String, Object>> items = new ArrayList<>();
         
-        // Validate all selected items using view indices
+        // Validate all selected items
         for (int i = 0; i < restockProductTblModel.getRowCount(); i++) {
+            // Check if the item is selected
             boolean selected = (Boolean) restockProductTblModel.getValueAt(i, 0);
             if (selected) {
+                // Get the incoming quantity
                 Object incomingQtyObj = restockProductTblModel.getValueAt(i, 5);
+                // Validate that the quantity is not empty
                 if (incomingQtyObj == null || incomingQtyObj.toString().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(this,
                         "Incoming quantity for product '" + restockProductTblModel.getValueAt(i, 2) + "' cannot be empty.",
@@ -109,7 +145,9 @@ public class RestockProductGUI extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                // Convert the quantity to string
                 String incomingQtyStr = incomingQtyObj.toString();
+                // Validate that the quantity is a valid integer
                 if (!dataValidator.isInteger(incomingQtyStr)) {
                     JOptionPane.showMessageDialog(this,
                         "Invalid incoming quantity for product '" + restockProductTblModel.getValueAt(i, 2) + "'. Must be a non-negative integer.",
@@ -117,7 +155,9 @@ public class RestockProductGUI extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                // Parse the quantity
                 int incomingQty = Integer.parseInt(incomingQtyStr);
+                // Validate that the quantity is positive
                 if (incomingQty <= 0) {
                     JOptionPane.showMessageDialog(this,
                         "Incoming quantity for product '" + restockProductTblModel.getValueAt(i, 2) + "' must be greater than 0.",
@@ -125,11 +165,14 @@ public class RestockProductGUI extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                // Get the product ID
                 int productId = (Integer) restockProductTblModel.getValueAt(i, 1);
-                ProductData product = productDataManager.getList().stream()
+                // Find the corresponding product
+                ProductData product = productDataModel.getList().stream()
                     .filter(p -> p.getProductId() == productId)
                     .findFirst()
                     .orElse(null);
+                // Validate that the product exists
                 if (product == null) {
                     JOptionPane.showMessageDialog(this,
                         "Product with ID " + productId + " not found.",
@@ -137,14 +180,18 @@ public class RestockProductGUI extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                // Create a map for the item
                 Map<String, Object> item = new HashMap<>();
                 item.put("product", product);
                 item.put("quantity", incomingQty);
+                // Add the item to the list
                 items.add(item);
             }
         }
 
+        // Check if any items were selected
         if (items.isEmpty()) {
+            // Display error message if no items are selected
             JOptionPane.showMessageDialog(this,
                 "No items selected or no valid quantities provided.",
                 "Restock Error",
@@ -152,23 +199,29 @@ public class RestockProductGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Process restocking as a single event
+        // Process restocking
         try {
-            boolean restockSuccess = restockDataManager.restockMultipleProducts(items);
+            // Attempt to restock multiple products
+            boolean restockSuccess = restockDataModel.restockMultipleProducts(items);
             if (restockSuccess) {
+                // Refresh the table
                 refreshTable();
+                // Update the parent GUI's product table
                 parentGUI.updateProductTable();
+                // Display success message
                 JOptionPane.showMessageDialog(this,
                     "Restocking successful!",
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE);
             } else {
+                // Display error message if restocking fails
                 JOptionPane.showMessageDialog(this,
                     "Restocking failed. Please check the inputs and try again.",
                     "Restock Error",
                     JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
+            // Display error message for any exceptions
             JOptionPane.showMessageDialog(this,
                 "Error during restocking: " + e.getMessage(),
                 "Restock Error",
@@ -176,8 +229,12 @@ public class RestockProductGUI extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Disposes of the window.
+     */
     @Override
     public void dispose() {
+        // Call the superclass dispose method to close the window
         super.dispose();
     }
     
@@ -352,14 +409,28 @@ public class RestockProductGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Handles the action when the "Cancel" button is clicked.
+     * Closes the window without saving changes.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Cancel" button
+     */
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        // Close the window
         dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Restock Selected" button is clicked.
+     * Validates selections and processes restocking after user confirmation.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Restock Selected" button
+     */
     private void restockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockBtnActionPerformed
-        // Check if any items are selected
+        // Get the table model
         DefaultTableModel restockProductTblModel = (DefaultTableModel) restockProductTbl.getModel();
+        // Check for selected items
         boolean hasSelectedItems = false;
         for (int i = 0; i < restockProductTblModel.getRowCount(); i++) {
             if ((Boolean) restockProductTblModel.getValueAt(i, 0)) {
@@ -368,7 +439,9 @@ public class RestockProductGUI extends javax.swing.JFrame {
             }
         }
 
+        // Validate that at least one item is selected
         if (!hasSelectedItems) {
+            // Display error message if no items are selected
             JOptionPane.showMessageDialog(this,
                 "No items selected for restocking.",
                 "Restock Error",
@@ -376,26 +449,39 @@ public class RestockProductGUI extends javax.swing.JFrame {
             return;
         }
 
-        // Show confirmation dialog
+        // Prompt user to confirm restocking
         int response = JOptionPane.showConfirmDialog(this,
             "Are you sure you want to restock the selected items?",
             "Confirm Restock",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
 
-        // Proceed with restocking only if the user clicks "Yes"
+        // Proceed with restocking if user confirms
         if (response == JOptionPane.YES_OPTION) {
+            // Process the restocking operation
             restockItems();
         }
     }//GEN-LAST:event_restockBtnActionPerformed
-
+    
+    /**
+     * Handles the key release event in the search text field.
+     * Filters the restock product table based on the search text and selected column.
+     *
+     * @param evt The KeyEvent triggered by releasing a key in the search text field
+     */
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        // Retrieve and trim the search text
         String searchText = searchTxtField.getText().trim();
+        // Get the selected column name for searching
         String columnNameToSearch = searchPrmtrBox.getSelectedItem().toString();
+        // Get the table model
         DefaultTableModel model = (DefaultTableModel) restockProductTbl.getModel();
+        // Find the index of the selected column
         int columnIndex = model.findColumn(columnNameToSearch);
 
+        // Validate the column index
         if (columnIndex == -1) {
+            // Display error message if the column is invalid
             JOptionPane.showMessageDialog(this,
                 "Invalid column selected for search.",
                 "Search Error",
@@ -403,14 +489,24 @@ public class RestockProductGUI extends javax.swing.JFrame {
             return;
         }
 
+        // Apply the row filter
         if (searchText.isEmpty()) {
+            // Clear the filter if the search text is empty
             tableSorter.setRowFilter(null);
         } else {
+            // Apply a case-insensitive regex filter to the selected column
             tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, columnIndex));
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
-
+    
+    /**
+     * Handles the action when the "Refresh" button is clicked.
+     * Updates the table with the latest data.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Refresh" button
+     */
     private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        // Refresh the table with the latest data
         refreshTable();
     }//GEN-LAST:event_refreshBtnActionPerformed
 

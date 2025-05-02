@@ -8,106 +8,157 @@ import javax.swing.table.*;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class TransactionHistoryGUI extends javax.swing.JFrame {
+/**
+ * A graphical user interface (GUI) window for displaying the history of transactions.
+ * This class provides a table of transaction records with options to view details, delete records,
+ * search, refresh, and export reports.
+ */
+public class TransactionHistoryGUI extends JFrame {
+    /** The TransactionDataManager instance for managing transaction data operations. */
     private TransactionDataManager transactionDataModel;
+    /** The list of TransactionData objects retrieved from the database. */
     private List<TransactionData> transactionList;
-        // List to track open child GUIs
+    /** The list tracking open child GUI windows. */
     private final List<JFrame> childGUIs = new ArrayList<>();
-    // Map to track instances of active GUIs
+    /** The map tracking active GUI instances to ensure single-instance behavior. */
     private final Map<Class<? extends JFrame>, JFrame> activeGUIs = new HashMap<>();
     
     /**
-     * Default constructor initializing the TransactionHistoryGUI.
+     * Default constructor that initializes the TransactionHistoryGUI.
+     * Centers the window and sets up the form components.
      */
     public TransactionHistoryGUI() {
+        // Initialize the GUI components defined in the form
         initComponents();
-        setLocationRelativeTo(null); // Set the frame to appear in the center of the screen
+        // Center the window on the screen
+        setLocationRelativeTo(null);
     }
     
     /**
-     * Constructor initializing the Transaction History GUI with a provided TransactionDataManager.
+     * Constructor that initializes the TransactionHistoryGUI with a provided TransactionDataManager.
+     * Populates the table with transaction data and applies table formatting.
      *
-     * @param transactionDataManager The TransactionDataManager instance to use for database operations.
+     * @param transactionDataManager The TransactionDataManager instance for database operations
      */
     public TransactionHistoryGUI(TransactionDataManager transactionDataManager) {
+        // Assign the transaction data manager
         this.transactionDataModel = transactionDataManager;
+        // Load the transaction list from the data manager
         this.transactionList = transactionDataManager.getTransactionList();
+        // Initialize the GUI components defined in the form
         initComponents();
+        // Center the window on the screen
         setLocationRelativeTo(null);
+        // Populate the table with transaction data
         updateTable();
-        new TransactionHistoryTableRenderer(transHistorytbl, 667); // 667 is the table width
+        // Apply table renderer for formatting (667 is the table width)
+        new TransactionHistoryTableRenderer(transHistorytbl, 667);
     }
     
-    // Method to add a child GUI to the tracking list
+    /**
+     * Adds a child GUI to the tracking list.
+     *
+     * @param child The JFrame to add as a child GUI
+     */
     public void addChildGUI(JFrame child) {
+        // Add the child GUI to the tracking list
         childGUIs.add(child);
     }
 
-    // Method to remove a child GUI from the tracking list
+    /**
+     * Removes a child GUI from the tracking list.
+     *
+     * @param child The JFrame to remove from the child GUI list
+     */
     public void removeChildGUI(JFrame child) {
+        // Remove the child GUI from the tracking list
         childGUIs.remove(child);
     }
     
     /**
-     * Launches or focuses a single instance of a GUI.
+     * Launches or focuses a single instance of a specified GUI.
+     * Ensures only one instance of the GUI is open at a time.
      *
-     * @param guiClass The class of the GUI to launch.
-     * @param creator  A lambda to create a new instance of the GUI if needed.
-     * @return The GUI instance.
+     * @param guiClass The class of the GUI to launch
+     * @param creator A Supplier to create a new instance of the GUI if needed
+     * @param <T> The type of the JFrame subclass
+     * @return The launched or existing GUI instance
      */
     private <T extends JFrame> T launchSingleInstance(Class<T> guiClass, Supplier<T> creator) {
+        // Check if an instance of the GUI already exists
         JFrame existingInstance = activeGUIs.get(guiClass);
+        // Remove the instance if it exists but is no longer displayable
         if (existingInstance != null && !existingInstance.isDisplayable()) {
-            activeGUIs.remove(guiClass); // Remove disposed instance
+            activeGUIs.remove(guiClass);
             existingInstance = null;
         }
 
+        // If an instance exists, focus it and show a warning
         if (existingInstance != null) {
+            // Display warning message
             JOptionPane.showMessageDialog(
                 existingInstance,
                 "Only one instance can be present.",
                 "Instance Warning",
                 JOptionPane.WARNING_MESSAGE
             );
+            // Bring the existing instance to the foreground
             existingInstance.requestFocus();
+            // Ensure the instance is visible
             existingInstance.setVisible(true);
             return guiClass.cast(existingInstance);
         }
 
+        // Create a new instance of the GUI
         T newInstance = creator.get();
+        // Make the new instance visible
         newInstance.setVisible(true);
+        // Set the default close operation to dispose
         newInstance.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // Add a window listener to clean up when the window is closed
         newInstance.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
+                // Remove the GUI from the active instances map
                 activeGUIs.remove(guiClass);
+                // Remove the GUI from the child GUI list
                 removeChildGUI(newInstance);
             }
         });
+        // Add the new instance to the active GUIs map
         activeGUIs.put(guiClass, newInstance);
+        // Add the new instance to the child GUI list
         addChildGUI(newInstance);
         return newInstance;
     }
     
-    // Override dispose to close all child windows
+    /**
+     * Disposes of the window and closes all child GUIs.
+     */
     @Override
     public void dispose() {
-        // Close all child windows
+        // Close all child GUIs
         for (JFrame child : new ArrayList<>(childGUIs)) {
             child.dispose();
         }
-        childGUIs.clear(); // Clear the list
-        super.dispose(); // Call parent dispose
+        // Clear the child GUI list
+        childGUIs.clear();
+        // Call the superclass dispose method to close the window
+        super.dispose();
     }
     
     /**
-     * Updates the transaction history table with data from the database.
+     * Updates the transaction history table with data from the transaction list.
      */
     private void updateTable() {
+        // Get the table model
         DefaultTableModel transHistoryTblModel = (DefaultTableModel) transHistorytbl.getModel();
-        transHistoryTblModel.setRowCount(0); // Clear existing rows
+        // Clear existing rows
+        transHistoryTblModel.setRowCount(0);
 
+        // Iterate through the transaction list
         for (TransactionData transaction : transactionList) {
+            // Add each transaction as a new row
             transHistoryTblModel.addRow(new Object[]{
                 transaction.getTransactionId(),
                 transaction.getFormattedDate().split(" ")[0], // Date (YYYY-MM-DD)
@@ -118,7 +169,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             });
         }
         
-        // Reapply search filter if active
+        // Reapply the current search filter if the search field is not empty
         if (!searchTxtField.getText().trim().isEmpty()) {
             searchTxtFieldKeyReleased(null);
         }
@@ -276,92 +327,133 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     /**
-     * Handles the "See Details" button click, displaying transaction items for the selected transaction.
+     * Handles the action when the "See Details" button is clicked.
+     * Displays the transaction items for the selected transaction in a new window.
+     *
+     * @param evt The ActionEvent triggered by clicking the "See Details" button
      */
     private void detailsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsBtnActionPerformed
+        // Get the index of the selected row
         int selectedRow = transHistorytbl.getSelectedRow();
+        // Check if a row is selected
         if (selectedRow == -1) {
+            // Display error message if no row is selected
             JOptionPane.showMessageDialog(this, "Please select a transaction to view details.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Convert view index to transHistoryTblModel index to account for sorting/filtering
+        // Convert view index to model index to account for sorting/filtering
         selectedRow = transHistorytbl.convertRowIndexToModel(selectedRow);
+        // Get the transaction ID from the selected row
         int transactionId = (int) transHistorytbl.getModel().getValueAt(selectedRow, 0);
+        // Find the corresponding TransactionData object
         TransactionData selectedTransaction = transactionList.stream()
             .filter(t -> t.getTransactionId() == transactionId)
             .findFirst()
             .orElse(null);
 
+        // Check if the transaction data was found
         if (selectedTransaction != null) {
+            // Launch or focus a single instance of THDetailsGUI
             launchSingleInstance(THDetailsGUI.class, () -> {
+                // Create a new THDetailsGUI instance
                 THDetailsGUI thDetailGUI = new THDetailsGUI(selectedTransaction);
+                // Pack the GUI to fit its contents
                 thDetailGUI.pack();
+                // Center the GUI on the screen
                 thDetailGUI.setLocationRelativeTo(null);
+                // Set the default close operation to dispose
                 thDetailGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 return thDetailGUI;
             });
         } else {
+            // Display error message if transaction data is not found
             JOptionPane.showMessageDialog(this, "Transaction not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_detailsBtnActionPerformed
     
     /**
-     * Handles the "Delete" button click, removing the selected transaction using TransactionDataManager.
+     * Handles the action when the "Delete" button is clicked.
+     * Deletes the selected transaction after user confirmation.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Delete" button
      */
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // Get the index of the selected row
         int selectedRow = transHistorytbl.getSelectedRow();
+        // Check if a row is selected
         if (selectedRow == -1) {
+            // Display error message if no row is selected
             JOptionPane.showMessageDialog(this, "Please select a transaction to delete.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Convert view index to transHistoryTblModel index
+        // Convert view index to model index
         selectedRow = transHistorytbl.convertRowIndexToModel(selectedRow);
+        // Get the transaction ID from the selected row
         int transactionId = (int) transHistorytbl.getModel().getValueAt(selectedRow, 0);
 
+        // Prompt user to confirm deletion
         int confirmDelete = JOptionPane.showConfirmDialog(this,
             "Do you really want to delete transaction ID " + transactionId + "?",
             "Delete",
             JOptionPane.YES_NO_OPTION);
+        // Proceed with deletion if user confirms
         if (confirmDelete == JOptionPane.YES_OPTION) {
+            // Attempt to delete the transaction from the database
             boolean success = transactionDataModel.deleteTransaction(transactionId);
             if (success) {
+                // Update the table to reflect the deletion
                 updateTable();
+                // Display success message
                 JOptionPane.showMessageDialog(this, "Transaction deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
+                // Display error message if deletion fails
                 JOptionPane.showMessageDialog(this, "Failed to delete transaction.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
     
     /**
-     * Handles the "Refresh" button click, reloading the table with the latest transactions.
+     * Handles the action when the "Refresh" button is clicked.
+     * Updates the transaction history table with the latest data.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Refresh" button
      */
     private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        // Refresh the table with the latest transaction data
         updateTable();
     }//GEN-LAST:event_refreshBtnActionPerformed
     
     /**
-     * Handles search functionality, filtering the table based on the search text and parameter.
+     * Handles the key release event in the search text field.
+     * Filters the transaction history table based on the search text and selected parameter.
+     *
+     * @param evt The KeyEvent triggered by releasing a key in the search text field
      */
     private void searchTxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtFieldKeyReleased
+        // Get the table model
         DefaultTableModel transHistoryTblModel = (DefaultTableModel) transHistorytbl.getModel();
+        // Create a new TableRowSorter for filtering
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(transHistoryTblModel);
+        // Apply the sorter to the table
         transHistorytbl.setRowSorter(sorter);
 
+        // Retrieve and trim the search text
         String searchText = searchTxtField.getText().trim();
+        // Get the selected search parameter
         String param = searchPrmtrBox.getSelectedItem().toString();
 
+        // Clear the filter if the search text is empty
         if (searchText.isEmpty()) {
             sorter.setRowFilter(null);
             return;
         }
 
-        // Handle month name to numeric conversion for Month parameter
+        // Convert month name to numeric format for Month parameter
         String filterText = param.equals("Month") ? MonthConverter.monthNameToNumeric(searchText) : searchText;
 
-        // Map parameter to column index using switch expression
+        // Map parameter to column index
         int columnIndex = switch (param) {
             case "ID" -> 0;
             case "Date", "Year", "Month", "Day" -> 1; // Date column
@@ -371,7 +463,7 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
             default -> throw new IllegalArgumentException("Invalid search parameter: " + param);
         };
 
-        // Apply case-insensitive regex filter using switch expression
+        // Apply case-insensitive regex filter
         try {
             RowFilter<DefaultTableModel, Object> filter = switch (param) {
                 case "Date" -> RowFilter.regexFilter("(?i)" + searchTxtField.getText(), columnIndex);
@@ -380,14 +472,24 @@ public class TransactionHistoryGUI extends javax.swing.JFrame {
                 case "Day" -> RowFilter.regexFilter("(?i)^\\d{4}-\\d{2}-" + filterText + ".*", columnIndex);
                 default -> RowFilter.regexFilter("(?i)" + filterText, columnIndex);
             };
+            // Apply the filter to the sorter
             sorter.setRowFilter(filter);
         } catch (Exception e) {
+            // Clear the filter if an error occurs
             sorter.setRowFilter(null);
         }
     }//GEN-LAST:event_searchTxtFieldKeyReleased
-
+    
+    /**
+     * Handles the action when the "Export" button is clicked.
+     * Generates and exports a transaction history report.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Export" button
+     */
     private void exportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportBtnActionPerformed
+        // Create a TransactionReportGenerator with the transaction list
         TransactionReportGenerator reportGenerator = new TransactionReportGenerator(transactionList);
+        // Generate and export the transaction history report
         reportGenerator.generateReport(this);
     }//GEN-LAST:event_exportBtnActionPerformed
 

@@ -5,39 +5,67 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class LaunchPanelGUI extends javax.swing.JFrame {
-    
+/**
+ * A graphical user interface (GUI) window serving as the login panel for the application.
+ * This class provides input fields for username and password, validates user credentials,
+ * and launches the main program upon successful login.
+ */
+public class LaunchPanelGUI extends JFrame {
+    /** The UserAccountDataManager instance responsible for handling user account validation and database operations. */
     private final UserAccountDataManager userAccountDataModel;
     
+    /**
+     * Default constructor that initializes the LaunchPanelGUI.
+     * Sets up the form components, centers the window, initializes the data model,
+     * and adds key listeners for the Enter key.
+     */
     public LaunchPanelGUI() {
-        initComponents(); // Initialize GUI components
-        setLocationRelativeTo(null); // Set the location of the frame to the center of the screen
+        // Initialize the GUI components defined in the form
+        initComponents();
+        // Center the window on the screen
+        setLocationRelativeTo(null);
         
-        // Initialize the UserAccountDataManager and load user accounts
+        // Initialize the UserAccountDataManager to manage user accounts
         userAccountDataModel = new UserAccountDataManager();
         
-        // Add KeyListeners for Enter key action
+        // Add key listeners to text fields to trigger login on Enter key press
         addEnterKeyListener(usernameTxtField);
         addEnterKeyListener(passwordTxtField);
     }
     
+    /**
+     * Adds a key listener to a text field to trigger the login action when the Enter key is pressed.
+     *
+     * @param textField The JTextField to which the Enter key listener is added
+     */
     private void addEnterKeyListener(JTextField textField) {
+        // Attach a KeyAdapter to the text field to handle key events
         textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                // Check if the pressed key is Enter
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    launchBtnActionPerformed(null); // Simulate button click when Enter is pressed
+                    // Simulate clicking the launch button to perform login
+                    launchBtnActionPerformed(null);
                 }
             }
         });
     }
     
+    /**
+     * Launches the main program GUI and closes the login window.
+     */
     private void launchMainProgram() {
-        JFrame mainProgram = new MainProgramGUI(userAccountDataModel); // Pass UserAccountDataManager
-        mainProgram.setVisible(true); // Set the main program frame visible
+        // Create a new MainProgramGUI instance, passing the UserAccountDataManager
+        JFrame mainProgram = new MainProgramGUI(userAccountDataModel);
+        // Make the main program window visible
+        mainProgram.setVisible(true);
+        // Pack the window to fit its contents
         mainProgram.pack();
+        // Center the main program window on the screen
         mainProgram.setLocationRelativeTo(null);
-        this.dispose(); // Dispose of the current frame (LaunchPanelGUI)
+        // Close the current login window
+        this.dispose();
     }
     
     /**
@@ -61,8 +89,6 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
-        passwordTxtField.setText("tjb123");
 
         versionTxTField.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         versionTxTField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -91,8 +117,6 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         passwordLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         passwordLabel.setText(" Password :");
-
-        usernameTxtField.setText("admin");
 
         usernameLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         usernameLabel.setText("Username :");
@@ -166,25 +190,45 @@ public class LaunchPanelGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Handles the action when the "Launch" button is clicked or Enter key is pressed.
+     * Validates user credentials and launches the main program if valid, or displays an error message.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Launch" button or pressing Enter
+     */
     private void launchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchBtnActionPerformed
+        // Retrieve and trim username input
         String username = usernameTxtField.getText().trim();
+        // Retrieve and trim password input
         String password = new String(passwordTxtField.getPassword()).trim();
 
+        // Validate that both fields are filled
         if (username.isEmpty() || password.isEmpty()) {
+            // Display error message if any field is empty
             JOptionPane.showMessageDialog(this, "Please enter both username and password.");
             return;
         }
 
+        // Check if the credentials are valid
         if (userAccountDataModel.validateUserLogin(username, password)) {
+            // Launch the main program if credentials are valid
             launchMainProgram();
         } else {
+            // Display error message for invalid credentials
             JOptionPane.showMessageDialog(this, "Invalid username or password.");
         }
     }//GEN-LAST:event_launchBtnActionPerformed
-
+    
+    /**
+     * Handles the action when the "Exit" button is clicked.
+     * Terminates the application.
+     *
+     * @param evt The ActionEvent triggered by clicking the "Exit" button
+     */
     private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
-        System.exit(0); // Close the application
+        // Terminate the application
+        System.exit(0);
     }//GEN-LAST:event_exitBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

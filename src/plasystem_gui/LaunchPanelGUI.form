@@ -106,9 +106,6 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JPasswordField" name="passwordTxtField">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="tjb123"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="versionTxTField">
           <Properties>
@@ -163,9 +160,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="usernameTxtField">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="admin"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="usernameLabel">
           <Properties>
